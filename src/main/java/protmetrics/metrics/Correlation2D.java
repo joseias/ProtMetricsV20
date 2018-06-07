@@ -25,6 +25,10 @@ import protmetrics.utils.PdbFilter;
 import com.beust.jcommander.Parameter;
 import java.util.ArrayList;
 import protmetrics.dao.ProtWrapper;
+import protmetrics.dao.dm.DMAttValue;
+import protmetrics.dao.dm.DMAtt;
+import protmetrics.dao.dm.DMDataSet;
+import protmetrics.dao.dm.DMInstance;
 import protmetrics.utils.Formats;
 
 /**
@@ -33,6 +37,8 @@ import protmetrics.utils.Formats;
  */
 public class Correlation2D {
 
+    public static final String INDEX_ID = "Correlation2DMax";
+    
     public static class Constants {
 
         public static final String PROPERTY_VECTOR = "PROPERTY_VECTOR";
@@ -51,7 +57,10 @@ public class Correlation2D {
 
         public static final String PROTEIN_LIST = "PROTEIN_LIST";
 
-        //String a_filesPath, PropertyMatrix a_propMatrix, String a_outputPath, int a_MaxDist, int a_MinDist, int a_step
+        public static final String DO_PRODUCT = "DO_PRODUCT";
+        public static final String DO_MAX = "DO_MAX";
+        public static final String DO_MIN = "DO_MIN";
+
     }
 
     static class Args {
@@ -60,72 +69,159 @@ public class Correlation2D {
         String cfgPath = null;
     }
 
-    /***
+
+    public DMDataSet calc2DCorrelationIndex(Properties p) throws Exception {
+
+        DMDataSet ds = new DMDataSet(Correlation2D.INDEX_ID);
+        int attOrder = 0;
+        try {
+            PropertyMatrix propMatrix = (PropertyMatrix) p.get(Constants.PROP_MATRIX);
+            boolean doProduct = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_PRODUCT));
+            boolean doMax = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_MAX));
+            boolean doMin = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_MIN));
+            
+            int maxDist = Integer.parseInt(p.getProperty(Constants.MAX_DIST));
+            int minDist = Integer.parseInt(p.getProperty(Constants.MIN_DIST));
+            int step = Integer.parseInt(p.getProperty(Constants.STEP));
+
+            
+            int stepDesp = (int) Math.round((maxDist - minDist) / step) + 1;
+
+            ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
+            
+            for (int t = 0; t < protList.size(); t++) {
+                DMInstance inst = new DMInstance(protList.get(t).getName());
+                DMAtt attPN = new DMAtt(DMAtt.getSPECIAL_ATT_NAME(), String.class, attOrder++);
+                ds.addAtt(attPN);
+                
+                inst.setAttValue(attPN, new DMAttValue(inst.getInstID()));
+                
+                String seq = protList.get(t).getSequence();
+                for (PropertyVector PropertyVectorsColumn : propMatrix.PropertyVectorsColumns) {
+                    int rstep = minDist;
+                    PropertyVector pv = PropertyVectorsColumn;
+                    for (int j = 0; j < stepDesp; j++) {
+                       if(doProduct){
+                            /* Calcular el indice */
+                            DMAttValue r = Correlation2D.get2DCorrelationIndex(pv, seq, rstep);
+
+                            String attName = pv.PropertyName + "_" + (double)rstep;
+                            DMAtt att = new DMAtt(attName, Double.class, attOrder++);
+                            ds.addAtt(att);
+                            inst.setAttValue(att, r);
+                       }
+                       
+                        if(doMax){
+                            /* Calcular el indice */
+                            DMAttValue r = Correlation2D.get2DCorrelationIndexMax(pv, seq, rstep);
+
+                            String attName = pv.PropertyName + "_Max_" + (double)rstep;
+                            DMAtt att = new DMAtt(attName, Double.class, attOrder++);
+                            ds.addAtt(att);
+                            inst.setAttValue(att, r);
+                       }
+                        
+                        
+                        if(doMin){
+                            /* Calcular el indice */
+                            DMAttValue r = Correlation2D.get2DCorrelationIndexMin(pv, seq, rstep);
+
+                            String attName = pv.PropertyName + "_Min_" + (double)rstep;
+                            DMAtt att = new DMAtt(attName, Double.class, attOrder++);
+                            ds.addAtt(att);
+                            inst.setAttValue(att, r);
+                       }
+                        
+                        rstep = rstep + step;
+                    }
+                }
+                
+                ds.addInstance(inst);
+            }
+        } catch (NumberFormatException nfe) {
+            throw nfe;
+        }
+        return ds;
+    }
+
+     /***
      * Compute the 2D Correlation Index for one property.
      * @param pv
      * @param seq
      * @param step
      * @return 
      */
-    public static double get2DCorrelationIndex(PropertyVector pv, String seq, int step) {
+    public static DMAttValue get2DCorrelationIndex(PropertyVector pv, String seq, int step) {
 
-        int m_cantSumandos = 0;
+        int cantSum = 0;
 
-        boolean[] m_found = {true};
-        double m_result = 0;
-        double m_P1;
-        double m_P2;
+        boolean[] found = {true};
+        double result = 0;
+        double p1;
+        double p2;
 
         for (int i = 0; i < seq.length(); i++) {
-            m_P1 = pv.getValueFromName(seq.substring(i, i + 1), m_found);
+            p1 = pv.getValueFromName(seq.substring(i, i + 1), found);
             if (i + step < seq.length()) {
-                m_P2 = pv.getValueFromName(seq.substring(i + step, i + step + 1), m_found);
-                m_result = m_result + m_P1 * m_P2;
-                m_cantSumandos++;
+                p2 = pv.getValueFromName(seq.substring(i + step, i + step + 1), found);
+                result = result + p1 * p2;
+                cantSum++;
             }
         }
-        m_result = m_result / m_cantSumandos;
-        return MyMath.Round(m_result, 2);
+        result = result / cantSum;
+        return new DMAttValue(Double.toString(MyMath.Round(result, 2)));
     }
 
-    public String[][] calc2DCorrelationIndex(Properties p) throws Exception {
+     /***
+     * Compute the 2D Correlation Index Max for one property.
+     * @param pv
+     * @param seq
+     * @param step
+     * @return 
+     */
+    public static DMAttValue get2DCorrelationIndexMax(PropertyVector pv, String seq, int step) {
 
-        String[][] result = null;
-        try {
-            PropertyMatrix propMatrix = (PropertyMatrix) p.get(Constants.PROP_MATRIX);
-            int maxDist = Integer.parseInt(p.getProperty(Constants.MAX_DIST));
-            int minDist = Integer.parseInt(p.getProperty(Constants.MIN_DIST));
-            int step = Integer.parseInt(p.getProperty(Constants.STEP));
-
-            int stepDesp = (int) Math.round((maxDist - minDist) / step) + 1;
-
-            ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
-
-            result = BioUtils.formatRDFIndexResultMatrix(propMatrix, maxDist, minDist, step, protList.size());
-
-            for (int t = 0; t < protList.size(); t++) {
-                result[t + 2][0] = protList.get(t).getName();
-                String seq = protList.get(t).getSequence();
-                for (int propv = 0; propv < propMatrix.PropertyVectorsColumns.length; propv++) {
-                    int rstep = minDist;
-                    PropertyVector pv = propMatrix.PropertyVectorsColumns[propv];
-                    for (int j = 0; j < stepDesp; j++) {
-                        //-> Calcular el indice.                       
-                        double r = Correlation2D.get2DCorrelationIndex(pv, seq, rstep);
-
-                        result[t + 2][j + propv * stepDesp + 1] = Double.toString(r);
-                        rstep = rstep + step;
-                    }
-                }
+        boolean[] found = {true};
+        double p1;
+        double p2;
+        double max = Double.MIN_VALUE;
+        
+        for (int i = 0; i < seq.length(); i++) {
+            p1 = pv.getValueFromName(seq.substring(i, i + 1), found);
+            if (i + step < seq.length()) {
+                p2 = pv.getValueFromName(seq.substring(i + step, i + step + 1), found);
+                max = Math.max(max, p1 * p2);
             }
-        } catch (NumberFormatException m_e) {
-            throw m_e;
         }
-        return result;
+        return new DMAttValue(Double.toString(MyMath.Round(max, 2)));
     }
+    
+    
+    /***
+     * Compute the 2D Correlation Index Max for one property.
+     * @param pv
+     * @param seq
+     * @param step
+     * @return 
+     */
+    public static DMAttValue get2DCorrelationIndexMin(PropertyVector pv, String seq, int step) {
 
-    public Properties init(String cfgPath) {
-        try {
+        boolean[] found = {true};
+        double p1;
+        double p2;
+        double min = Double.MAX_VALUE;
+        
+        for (int i = 0; i < seq.length(); i++) {
+            p1 = pv.getValueFromName(seq.substring(i, i + 1), found);
+            if (i + step < seq.length()) {
+                p2 = pv.getValueFromName(seq.substring(i + step, i + step + 1), found);
+                min = Math.min(min, p1 * p2);
+            }
+        }
+        return new DMAttValue(Double.toString(MyMath.Round(min, 2)));
+    }
+    
+    public Properties init(String cfgPath) throws Exception{
 
             /*Properties file*/
             File cfgFile = new File(cfgPath);
@@ -141,12 +237,12 @@ public class Correlation2D {
                 throw new IOException(pdbsPath + " does not exist...");
             }
 
-            File m_pdbFilesDir = new File(pdbsPath);
-            PdbFilter m_pdbFilter = new PdbFilter("." + Formats.PDB);
-            File[] pdbFiles = m_pdbFilesDir.listFiles(m_pdbFilter);
+            File pdbFilesDir = new File(pdbsPath);
+            PdbFilter pdbFilter = new PdbFilter("." + Formats.PDB);
+            File[] pdbFiles = pdbFilesDir.listFiles(pdbFilter);
 
-            m_pdbFilter = new PdbFilter("." + Formats.FASTA);
-            File[] fastaFiles = m_pdbFilesDir.listFiles(m_pdbFilter);
+            pdbFilter = new PdbFilter("." + Formats.FASTA);
+            File[] fastaFiles = pdbFilesDir.listFiles(pdbFilter);
 
             ArrayList<ProtWrapper> protList = new ArrayList<>(pdbFiles.length + fastaFiles.length);
             for (File pdbFile : pdbFiles) {
@@ -155,10 +251,10 @@ public class Correlation2D {
             }
 
             for (File fastaFile : fastaFiles) {
-                FastaClass m_fc = new FastaClass(fastaFile.getAbsolutePath());
-                String[][] m_NS = m_fc.getSequences();
-                for (String[] m_NS1 : m_NS) {
-                    protList.add(new ProtWrapper(m_NS1[0], m_NS1[1]));
+                FastaClass fc = new FastaClass(fastaFile.getAbsolutePath());
+                String[][] ns = fc.getSequences();
+                for (String[] ns1 : ns) {
+                    protList.add(new ProtWrapper(ns1[0], ns1[1]));
                 }
             }
             p.put(Constants.PROTEIN_LIST, protList);
@@ -196,10 +292,6 @@ public class Correlation2D {
             p.put(Constants.PROP_MATRIX, pm);
 
             return p;
-        } catch (Exception ex) {
-            Logger.getLogger(Correlation2D.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
     }
 
     public static void main(String[] args) {
@@ -214,18 +306,15 @@ public class Correlation2D {
                 Correlation2D tdc = new Correlation2D();
                 Properties p = tdc.init(a.cfgPath);
 
-                String[][] m_result = tdc.calc2DCorrelationIndex(p);
+                DMDataSet ds = tdc.calc2DCorrelationIndex(p);
                 String format = p.getProperty(Constants.OUTPUT_FORMAT);
                 String outFile = p.getProperty(Constants.OUTPUT_FILE_PATH);
                 switch (format) {
                     case Formats.ARFF:
-                        BioUtils.PrintMatrixArff(outFile, "2D", m_result);
+                        ds.toARFF(outFile);
                         break;
                     case Formats.CSV:
-                        BioUtils.PrintMatrixCSV(outFile, m_result);
-                        break;
-                    case Formats.TXT:
-                        BioUtils.PrintMatrix(outFile, m_result);
+                        ds.toCSV(outFile);
                         break;
                 }
             } else {
