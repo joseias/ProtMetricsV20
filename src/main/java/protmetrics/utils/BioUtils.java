@@ -11,13 +11,14 @@ import java.util.Arrays;
 import java.util.Properties;
 
 import protmetrics.dao.AMutation;
+import protmetrics.dao.AtomLine;
+import protmetrics.dao.PdbClass;
 import protmetrics.dao.PropertyMatrix;
 import protmetrics.errors.SomeErrorException;
 
 /// <summary>
 /// Summary description for BioUtils.
 /// </summary>
-
 public class BioUtils {
 
     public static final String SEPARATOR = ",";
@@ -687,4 +688,36 @@ public class BioUtils {
 
     }//public String[,] FormatBioIndexResultMatrix(PropertyMatrix a_pm,int a_maxStep,int a_step,int a_cantPdbs)
 
-}//BioUtils Class
+    /***
+     * Creates the inter CA distance matrix, for 3D indices...
+     * @param pdb
+     * @return
+     * @throws Exception 
+     */
+    public static String[][] getInterCADistMatrixN(PdbClass pdb) throws Exception {
+
+        double x;
+        double y;
+        double z;
+
+        AtomLine[] caData = pdb.getCALines();
+        String[][] result = new String[caData.length + 1][caData.length + 1];
+
+        result[0][0] = "ELEMENTS";
+        for (int f = 0; f < caData.length; f++) {
+            //El arreglo de CA comienza en 0
+            result[f + 1][0] = result[0][f + 1] = (f + 1) + "_" + caData[f].GetAtomType() + "_" + caData[f].GetAminoType();
+
+        }
+        for (int i = 0; i < caData.length; i++) {
+            for (int j = i; j < caData.length; j++) {
+                x = Math.pow(caData[i].GetLocation().X - caData[j].GetLocation().X, 2);
+                y = Math.pow(caData[i].GetLocation().Y - caData[j].GetLocation().Y, 2);
+                z = Math.pow(caData[i].GetLocation().Z - caData[j].GetLocation().Z, 2);
+
+                result[i + 1][j + 1] = result[j + 1][i + 1] = Double.toString(MyMath.Round(Math.sqrt(x + y + z), 4));
+            }
+        }
+        return result;
+    }
+}
