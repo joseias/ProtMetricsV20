@@ -246,28 +246,28 @@ public class Correlation3D {
 
         /*Min radius*/
         if (!p.containsKey(Constants.MIN_DIST)) {
-            throw new IllegalArgumentException("Min Distance not specified for 2D Correlation...");
+            throw new IllegalArgumentException("Min Distance not specified for 3D Correlation...");
         }
 
         /*Max radius*/
         if (!p.containsKey(Constants.MAX_DIST)) {
-            throw new IllegalArgumentException("Max Distance not specified for 2D Correlation...");
+            throw new IllegalArgumentException("Max Distance not specified for 3D Correlation...");
         }
 
         /*Step*/
         if (!p.containsKey(Constants.STEP)) {
-            throw new IllegalArgumentException("Step not specified for 2D Correlation...");
+            throw new IllegalArgumentException("Step not specified for 3D Correlation...");
         }
         else{
             double step = Double.parseDouble(p.getProperty(Constants.STEP));
             if(step<=0){
-                throw new IllegalArgumentException("Step mut be > 0 for 2D Correlation...");
+                throw new IllegalArgumentException("Step mut be > 0 for 3D Correlation...");
             }
         }
 
         /*Output formar*/
         if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
-            throw new IllegalArgumentException("Output format not specified for 2D Correlation...");
+            throw new IllegalArgumentException("Output format not specified for 3D Correlation...");
         }
 
         PropertyMatrix pmAll = DataLoader.loadPropertyMatrix(pmPath);
@@ -309,7 +309,7 @@ public class Correlation3D {
         }
     }
 
-    public static class Constants {
+    private static class Constants {
 
         public static final String PROPERTY_VECTOR = "PROPERTY_VECTOR";
         public static final String PROP_MATRIX = "PROP_MATRIX";
@@ -333,7 +333,7 @@ public class Correlation3D {
 
     }
 
-    static class Args {
+    private static class Args {
 
         @Parameter(names = {"--cfg", "-cfg"})
         String cfgPath = null;
