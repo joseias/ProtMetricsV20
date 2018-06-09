@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import protmetrics.dao.IEDMatrix;
 import protmetrics.dao.PdbClass;
 import protmetrics.dao.PropertyMatrix;
@@ -23,37 +22,27 @@ import protmetrics.utils.Formats;
 import protmetrics.utils.MyMath;
 import protmetrics.utils.PdbFilter;
 
-/**
- * *
- * [1] M. Wagener, J. Sadowski, J. Gasteiger. Autocorrelation of molecular
- * properties for modelling corticosteroid binding globulin and cytosolic ah
- * receptor activity by neural networks. J. Am. Chem. Soc., 117, 7769 (1995)
- *
- * @author Docente
- */
-public class Correlation3D {
+public class Morse3D {
 
-    public static final String INDEX_ID = "Correlation3D";
+    public static final String INDEX_ID = "3DMorse";
 
-    public DMDataSet calc3DCorrelationIndex(Properties p) throws Exception {
+    public DMDataSet calc3DMorseIndex(Properties p) throws Exception {
 
         int attOrder = 0;
-        DMDataSet ds = new DMDataSet(Correlation3D.INDEX_ID);
+        DMDataSet ds = new DMDataSet(Morse3D.INDEX_ID);
         DMAtt attPN = new DMAtt(DMAtt.getSPECIAL_ATT_NAME(), String.class, attOrder++);
         ds.addAtt(attPN);
 
         PropertyMatrix propMatrix = (PropertyMatrix) p.get(Constants.PROP_MATRIX);
-        boolean doProduct = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_PRODUCT));
-        boolean doMax = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_MAX));
-        boolean doMin = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_MIN));
 
-        double maxDist = Double.parseDouble(p.getProperty(Constants.MAX_DIST));
-        double minDist = Double.parseDouble(p.getProperty(Constants.MIN_DIST));
-        double step = Double.parseDouble(p.getProperty(Constants.STEP));
+        int maxDist = Integer.parseInt(p.getProperty(Constants.MAX_DIST));
+        int minDist = Integer.parseInt(p.getProperty(Constants.MIN_DIST));
+        int step = Integer.parseInt(p.getProperty(Constants.STEP));
 
-        double deltha = step / 2;
+        int stepDesp = (int) Math.round((maxDist - minDist) / step) + 1; //-> Para ver el rango de distancia.;
 
         ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
+
         //-> Para cada Pdb calcular el indice según los parámetros.
         for (ProtWrapper pw : protList) {
             DMInstance inst = new DMInstance(pw.getName());
@@ -61,150 +50,52 @@ public class Correlation3D {
 
             //-> Para cada propiedad, calcular los indices a distintos pasos
             for (PropertyVector pv : propMatrix.PropertyVectorsColumns) {
-                double currentDist = minDist;
+                double rstep = minDist;
 
-                /* Para cada paso, calcular el indice AutoCorrelacion 3D */
-                while (currentDist <= maxDist) {
-                    double dLower = currentDist - deltha;
-                    double dUpper = currentDist + deltha;
-                    if (doProduct) {
-                        /* Calcular el indice */
-                        DMAttValue r = this.get3DProd(pv, pw.getInterCADistMatrix(), dLower, dUpper);
+                //-> Por cada paso en el rango.
+                for (int j = 0; j < stepDesp; j++) {
+                    DMAttValue r = this.get3DMorse(pv, pw.getInterCADistMatrix(), rstep);
 
-                        String attName = pv.PropertyName + "_[" + MyMath.Round(dLower, 2) + " - " + MyMath.Round(dUpper, 2) + "]";
-                        DMAtt att = new DMAtt(attName, Double.class, attOrder++);
-                        ds.addAtt(att);
-                        inst.setAttValue(att, r);
-                    }
+                    String attName = pv.PropertyName + "_" + (double) rstep;
+                    DMAtt att = new DMAtt(attName, Double.class, attOrder++);
+                    ds.addAtt(att);
+                    inst.setAttValue(att, r);
 
-                    if (doMax) {
-                        /* Calcular el indice */
-                        DMAttValue r = this.get3DMax(pv, pw.getInterCADistMatrix(), dLower, dUpper);
-
-                        String attName = pv.PropertyName + "_Max_[" + MyMath.Round(dLower, 2) + " - " + MyMath.Round(dUpper, 2) + "]";
-                        DMAtt att = new DMAtt(attName, Double.class, attOrder++);
-                        ds.addAtt(att);
-                        inst.setAttValue(att, r);
-                    }
-
-                    if (doMin) {
-                        /* Calcular el indice */
-                        DMAttValue r = this.get3DMin(pv, pw.getInterCADistMatrix(), dLower, dUpper);
-
-                        String attName = pv.PropertyName + "_Min_[" + MyMath.Round(dLower, 2) + " - " + MyMath.Round(dUpper, 2) + "]";
-                        DMAtt att = new DMAtt(attName, Double.class, attOrder++);
-                        ds.addAtt(att);
-                        inst.setAttValue(att, r);
-                    }
-
-                    currentDist = currentDist + step;
+                    rstep = rstep + step;
                 }
             }
             ds.addInstance(inst);
         }
+
         return ds;
     }
 
-    /**
-     * Index as described in [1] (\geq for the upper distance)
-     *
-     * @param pv
-     * @param interCAMatrix
-     * @param dLower
-     * @param dUpper
-     * @return
-     */
-    public DMAttValue get3DProd(PropertyVector pv, IEDMatrix interCAMatrix, double dLower, double dUpper) {
+    public DMAttValue get3DMorse(PropertyVector pv, IEDMatrix interCAMatrix, double S) {
 
         boolean[] found = {true};
-        double pi;
-        double pj;
-        double dij;
         double sum = 0;
-        int L = 0;
+        double factor;
+        double coef;
+        double pMult;
+        double radius;
+        double p1;
+        double p2;
 
-        for (int i = 1; i < interCAMatrix.getRows()-1; i++) {
-            pi = pv.getValueFromName(interCAMatrix.getElementAt(i), found);
-            for (int j = i+1; j < interCAMatrix.getColumns(); j++) {
-                pj = pv.getValueFromName(interCAMatrix.getElementAt(j), found);
-                dij = interCAMatrix.getValueAt(i, j);
+        for (int f = 2; f < interCAMatrix.getRows(); f++) {
+            p1 = pv.getValueFromName(interCAMatrix.getElementAt(f), found);
+            for (int c = 1; c < f; c++) {
+                /* Af Aj e(-B(r-rij)) */
+                p2 = pv.getValueFromName(interCAMatrix.getElementAt(c), found);
 
-                if ((dij > dLower) && (dij <= dUpper)) {
-                    sum = sum + pi * pj;
-                    L++;
-                }
-            }
-        }
-        double result = L > 0 ? sum / L : 0;
-        return new DMAttValue(Double.toString(MyMath.Round(result, 2)));
-    }
-
-    /***
-     * 
-     * @param pv
-     * @param interCAMatrix
-     * @param dLower
-     * @param dUpper
-     * @return 
-     */
-    public DMAttValue get3DMax(PropertyVector pv, IEDMatrix interCAMatrix, double dLower, double dUpper) {
-
-        boolean[] found = {true};
-        double pi;
-        double pj;
-        double dij;
-        double max = Double.MIN_VALUE;
-        int L = 0;
-
-        for (int i = 1; i < interCAMatrix.getRows()-1; i++) {
-            pi = pv.getValueFromName(interCAMatrix.getElementAt(i), found);
-            for (int j = i+1; j < interCAMatrix.getColumns(); j++) {
-                pj = pv.getValueFromName(interCAMatrix.getElementAt(j), found);
-                dij = interCAMatrix.getValueAt(i, j);
-
-                if ((dij > dLower) && (dij <= dUpper)) {
-                    max = Math.max(max, pi * pj);
-                    L++;
-                }
+                pMult = p1 * p2;
+                radius = interCAMatrix.getValueAt(f, c);
+                coef = S * radius;
+                factor = Math.sin(coef) / (coef);
+                sum = sum + pMult * factor;
             }
         }
 
-        double result = L != 0 ? MyMath.Round(max, 2) : 0;
-        return new DMAttValue(Double.toString(result));
-    }
-
-    /***
-     * 
-     * @param pv
-     * @param interCAMatrix
-     * @param dLower
-     * @param dUpper
-     * @return 
-     */
-    public DMAttValue get3DMin(PropertyVector pv, IEDMatrix interCAMatrix, double dLower, double dUpper) {
-
-        boolean[] found = {true};
-        double pi;
-        double pj;
-        double dij;
-        double min = Double.MAX_VALUE;
-        int L = 0;
-
-        for (int i = 1; i < interCAMatrix.getRows()-1; i++) {
-            pi = pv.getValueFromName(interCAMatrix.getElementAt(i), found);
-            for (int j = i+1; j < interCAMatrix.getColumns(); j++) {
-                pj = pv.getValueFromName(interCAMatrix.getElementAt(j), found);
-                dij = interCAMatrix.getValueAt(i, j);
-
-                if ((dij > dLower) && (dij <= dUpper)) {
-                    min = Math.min(min, pi * pj);
-                    L++;
-                }
-            }
-        }
-
-        double result = L != 0 ? MyMath.Round(min, 2) : 0;
-        return new DMAttValue(Double.toString(result));
+        return new DMAttValue(Double.toString(MyMath.Round(sum, 2)));
     }
 
     public Properties init(String cfgPath) throws Exception {
@@ -305,7 +196,7 @@ public class Correlation3D {
                 throw new IllegalArgumentException("Configuration file not specified... must supply -cfg option...");
             }
         } catch (Exception ex) {
-            Logger.getLogger(Correlation3D.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Morse3D.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
