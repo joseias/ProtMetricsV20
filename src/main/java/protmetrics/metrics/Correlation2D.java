@@ -31,12 +31,15 @@ import protmetrics.dao.dm.DMInstance;
 import protmetrics.utils.Formats;
 
 /**
- *
+ * [1] G. Moreau, P. Broto. Autocorrelation of a topological structure: 
+ * A new molecular descriptor. 
+ * Nouv. J. Chim., 4, 359 (1980).
+
  * @author personal
  */
 public class Correlation2D {
 
-    public static final String INDEX_ID = "Correlation2DMax";
+    public static final String INDEX_ID = "Correlation2D";
 
     public DMDataSet calc2DCorrelationIndex(Properties p) throws Exception {
 
@@ -54,8 +57,6 @@ public class Correlation2D {
         int minDist = Integer.parseInt(p.getProperty(Constants.MIN_DIST));
         int step = Integer.parseInt(p.getProperty(Constants.STEP));
 
-        int stepDesp = (int) Math.round((maxDist - minDist) / step) + 1;
-
         ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
 
         for (ProtWrapper pw : protList) {
@@ -64,13 +65,14 @@ public class Correlation2D {
 
             String seq = pw.getSequence();
             for (PropertyVector pv : propMatrix.PropertyVectorsColumns) {
-                int rstep = minDist;
-                for (int currentDesp = 0; currentDesp < stepDesp; currentDesp++) {
+                int currentDist = minDist;
+                
+                while (currentDist <= maxDist) {
                     if (doProduct) {
                         /* Calcular el indice */
-                        DMAttValue r = this.get2DProd(pv, seq, rstep);
+                        DMAttValue r = this.get2DProd(pv, seq, currentDist);
 
-                        String attName = pv.PropertyName + "_" + (double) rstep;
+                        String attName = pv.PropertyName + "_" + (double) currentDist;
                         DMAtt att = new DMAtt(attName, Double.class, attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
@@ -78,9 +80,9 @@ public class Correlation2D {
 
                     if (doMax) {
                         /* Calcular el indice */
-                        DMAttValue r = this.get2DMax(pv, seq, rstep);
+                        DMAttValue r = this.get2DMax(pv, seq, currentDist);
 
-                        String attName = pv.PropertyName + "_Max_" + (double) rstep;
+                        String attName = pv.PropertyName + "_Max_" + (double) currentDist;
                         DMAtt att = new DMAtt(attName, Double.class, attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
@@ -88,15 +90,15 @@ public class Correlation2D {
 
                     if (doMin) {
                         /* Calcular el indice */
-                        DMAttValue r = this.get2DMin(pv, seq, rstep);
+                        DMAttValue r = this.get2DMin(pv, seq, currentDist);
 
-                        String attName = pv.PropertyName + "_Min_" + (double) rstep;
+                        String attName = pv.PropertyName + "_Min_" + (double) currentDist;
                         DMAtt att = new DMAtt(attName, Double.class, attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
                     }
 
-                    rstep = rstep + step;
+                    currentDist = currentDist + step;
                 }
             }
             ds.addInstance(inst);
@@ -110,27 +112,27 @@ public class Correlation2D {
      *
      * @param pv
      * @param seq
-     * @param step
+     * @param lag
      * @return
      */
-    public DMAttValue get2DProd(PropertyVector pv, String seq, int step) {
+    public DMAttValue get2DProd(PropertyVector pv, String seq, int lag) {
 
         boolean[] found = {true};
-        double sum = 0;
-        double p1;
-        double p2;
-        int cantSum = 0;
+        double pi;
+        double pj;
+        double sum = 0;        
+        int L = 0;
 
         for (int i = 0; i < seq.length(); i++) {
-            p1 = pv.getValueFromName(seq.substring(i, i + 1), found);
-            if (i + step < seq.length()) {
-                p2 = pv.getValueFromName(seq.substring(i + step, i + step + 1), found);
-                sum = sum + p1 * p2;
-                cantSum++;
+            pi = pv.getValueFromName(seq.substring(i, i + 1), found);
+            if (i + lag < seq.length()) {
+                pj = pv.getValueFromName(seq.substring(i + lag, i + lag + 1), found);
+                sum = sum + pi * pj;
+                L++;
             }
         }
 
-        double result = cantSum > 0 ? sum / cantSum : 0;
+        double result = L > 0 ? sum / L : 0;
         return new DMAttValue(Double.toString(MyMath.Round(result, 2)));
     }
 
@@ -140,26 +142,26 @@ public class Correlation2D {
      *
      * @param pv
      * @param seq
-     * @param step
+     * @param lag
      * @return
      */
-    public DMAttValue get2DMax(PropertyVector pv, String seq, int step) {
+    public DMAttValue get2DMax(PropertyVector pv, String seq, int lag) {
 
         boolean[] found = {true};
-        double p1;
-        double p2;
-        double max = Double.MIN_VALUE;
-        int cantSum = 0;
+        double pi;
+        double pj;
+        double max = Double.MIN_VALUE;        
+        int L = 0;
 
         for (int i = 0; i < seq.length(); i++) {
-            p1 = pv.getValueFromName(seq.substring(i, i + 1), found);
-            if (i + step < seq.length()) {
-                p2 = pv.getValueFromName(seq.substring(i + step, i + step + 1), found);
-                max = Math.max(max, p1 * p2);
-                cantSum++;
+            pi = pv.getValueFromName(seq.substring(i, i + 1), found);
+            if (i + lag < seq.length()) {
+                pj = pv.getValueFromName(seq.substring(i + lag, i + lag + 1), found);
+                max = Math.max(max, pi * pj);
+                L++;
             }
         }
-        double result = cantSum != 0 ? MyMath.Round(max, 2) : 0;
+        double result = L != 0 ? MyMath.Round(max, 2) : 0;
         return new DMAttValue(Double.toString(result));
     }
 
@@ -169,26 +171,26 @@ public class Correlation2D {
      *
      * @param pv
      * @param seq
-     * @param step
+     * @param lag
      * @return
      */
-    public DMAttValue get2DMin(PropertyVector pv, String seq, int step) {
+    public DMAttValue get2DMin(PropertyVector pv, String seq, int lag) {
 
         boolean[] found = {true};
-        double p1;
-        double p2;
-        double min = Double.MAX_VALUE;
-        int cantSum=0;
-        
+        double pi;
+        double pj;
+        double min = Double.MAX_VALUE;        
+        int L = 0;
+
         for (int i = 0; i < seq.length(); i++) {
-            p1 = pv.getValueFromName(seq.substring(i, i + 1), found);
-            if (i + step < seq.length()) {
-                p2 = pv.getValueFromName(seq.substring(i + step, i + step + 1), found);
-                min = Math.min(min, p1 * p2);
-                cantSum++;
+            pi = pv.getValueFromName(seq.substring(i, i + 1), found);
+            if (i + lag < seq.length()) {
+                pj = pv.getValueFromName(seq.substring(i + lag, i + lag + 1), found);
+                min = Math.min(min, pi * pj);
+                L++;
             }
         }
-        double result = cantSum != 0 ? MyMath.Round(min, 2) : 0;
+        double result = L != 0 ? MyMath.Round(min, 2) : 0;
         return new DMAttValue(Double.toString(result));
     }
 
@@ -251,11 +253,18 @@ public class Correlation2D {
         if (!p.containsKey(Constants.STEP)) {
             throw new IllegalArgumentException("Step not specified for 2D Correlation...");
         }
+        else{
+            double step = Double.parseDouble(p.getProperty(Constants.STEP));
+            if(step<=0){
+                throw new IllegalArgumentException("Step mut be > 0 for 2D Correlation...");
+            }
+        }
 
         /*Output formar*/
         if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
             throw new IllegalArgumentException("Output format not specified for 2D Correlation...");
         }
+
 
         PropertyMatrix pmAll = DataLoader.loadPropertyMatrix(pmPath);
         int[] indices = BioUtils.getSelectedIndices(p.getProperty(Constants.SELECTED_INDICES));
