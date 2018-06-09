@@ -35,9 +35,9 @@ public class Morse3D {
 
         PropertyMatrix propMatrix = (PropertyMatrix) p.get(Constants.PROP_MATRIX);
 
-        int maxDist = Integer.parseInt(p.getProperty(Constants.MAX_DIST));
-        int minDist = Integer.parseInt(p.getProperty(Constants.MIN_DIST));
-        int step = Integer.parseInt(p.getProperty(Constants.STEP));
+        double maxDist = Double.parseDouble(p.getProperty(Constants.MAX_DIST));
+        double minDist = Double.parseDouble(p.getProperty(Constants.MIN_DIST));
+        double step = Double.parseDouble(p.getProperty(Constants.STEP));
 
         int stepDesp = (int) Math.round((maxDist - minDist) / step) + 1; //-> Para ver el rango de distancia.;
 
@@ -84,7 +84,6 @@ public class Morse3D {
         for (int f = 2; f < interCAMatrix.getRows(); f++) {
             p1 = pv.getValueFromName(interCAMatrix.getElementAt(f), found);
             for (int c = 1; c < f; c++) {
-                /* Af Aj e(-B(r-rij)) */
                 p2 = pv.getValueFromName(interCAMatrix.getElementAt(c), found);
 
                 pMult = p1 * p2;
@@ -137,28 +136,28 @@ public class Morse3D {
 
         /*Min radius*/
         if (!p.containsKey(Constants.MIN_DIST)) {
-            throw new IllegalArgumentException("Min Distance not specified for 2D Correlation...");
+            throw new IllegalArgumentException("Min Distance not specified for 3D MORSE...");
         }
 
         /*Max radius*/
         if (!p.containsKey(Constants.MAX_DIST)) {
-            throw new IllegalArgumentException("Max Distance not specified for 2D Correlation...");
+            throw new IllegalArgumentException("Max Distance not specified for 3D MORSE...");
         }
 
         /*Step*/
         if (!p.containsKey(Constants.STEP)) {
-            throw new IllegalArgumentException("Step not specified for 2D Correlation...");
+            throw new IllegalArgumentException("Step not specified for 3D MORSE...");
         }
         else{
             double step = Double.parseDouble(p.getProperty(Constants.STEP));
             if(step<=0){
-                throw new IllegalArgumentException("Step mut be > 0 for 2D Correlation...");
+                throw new IllegalArgumentException("Step mut be > 0 for 3D MORSE...");
             }
         }
 
         /*Output formar*/
         if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
-            throw new IllegalArgumentException("Output format not specified for 2D Correlation...");
+            throw new IllegalArgumentException("Output format not specified for 3D MORSE...");
         }
 
         PropertyMatrix pmAll = DataLoader.loadPropertyMatrix(pmPath);
@@ -178,10 +177,10 @@ public class Morse3D {
                     .parse(args);
 
             if (a.cfgPath != null) {
-                Correlation3D tdc = new Correlation3D();
+                Morse3D tdc = new Morse3D();
                 Properties p = tdc.init(a.cfgPath);
 
-                DMDataSet ds = tdc.calc3DCorrelationIndex(p);
+                DMDataSet ds = tdc.calc3DMorseIndex(p);
                 String format = p.getProperty(Constants.OUTPUT_FORMAT);
                 String outFile = p.getProperty(Constants.OUTPUT_FILE_PATH);
                 switch (format) {
@@ -200,7 +199,7 @@ public class Morse3D {
         }
     }
 
-    public static class Constants {
+    private static class Constants {
 
         public static final String PROPERTY_VECTOR = "PROPERTY_VECTOR";
         public static final String PROP_MATRIX = "PROP_MATRIX";
@@ -224,7 +223,7 @@ public class Morse3D {
 
     }
 
-    static class Args {
+    private static class Args {
 
         @Parameter(names = {"--cfg", "-cfg"})
         String cfgPath = null;
