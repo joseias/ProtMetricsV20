@@ -15,4 +15,5 @@ public class Formats {
     public static final String TXT = "txt";
     public static final String PDB = "pdb";
     public static final String FASTA = "fasta";
+    public static final String XYZ = "xyz";
 }

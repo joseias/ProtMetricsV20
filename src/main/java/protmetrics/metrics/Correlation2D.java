@@ -14,14 +14,13 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import protmetrics.dao.FastaClass;
-import protmetrics.dao.PdbClass;
-import protmetrics.dao.PropertyMatrix;
-import protmetrics.dao.PropertyVector;
+import protmetrics.dao.files.fasta.FastaFile;
+import protmetrics.dao.files.pdb.PdbFile;
+import protmetrics.utils.propertymatrix.PropertyMatrix;
+import protmetrics.utils.propertymatrix.PropertyVector;
 import protmetrics.utils.BioUtils;
-import protmetrics.utils.DataLoader;
 import protmetrics.utils.MyMath;
-import protmetrics.utils.PdbFilter;
+import protmetrics.utils.Filter;
 import com.beust.jcommander.Parameter;
 import java.util.ArrayList;
 import protmetrics.dao.dm.DMAttValue;
@@ -64,7 +63,7 @@ public class Correlation2D {
             inst.setAttValue(attPN, new DMAttValue(inst.getInstID()));
 
             String seq = pw.getSequence();
-            for (PropertyVector pv : propMatrix.PropertyVectorsColumns) {
+            for (PropertyVector pv : propMatrix.getPropertyVectorsColumns()) {
                 int currentDist = minDist;
                 
                 while (currentDist <= maxDist) {
@@ -133,7 +132,7 @@ public class Correlation2D {
         }
 
         double result = L > 0 ? sum / L : 0;
-        return new DMAttValue(Double.toString(MyMath.Round(result, 2)));
+        return new DMAttValue(Double.toString(MyMath.round(result, 2)));
     }
 
     /**
@@ -161,7 +160,7 @@ public class Correlation2D {
                 L++;
             }
         }
-        double result = L != 0 ? MyMath.Round(max, 2) : 0;
+        double result = L != 0 ? MyMath.round(max, 2) : 0;
         return new DMAttValue(Double.toString(result));
     }
 
@@ -190,7 +189,7 @@ public class Correlation2D {
                 L++;
             }
         }
-        double result = L != 0 ? MyMath.Round(min, 2) : 0;
+        double result = L != 0 ? MyMath.round(min, 2) : 0;
         return new DMAttValue(Double.toString(result));
     }
 
@@ -211,20 +210,20 @@ public class Correlation2D {
         }
 
         File pdbFilesDir = new File(pdbsPath);
-        PdbFilter pdbFilter = new PdbFilter("." + Formats.PDB);
+        Filter pdbFilter = new Filter("." + Formats.PDB);
         File[] pdbFiles = pdbFilesDir.listFiles(pdbFilter);
 
-        pdbFilter = new PdbFilter("." + Formats.FASTA);
+        pdbFilter = new Filter("." + Formats.FASTA);
         File[] fastaFiles = pdbFilesDir.listFiles(pdbFilter);
 
         ArrayList<ProtWrapper> protList = new ArrayList<>(pdbFiles.length + fastaFiles.length);
         for (File pdbFile : pdbFiles) {
-            PdbClass pdbC = new PdbClass(pdbFile.getAbsolutePath());
+            PdbFile pdbC = new PdbFile(pdbFile.getAbsolutePath());
             protList.add(new ProtWrapper(pdbC.getProteinName(), pdbC.getSequence()));
         }
 
         for (File fastaFile : fastaFiles) {
-            FastaClass fc = new FastaClass(fastaFile.getAbsolutePath());
+            FastaFile fc = new FastaFile(fastaFile.getAbsolutePath());
             String[][] ns = fc.getSequences();
             for (String[] ns1 : ns) {
                 protList.add(new ProtWrapper(ns1[0], ns1[1]));
@@ -266,7 +265,7 @@ public class Correlation2D {
         }
 
 
-        PropertyMatrix pmAll = DataLoader.loadPropertyMatrix(pmPath);
+        PropertyMatrix pmAll = new PropertyMatrix(pmPath);
         int[] indices = BioUtils.getSelectedIndices(p.getProperty(Constants.SELECTED_INDICES));
         PropertyMatrix pm = pmAll.getSubPropertyMatrix(indices);
         p.put(Constants.PROP_MATRIX, pm);
