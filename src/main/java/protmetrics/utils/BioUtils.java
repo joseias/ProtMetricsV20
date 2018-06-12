@@ -6,15 +6,25 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.jgrapht.Graph;
 
 import protmetrics.dao.AMutation;
-import protmetrics.dao.AtomLine;
-import protmetrics.dao.PdbClass;
-import protmetrics.dao.PropertyMatrix;
+import protmetrics.dao.files.XYZ.GAtom;
+import protmetrics.dao.files.pdb.PdbAtomLine;
+import protmetrics.dao.files.pdb.PdbFile;
+import protmetrics.dao.intervals.Interval;
+import protmetrics.dao.intervals.Interval.IntervalType;
 import protmetrics.errors.SomeErrorException;
+import protmetrics.metrics.Wiener3D.IntervalTypeCodes;
 
 /// <summary>
 /// Summary description for BioUtils.
@@ -400,7 +410,8 @@ public class BioUtils {
 
                     m_mutations.add(m_mut);
                     m_actualLine = m_reader.readLine();
-                } else {
+                }
+                else {
                     m_actualLine = m_reader.readLine();
                 }
             }
@@ -658,49 +669,21 @@ public class BioUtils {
         return file.exists();
     }
 
-    public static String[][] formatRDFIndexResultMatrix(PropertyMatrix a_pm, double a_maxRadium, double a_minRadium, double a_rdfStep, int a_cantPdbs) {
-
-        /*
-			 * -> Creando la matriz resultado. Mas  filas para poner PropertyName y PropertyStep
-			 * -> y mas 1 columna para PdbNames
-         */
-        //int m_lag=Integer.parseInt(Double.toString(Math.floor((a_maxRadium-a_minRadium)/a_rdfStep)))+1;
-        int m_lag = (int) Math.round((a_maxRadium - a_minRadium) / a_rdfStep) + 1;
-
-        String[][] m_result = new String[a_cantPdbs + 2][(a_pm.PropertyVectorsColumns.length * m_lag) + 1];
-
-        for (int i = 0; i < a_pm.PropertyVectorsColumns.length; i++) {
-            m_result[0][i * m_lag + 1] = a_pm.PropertyVectorsColumns[i].PropertyName;
-            double m_rstep = a_minRadium;
-            for (int j = i * m_lag + 1; j < (i + 1) * m_lag + 1; j++) {
-                m_result[1][j] = a_pm.PropertyVectorsColumns[i].PropertyName + "_" + m_rstep;
-                m_rstep = m_rstep + a_rdfStep;
-            }
-        }
-        for (int f = 0; f < m_result.length; f++) {
-            for (int c = 0; c < m_result[0].length; c++) {
-                if (m_result[f][c] == null) {
-                    m_result[f][c] = " ";
-                }
-            }
-        }
-        return m_result;
-
-    }//public String[,] FormatBioIndexResultMatrix(PropertyMatrix a_pm,int a_maxStep,int a_step,int a_cantPdbs)
-
-    /***
+    /**
+     * *
      * Creates the inter CA distance matrix, for 3D indices...
+     *
      * @param pdb
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
-    public static String[][] getInterCADistMatrixN(PdbClass pdb) throws Exception {
+    public static String[][] getInterCADistMatrixN(PdbFile pdb) throws Exception {
 
         double x;
         double y;
         double z;
 
-        AtomLine[] caData = pdb.getCALines();
+        PdbAtomLine[] caData = pdb.getCALines();
         String[][] result = new String[caData.length + 1][caData.length + 1];
 
         result[0][0] = "ELEMENTS";
@@ -711,13 +694,132 @@ public class BioUtils {
         }
         for (int i = 0; i < caData.length; i++) {
             for (int j = i; j < caData.length; j++) {
-                x = Math.pow(caData[i].GetLocation().X - caData[j].GetLocation().X, 2);
-                y = Math.pow(caData[i].GetLocation().Y - caData[j].GetLocation().Y, 2);
-                z = Math.pow(caData[i].GetLocation().Z - caData[j].GetLocation().Z, 2);
+                x = Math.pow(caData[i].GetLocation().getX() - caData[j].GetLocation().getX(), 2);
+                y = Math.pow(caData[i].GetLocation().getY() - caData[j].GetLocation().getY(), 2);
+                z = Math.pow(caData[i].GetLocation().getZ() - caData[j].GetLocation().getZ(), 2);
 
-                result[i + 1][j + 1] = result[j + 1][i + 1] = Double.toString(MyMath.Round(Math.sqrt(x + y + z), 4));
+                result[i + 1][j + 1] = result[j + 1][i + 1] = Double.toString(MyMath.round(Math.sqrt(x + y + z), 4));
             }
         }
         return result;
     }
+
+    private static int precision = -1;
+
+    public static <V, E> List<V> graphToList(Graph<V, E> graph) {
+        Set<V> vertices = graph.vertexSet();
+        List<V> result = new ArrayList<>(vertices.size());
+
+        for (V v : vertices) {
+            result.add(v);
+        }
+
+        return result;
+    }
+
+    public static <E> String printVector(E[] elements) {
+        StringBuilder buffer = new StringBuilder();
+        for (E element : elements) {
+            buffer.append(element.toString()).append(",");
+        }
+
+        return buffer.substring(0, buffer.length() - 1);
+    }
+
+    public static String printVector(double[] elements) {
+        StringBuilder buffer = new StringBuilder();
+        for (double element : elements) {
+            buffer.append(Double.toString(element)).append(",");
+        }
+
+        return buffer.substring(0, buffer.length() - 1);
+    }
+
+    public static double getDistance(GAtom a, GAtom b) {
+        return a.getLocation().distance(b.getLocation());
+    }
+
+    public static double round(double value, int precision) {
+        if (precision < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(precision, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+    public static Properties getPropertiesFromArgs(String[] args) {
+        Properties result = new Properties();
+
+        for (int i = 0; i < args.length; i = i + 2) {
+            if ('-' == args[i].charAt(0)) {
+                result.put(args[i], args[i + 1]);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Applies a regex to verify if the string match with a interval
+     * specification
+     *
+     * @param target
+     * @return
+     */
+    public static boolean matchIntExp(String target) {
+        String regex = "([\\[]|[\\(])[0-9]+.[0-9]+,[0-9]+.[0-9]+([\\]]|[\\)])";
+        return target.matches(regex);
+    }
+
+    public static Interval getIntervalFromDesc(String desc) {
+        String regex = "([\\[]|[\\(])(([0-9]+.[0-9]+),([0-9]+.[0-9]+))([\\]]|[\\)])";
+
+        Pattern r = Pattern.compile(regex);
+        Matcher m = r.matcher(desc);
+
+        if (m.find()) {
+            String lo = m.group(1);
+            String ll = m.group(3);
+            String ul = m.group(4);
+            String ro = m.group(5);
+
+            double lld = Double.parseDouble(ll);
+            double uld = Double.parseDouble(ul);
+
+            boolean lclosed_rclosed = lo.equals(IntervalTypeCodes.LCLOSED) && ro.equals(IntervalTypeCodes.RCLOSED);
+            boolean lclosed_ropen = lo.equals(IntervalTypeCodes.LCLOSED) && ro.equals(IntervalTypeCodes.ROPEN);
+            boolean lopen_ropen = lo.equals(IntervalTypeCodes.LOPEN) && ro.equals(IntervalTypeCodes.ROPEN);
+            boolean lopen_rclosed = lo.equals(IntervalTypeCodes.LOPEN) && ro.equals(IntervalTypeCodes.RCLOSED);
+
+            IntervalType itype = IntervalType.LCLOSED_ROPEN;
+
+            /*Better implementation with nested if, but for readability and because if are exclusive*/
+            if (lclosed_rclosed) {
+                itype = IntervalType.LCLOSED_RCLOSED;
+            }
+            if (lclosed_ropen) {
+                itype = IntervalType.LCLOSED_ROPEN;
+            }
+            if (lopen_ropen) {
+                itype = IntervalType.LOPEN_ROPEN;
+            }
+            if (lopen_rclosed) {
+                itype = IntervalType.LOPEN_RCLOSED;
+            }
+            if (!(lclosed_rclosed || lclosed_ropen || lopen_rclosed || lopen_ropen)) {
+                System.err.println("Interval " + desc + " specification is wrong, check it...");
+                return null;
+            }
+
+            return new Interval(lld, uld, itype);
+
+        }
+        else {
+            System.err.println("Interval " + desc + " specification is wrong, check it...");
+            return null;
+        }
+    }
+
 }

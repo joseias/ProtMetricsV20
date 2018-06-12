@@ -10,18 +10,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import protmetrics.dao.IEDMatrix;
-import protmetrics.dao.PdbClass;
-import protmetrics.dao.PropertyMatrix;
-import protmetrics.dao.PropertyVector;
+import protmetrics.dao.files.pdb.PdbFile;
+import protmetrics.utils.propertymatrix.PropertyMatrix;
+import protmetrics.utils.propertymatrix.PropertyVector;
 import protmetrics.dao.dm.DMAtt;
 import protmetrics.dao.dm.DMAttValue;
 import protmetrics.dao.dm.DMDataSet;
 import protmetrics.dao.dm.DMInstance;
 import protmetrics.utils.BioUtils;
-import protmetrics.utils.DataLoader;
 import protmetrics.utils.Formats;
 import protmetrics.utils.MyMath;
-import protmetrics.utils.PdbFilter;
+import protmetrics.utils.Filter;
 
 /**
  * *
@@ -60,7 +59,7 @@ public class Correlation3D {
             inst.setAttValue(attPN, new DMAttValue(inst.getInstID()));
 
             //-> Para cada propiedad, calcular los indices a distintos pasos
-            for (PropertyVector pv : propMatrix.PropertyVectorsColumns) {
+            for (PropertyVector pv : propMatrix.getPropertyVectorsColumns()) {
                 double currentDist = minDist;
 
                 /* Para cada paso, calcular el indice AutoCorrelacion 3D */
@@ -71,7 +70,7 @@ public class Correlation3D {
                         /* Calcular el indice */
                         DMAttValue r = this.get3DProd(pv, pw.getInterCADistMatrix(), dLower, dUpper);
 
-                        String attName = pv.PropertyName + "_[" + MyMath.Round(dLower, 2) + " - " + MyMath.Round(dUpper, 2) + "]";
+                        String attName = pv.PropertyName + "_[" + MyMath.round(dLower, 2) + " - " + MyMath.round(dUpper, 2) + "]";
                         DMAtt att = new DMAtt(attName, Double.class, attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
@@ -81,7 +80,7 @@ public class Correlation3D {
                         /* Calcular el indice */
                         DMAttValue r = this.get3DMax(pv, pw.getInterCADistMatrix(), dLower, dUpper);
 
-                        String attName = pv.PropertyName + "_Max_[" + MyMath.Round(dLower, 2) + " - " + MyMath.Round(dUpper, 2) + "]";
+                        String attName = pv.PropertyName + "_Max_[" + MyMath.round(dLower, 2) + " - " + MyMath.round(dUpper, 2) + "]";
                         DMAtt att = new DMAtt(attName, Double.class, attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
@@ -91,7 +90,7 @@ public class Correlation3D {
                         /* Calcular el indice */
                         DMAttValue r = this.get3DMin(pv, pw.getInterCADistMatrix(), dLower, dUpper);
 
-                        String attName = pv.PropertyName + "_Min_[" + MyMath.Round(dLower, 2) + " - " + MyMath.Round(dUpper, 2) + "]";
+                        String attName = pv.PropertyName + "_Min_[" + MyMath.round(dLower, 2) + " - " + MyMath.round(dUpper, 2) + "]";
                         DMAtt att = new DMAtt(attName, Double.class, attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
@@ -136,7 +135,7 @@ public class Correlation3D {
             }
         }
         double result = L > 0 ? sum / L : 0;
-        return new DMAttValue(Double.toString(MyMath.Round(result, 2)));
+        return new DMAttValue(Double.toString(MyMath.round(result, 2)));
     }
 
     /***
@@ -169,7 +168,7 @@ public class Correlation3D {
             }
         }
 
-        double result = L != 0 ? MyMath.Round(max, 2) : 0;
+        double result = L != 0 ? MyMath.round(max, 2) : 0;
         return new DMAttValue(Double.toString(result));
     }
 
@@ -203,7 +202,7 @@ public class Correlation3D {
             }
         }
 
-        double result = L != 0 ? MyMath.Round(min, 2) : 0;
+        double result = L != 0 ? MyMath.round(min, 2) : 0;
         return new DMAttValue(Double.toString(result));
     }
 
@@ -223,12 +222,12 @@ public class Correlation3D {
         }
 
         File pdbFilesDir = new File(pdbsPath);
-        PdbFilter pdbFilter = new PdbFilter("." + Formats.PDB);
+        Filter pdbFilter = new Filter("." + Formats.PDB);
         File[] pdbFiles = pdbFilesDir.listFiles(pdbFilter);
 
         ArrayList<ProtWrapper> protList = new ArrayList<>(pdbFiles.length);
         for (File pdbFile : pdbFiles) {
-            PdbClass pdbC = new PdbClass(pdbFile.getAbsolutePath());
+            PdbFile pdbC = new PdbFile(pdbFile.getAbsolutePath());
             String[][] interCADistMatrix = BioUtils.getInterCADistMatrixN(pdbC);
             IEDMatrix pdbInterDistMatrix = new IEDMatrix(interCADistMatrix);
 
@@ -270,7 +269,7 @@ public class Correlation3D {
             throw new IllegalArgumentException("Output format not specified for 3D Correlation...");
         }
 
-        PropertyMatrix pmAll = DataLoader.loadPropertyMatrix(pmPath);
+        PropertyMatrix pmAll = new PropertyMatrix(pmPath);
         int[] indices = BioUtils.getSelectedIndices(p.getProperty(Constants.SELECTED_INDICES));
         PropertyMatrix pm = pmAll.getSubPropertyMatrix(indices);
         p.put(Constants.PROP_MATRIX, pm);
