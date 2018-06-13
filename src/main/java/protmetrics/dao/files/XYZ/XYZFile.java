@@ -14,11 +14,6 @@ public class XYZFile {
     private List<GAtom> atoms;
     private String ID;
 
-    public XYZFile(List<GAtom> atoms, String fileName) {
-        this.atoms = atoms;
-        this.ID = fileName;
-    }
-
     public List<GAtom> getAtoms() {
         return atoms;
     }
@@ -531,7 +526,9 @@ public class XYZFile {
                     break;
             } //switch
 
-            this.atoms.add(new GAtom(aloc, at, getAtoms().size() + 1));
+            if (at != null) {
+                this.atoms.add(new GAtom(aloc, at, getAtoms().size() + 1));
+            }
             currentLine = m_lnr.readLine();
         }// while
 

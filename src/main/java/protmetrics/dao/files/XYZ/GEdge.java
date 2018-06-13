@@ -14,11 +14,6 @@ public class GEdge {
     private GAtom source;
     private double weight;
 
-    public GEdge(GAtom source,GAtom target,double weight){
-        this.source=source;
-        this.target=target;
-        this.weight=weight;
-    }
     /**
      * @return the target
      */
