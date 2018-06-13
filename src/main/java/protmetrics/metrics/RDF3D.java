@@ -180,10 +180,10 @@ public class RDF3D {
                     .parse(args);
 
             if (a.cfgPath != null) {
-                Morse3D tdc = new Morse3D();
-                Properties p = tdc.init(a.cfgPath);
+                RDF3D rdf = new RDF3D();
+                Properties p = rdf.init(a.cfgPath);
 
-                DMDataSet ds = tdc.calc3DMorseIndex(p);
+                DMDataSet ds = rdf.calcRDFIndex(p);
                 String format = p.getProperty(Constants.OUTPUT_FORMAT);
                 String outFile = p.getProperty(Constants.OUTPUT_FILE_PATH);
                 switch (format) {

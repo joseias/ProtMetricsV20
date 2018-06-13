@@ -1,7 +1,6 @@
 package protmetrics.utils.filters;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -12,8 +11,8 @@ import protmetrics.dao.files.XYZ.GAtom;
 public class ExtAtomFilterGraphene extends ExtAtomsFilter {
 
     @Override
-    public List<GAtom> getExteriorVertices(WeightedPseudograph<GAtom, DefaultWeightedEdge> graph) {
-        List<GAtom> result = new ArrayList<>(graph.vertexSet().size());
+    public Set<GAtom> getExteriorVertices(WeightedPseudograph<GAtom, DefaultWeightedEdge> graph) {
+        Set<GAtom> result = new HashSet<>(graph.vertexSet().size());
         for (GAtom vertex : graph.vertexSet()) {
             if (isExternal(graph, vertex)) {
                 boolean add = result.add(vertex);

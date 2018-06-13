@@ -28,7 +28,8 @@ import protmetrics.utils.MyMath;
 public class XYZMOLConverter {
     
     public MolFile convert(XYZFile input, Properties prop) throws Exception {
-        Boolean loadBondType = Boolean.parseBoolean(prop.getProperty(Wiener3D.Constants.LOAD_BOND_TYPE, "true"));
+        
+        boolean loadBondType = Boolean.parseBoolean(prop.getProperty(Wiener3D.Constants.LOAD_BOND_TYPE));
         
         WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds = new WeightedPseudograph<>(DefaultWeightedEdge.class);
         
