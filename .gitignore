@@ -4,10 +4,10 @@ nbbuild/
 nbdist/
 .nb-gradle/
 
-target/archive-tmp
+target/archive-tmp/
 target/classes/
 target/generated-sources/
 target/maven-archiver/
-target/surefire
+target/surefire/
 target/test-classes/
 

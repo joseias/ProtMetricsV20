@@ -23,12 +23,6 @@ public class GAtom {
         this.ID = id;
     }
 
-    public GAtom(Point3D location, AtomType type) {
-        this.location = location;
-        this.type = type;
-        this.ID = -1;
-    }
-
     public AtomType getType() {
         return type;
     }
