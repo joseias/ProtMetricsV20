@@ -7,17 +7,14 @@ import java.util.ArrayList;
 
 import protmetrics.errors.SomeErrorException;
 import protmetrics.utils.BioUtils;
-/// <summary>
-/// Summary description for PdbFile.
-/// </summary>
 
 public class PdbFile {
 
-    public int[] caLinesIndex; //Numeros de lineas donde estan los CA.
-    public int[] atomLinesIndex; //Numero de las lineas que son ATOM.
-    public PdbLine[] lines;
-    public String proteinName;
-    public String pdbPath = "";
+    private int[] caLinesIndex; //Numeros de lineas donde estan los CA.
+    private int[] atomLinesIndex; //Numero de las lineas que son ATOM.
+    private PdbLine[] lines;
+    private String proteinName;
+    private String pdbPath = "";
 
     public PdbFile() {
 
@@ -27,16 +24,6 @@ public class PdbFile {
         pdbPath = a_pdbFilePath;
         try {
             this.intPDB(a_pdbFilePath, "~");
-        } catch (Exception m_see) {
-            throw m_see;
-        }
-
-    }//public PdbFile(String a_pdbFilePath)
-
-    public PdbFile(String a_pdbFilePath, String a_seq) throws Exception {
-        pdbPath = a_pdbFilePath;
-        try {
-            this.intPDB(a_pdbFilePath, a_seq);
         } catch (Exception m_see) {
             throw m_see;
         }
@@ -77,25 +64,25 @@ public class PdbFile {
             int m_totalPdbLines = 0;
 
             /*Leer el nombre de la proteina, ver si siempre esta en la misma posicion de la primera linea.*/
-            m_tokens = BioUtils.ProcSplitString(m_actualLine.trim().split("[\\s]+", 0));
+            m_tokens = BioUtils.procSplitString(m_actualLine.trim().split("[\\s]+", 0));
             this.proteinName = m_tokens[1];
             while (m_actualLine != null) {
                 //Aqui se ira poniendo la inicializacion de todas la variable necesarias en PdbFile
 
                 //Parece que hacer m_actualLines.Split(m_sep) da alguna cacharra, verificar
-                //m_tokens=BioUtils.ProcSplitString(m_actualLine.split(new String(new String(m_sep))));
-                m_tokens = BioUtils.ProcSplitString(m_actualLine.trim().split("[\\s]+", 0));
+                //m_tokens=BioUtils.procSplitString(m_actualLine.split(new String(new String(m_sep))));
+                m_tokens = BioUtils.procSplitString(m_actualLine.trim().split("[\\s]+", 0));
 
                 if (m_tokens[0].equals("ATOM")) {
 
                     //Si es de la secuencia seleccionada
                     m_alaux = new PdbAtomLine(m_actualLine, m_tokens);
-                    if (m_alaux.Sequence.equals(a_seq)) {
+                    if (m_alaux.getSequence().equals(a_seq)) {
                         //Es una linea ATOM asi que adicionarala a m_ATOMLineIndex
                         m_ATOMLinesIndex.add(m_totalPdbLines);
 
                         // Si es un CA entonces adicionarla a m_CALinesIndex
-                        if (m_alaux.GetAtomType().equals("CA")) {
+                        if (m_alaux.getAtomType().equals("CA")) {
                             m_CALinesIndex.add(m_totalPdbLines);
                         }
                         m_lines.add(m_alaux);
@@ -143,8 +130,8 @@ public class PdbFile {
         PdbAtomLine[] m_CALines = this.getCALines();
         String m_result = "";
         for (int i = 0; i < m_CALines.length; i++) {
-            //System.out.println(m_CALines[i].GetAminoType());
-            m_result = m_result + BioUtils.AminoThreetoOne(m_CALines[i].GetAminoType());
+            //System.out.println(m_CALines[i].getAminoType());
+            m_result = m_result + BioUtils.aminoThreetoOne(m_CALines[i].getAminoType());
         }
         return m_result;
     }

@@ -16,13 +16,8 @@ public class DMAtt {
     private final String attName;
     private final Class attType;
     private int attOrder;
-        
-    private static String SPECIAL_ATT_NAME = "StructID";
 
-    public DMAtt(String attName, Class attType) {
-        this.attName = attName;
-        this.attType = attType;
-    }
+    private static String SPECIAL_ATT_NAME = "StructID";
 
     public DMAtt(String attName, Class attType, int order) {
         this.attName = attName;

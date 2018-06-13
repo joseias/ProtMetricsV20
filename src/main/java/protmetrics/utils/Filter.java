@@ -10,11 +10,7 @@ public class Filter implements FileFilter {
         c_pattern = a_pattern;
     }
 
-    public boolean accept(File a_file, String a_fileName) {
-
-        return a_fileName.endsWith(c_pattern);
-    }
-
+    @Override
     public boolean accept(File a_file) {
 
         return a_file.getName().endsWith(c_pattern);

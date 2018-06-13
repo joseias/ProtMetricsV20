@@ -10,8 +10,8 @@ import com.beust.jcommander.Parameter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jgrapht.GraphPath;
@@ -33,6 +33,12 @@ import protmetrics.dao.files.mol.MolFile;
 import protmetrics.utils.filters.ExtAtomsFilter;
 
 /**
+ * Implements Wiener index as described in [1] Machine Learning Prediction of
+ * the Energy Gap of Graphene Nanoflakes Using Topological Autocorrelation
+ * Vectors M Fernandez, JI Abreu, H Shi, AS Barnard ACS Combinatorial Science 18
+ * (11), 661-664
+ *
+ * Paths goes through the interior of the molecule
  *
  * @author Docente
  */
@@ -74,7 +80,6 @@ public class Wiener3D {
 
             while (currentPathL <= maxPathL) {
                 /* Calcular el indice (still a bit inefficient since path lengh are explored progressively) */
-
                 DMAttValue r = this.getWienerThrough(wpsg, fwsPath, extAtomFilter, currentPathL, normalized, onlyExt, extNodeTagL, intNodeTagL, precision);
 
                 String attName = "PL_" + Integer.toString(currentPathL);
@@ -101,32 +106,36 @@ public class Wiener3D {
             int intNodeTagL,
             int precision) {
 
-        List<GAtom> external;
+        Set<GAtom> extVertices = extAtomFilter.getExteriorVertices(wpsg);
+        Set<GAtom> procVertices = wpsg.vertexSet();
 
-        if (onlyExt == true) {
-            external = extAtomFilter.getExteriorVertices(wpsg);
-        }
-        else {
-            external = BioUtils.graphToList(wpsg);
+        if (onlyExt) {
+            procVertices = extVertices;
         }
 
         double count = 0;
         double L = 0;
 
+        GAtom[] procVerticesA = new GAtom[procVertices.size()];
+        procVerticesA = procVertices.toArray(procVerticesA);
+
         int pathLength;
         GraphPath<GAtom, DefaultWeightedEdge> path;
-        for (int i = 0; i < external.size() - 1; i++) {
-            for (int j = i + 1; j < external.size(); j++) {
-                path = fwsPath.getPath(external.get(i), external.get(j));
+        for (int i = 0; i < procVerticesA.length - 1; i++) {
+            double iP = extVertices.contains(procVerticesA[i])? extNodeTagL: intNodeTagL;
+            
+            for (int j = i + 1; j < procVerticesA.length; j++) {
+                double jP = extVertices.contains(procVerticesA[j])? extNodeTagL: intNodeTagL;
+                path = fwsPath.getPath(procVerticesA[i], procVerticesA[j]);
+                
                 if (path != null) {
                     /*The weights are supposed to be integers*/
                     pathLength = (int) path.getWeight();
                     if (pathLength == pathL) {
-//                        System.out.println(i+","+j+","+pathLength);
-                        count = count + (intNodeTagL * extNodeTagL);
+//                        System.out.println(procVerticesA[i].getID() + "," + procVerticesA[j].getID() + "," + pathLength);
+                        count = count + (iP * jP);
                         L++;
                     }
-
                 }
             }
         }
@@ -145,7 +154,7 @@ public class Wiener3D {
             throw new IOException(cfgPath + " does not exist...");
         }
         Properties p = BioUtils.loadProperties(cfgPath);
-        
+
         /*Precision*/
         if (!p.containsKey(Constants.PRECISION)) {
             throw new IllegalArgumentException(Constants.PRECISION + " not specified for 3D Wiener...");
@@ -153,7 +162,7 @@ public class Wiener3D {
         else {
             p.put(Constants.PRECISION, Integer.parseInt(p.getProperty(Constants.PRECISION)));
         }
-        
+
         if (!p.containsKey(Constants.BOND_DESC_FILE)) {
             throw new IllegalArgumentException(Constants.BOND_DESC_FILE + " not specified for 3D Wiener...");
         }
@@ -164,7 +173,11 @@ public class Wiener3D {
                 throw new IOException(pmFile + " does not exist...");
             }
         }
- 
+
+        if (!p.containsKey(Wiener3D.Constants.LOAD_BOND_TYPE)) {
+            throw new IllegalArgumentException(Wiener3D.Constants.LOAD_BOND_TYPE + "  not specified for 3D Wiener...");
+        }
+
         if (!p.containsKey(Constants.LOAD_XYZ_DEPLETED)) {
             throw new IllegalArgumentException(Constants.LOAD_XYZ_DEPLETED + " not specified for 3D Wiener...");
         }
@@ -311,37 +324,35 @@ public class Wiener3D {
 
     public static class Constants {
 
+        public static final int DEFAULT_PRECISION = 2;
+        public static final String PRECISION = "PRECISION";
+
         public static final String XYZ_DIRECTORY_PATH = "XYZ_DIRECTORY_PATH";
         public static final String OUTPUT_FILE_PATH = "OUTPUT_FILE_PATH";
         public static final String OUTPUT_FORMAT = "OUTPUT_FORMAT";
 
+        public static final String EXTERNAL_ATOM_FILTER = "EXTERNAL_ATOM_FILTER";
+        public static final String BOND_DESC_FILE = "BOND_DESC_FILE";
+
         public static final String MAX_DIST = "MAX_DIST";
         public static final String MIN_DIST = "MIN_DIST";
 
-        public static final String INSTANCES = "INSTANCES";
-
-        public static final String LOAD_XYZ_DEPLETED = "LOAD_XYZ_DEPLETED";
-        public static final String BOND_DESC_FILE = "BOND_DESC_FILE";
-        public static final String V2K = "V2000";
-        public static final String V3K = "V3000";
-
-        public static final double DEFAULT_EDGE_WEIGHT = 1;
-        public static final String EXTERNAL_ATOM_FILTER = "EXTERNAL_ATOM_FILTER";
-
-        public static final String MOL_TYPE = "MOL_TYPE";
-
-        public static final String MAX_EDGES_BY_ATOM = "MAX_EDGES_BY_ATOM";
-
         public static final String GINDEX_INT_ATOM_TAG = "GINDEX_INT_ATOM_TAG";
         public static final String GINDEX_EXT_ATOM_TAG = "GINDEX_EXT_ATOM_TAG";
+
+        public static final String LOAD_XYZ_DEPLETED = "LOAD_XYZ_DEPLETED";
         public static final String GINDEX_ONLY_EXT = "GINDEX_ONLY_EXT";
+        public static final String GINDEX_NORMALIZED = "GINDEX_NORMALIZED";
         public static final String LOAD_BOND_TYPE = "LOAD_BOND_TYPE";
 
-        public static final String GINDEX_NORMALIZED = "GINDEX_NORMALIZED";
+        public static final String MOL_TYPE = "MOL_TYPE";
+        public static final String V2K = "V2000";
+        public static final String V3K = "V3000";
+        public static final String MAX_EDGES_BY_ATOM = "MAX_EDGES_BY_ATOM";
 
-        public static final int DEFAULT_PRECISION = 2;
-        public static final String PRECISION = "PRECISION";
+        public static final double DEFAULT_EDGE_WEIGHT = 1;
 
+        public static final String INSTANCES = "INSTANCES";
     }
 
     public static class IntervalTypeCodes {

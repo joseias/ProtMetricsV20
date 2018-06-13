@@ -25,11 +25,6 @@ public class IntervalData<Type> extends Interval {
         this.data = data;
     }
 
-    public IntervalData(double start, double end, Type data, IntervalType itype) {
-        super(start, end, itype);
-        this.data = data;
-    }
-
     public Type getData() {
         return data;
     }

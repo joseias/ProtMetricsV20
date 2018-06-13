@@ -25,7 +25,7 @@ public class PropertyMatrix {
         if (m_actualLine != null) {
             //-> Obtener los indices de las propiedades.
             m_actualLineElements = m_actualLine.trim().split("[\\s]+", 0);
-            m_actualLineElements = BioUtils.ProcSplitString(m_actualLineElements);
+            m_actualLineElements = BioUtils.procSplitString(m_actualLineElements);
             propertyVectorsColumns = new PropertyVector[m_actualLineElements.length];
 
             m_actualLine = m_sr.readLine();
@@ -34,7 +34,7 @@ public class PropertyMatrix {
             if (m_actualLine != null) //2
             {
                 m_actualLineElements = m_actualLine.trim().split("[\\s]+", 0);
-                m_actualLineElements = BioUtils.ProcSplitString(m_actualLineElements);
+                m_actualLineElements = BioUtils.procSplitString(m_actualLineElements);
 
                 //-> Crear los PropertyVectors
                 for (int i = 0; i < m_actualLineElements.length; i++) {
@@ -44,7 +44,7 @@ public class PropertyMatrix {
                 m_actualLine = m_sr.readLine();
                 while (m_actualLine != null) {
                     m_actualLineElements = m_actualLine.trim().split("[\\s]+", 0);
-                    m_actualLineElements = BioUtils.ProcSplitString(m_actualLineElements);
+                    m_actualLineElements = BioUtils.procSplitString(m_actualLineElements);
 
                     for (int e = 3; e < m_actualLineElements.length; e++) {
 
