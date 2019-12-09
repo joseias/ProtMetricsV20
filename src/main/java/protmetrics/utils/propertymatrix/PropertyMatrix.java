@@ -58,6 +58,11 @@ public class PropertyMatrix {
         this.propertyVectorsColumns = a_matrixColums;
     }
 
+    /***
+     * Index of properties (the first property has index 1)
+     * @param a_selectedPVC
+     * @return 
+     */
     public PropertyMatrix getSubPropertyMatrix(int[] a_selectedPVC) {
         /*Devuelve una nueva PropertyMatrix cuyo PropertyVectorsColumns es 
             un subconjunto de los de esta, especificados por los valores en el arreglo*/
@@ -67,7 +72,7 @@ public class PropertyMatrix {
         for (int i = 0; i < m_length; i++) {
             /*Ahora no se chequeara que el valor indicado sea menor que la longitud
                 de PropertyVectorColumns*/
-            m_PVC[i - 1] = this.getPropertyVectorsColumns()[a_selectedPVC[i - 1]];
+            m_PVC[i] = this.getPropertyVectorsColumns()[a_selectedPVC[i]-1];
         }
         return new PropertyMatrix(m_PVC);
     }
