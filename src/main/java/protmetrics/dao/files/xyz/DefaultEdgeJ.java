@@ -1,4 +1,4 @@
-package protmetrics.dao.files.XYZ;
+package protmetrics.dao.files.xyz;
 
 import org.jgrapht.graph.DefaultEdge;
 import protmetrics.dao.intervals.IntervalTree;

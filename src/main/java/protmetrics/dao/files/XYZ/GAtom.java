@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package protmetrics.dao.files.XYZ;
+package protmetrics.dao.files.xyz;
 
 import javax.vecmath.Point3d;
 

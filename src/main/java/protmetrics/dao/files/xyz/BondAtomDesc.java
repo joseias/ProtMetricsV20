@@ -1,4 +1,4 @@
-package protmetrics.dao.files.XYZ;
+package protmetrics.dao.files.xyz;
 
 import protmetrics.dao.json.BondAtomDescJSON;
 import protmetrics.dao.json.BondDescJSON;

@@ -1,4 +1,4 @@
-package protmetrics.dao.files.XYZ;
+package protmetrics.dao.files.xyz;
 
 import java.util.List;
 
