@@ -6,10 +6,10 @@ import java.util.Properties;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedPseudograph;
 
-import protmetrics.dao.files.XYZ.BondDescFile;
-import protmetrics.dao.files.XYZ.GAtom;
-import protmetrics.dao.files.XYZ.GHeader;
-import protmetrics.dao.files.XYZ.XYZFile;
+import protmetrics.dao.files.xyz.BondDescFile;
+import protmetrics.dao.files.xyz.GAtom;
+import protmetrics.dao.files.xyz.GHeader;
+import protmetrics.dao.files.xyz.XYZFile;
 import protmetrics.dao.files.mol.MolFile;
 import protmetrics.dao.intervals.IntervalData;
 import protmetrics.metrics.Wiener3D;

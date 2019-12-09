@@ -8,7 +8,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import protmetrics.dao.files.XYZ.GAtom;
+import protmetrics.dao.files.xyz.GAtom;
 import protmetrics.dao.files.pdb.PdbAtomLine;
 import protmetrics.dao.files.pdb.PdbFile;
 import protmetrics.dao.intervals.Interval;

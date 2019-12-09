@@ -2,8 +2,8 @@ package protmetrics.dao.files.mol;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedPseudograph;
-import protmetrics.dao.files.XYZ.GAtom;
-import protmetrics.dao.files.XYZ.GHeader;
+import protmetrics.dao.files.xyz.GAtom;
+import protmetrics.dao.files.xyz.GHeader;
 
 /**
  *

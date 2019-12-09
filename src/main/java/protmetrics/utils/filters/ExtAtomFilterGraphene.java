@@ -6,7 +6,7 @@ import java.util.Set;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedPseudograph;
 
-import protmetrics.dao.files.XYZ.GAtom;
+import protmetrics.dao.files.xyz.GAtom;
 
 public class ExtAtomFilterGraphene extends ExtAtomsFilter {
 
