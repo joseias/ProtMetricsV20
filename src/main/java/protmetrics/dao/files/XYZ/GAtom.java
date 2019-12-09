@@ -5,7 +5,7 @@
  */
 package protmetrics.dao.files.XYZ;
 
-import javafx.geometry.Point3D;
+import javax.vecmath.Point3d;
 
 /**
  *
@@ -13,11 +13,11 @@ import javafx.geometry.Point3D;
  */
 public class GAtom {
 
-    private Point3D location;
+    private Point3d location;
     private int ID;
     private AtomType type;
 
-    public GAtom(Point3D location, AtomType type, int id) {
+    public GAtom(Point3d location, AtomType type, int id) {
         this.location = location;
         this.type = type;
         this.ID = id;
@@ -70,14 +70,14 @@ public class GAtom {
     /**
      * @return the location
      */
-    public Point3D getLocation() {
+    public Point3d getLocation() {
         return location;
     }
 
     /**
      * @param location the location to set
      */
-    public void setLocation(Point3D location) {
+    public void setLocation(Point3d location) {
         this.location = location;
     }
 }

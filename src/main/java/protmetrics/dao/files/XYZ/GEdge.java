@@ -10,6 +10,7 @@ package protmetrics.dao.files.XYZ;
  * @author sijfg
  */
 public class GEdge {
+
     private GAtom target;
     private GAtom source;
     private double weight;
