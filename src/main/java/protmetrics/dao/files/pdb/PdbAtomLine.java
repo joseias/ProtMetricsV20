@@ -1,13 +1,14 @@
 package protmetrics.dao.files.pdb;
 
-import javafx.geometry.Point3D;
+import javax.vecmath.Point3d;
+//import import javax.vecmath.Point3d;
 import protmetrics.utils.BioUtils;
 
-public class PdbAtomLine extends PdbLine {
+public final class PdbAtomLine extends PdbLine {
 
     private final int aminoNumberPos;
     private String sequence;
-    private final Point3D location;
+    private final Point3d location;
     private final String aminoNumber;
     private String aminoType;
     private final String atomType;
@@ -21,8 +22,7 @@ public class PdbAtomLine extends PdbLine {
         aminoNumberPos = this.getAminoNumberLocation(a_lineTokens);
         if (aminoNumberPos != -1) {
             aminoNumber = a_lineTokens[aminoNumberPos];
-        }
-        else {
+        } else {
             aminoNumber = "~";
         }
 
@@ -30,7 +30,7 @@ public class PdbAtomLine extends PdbLine {
         double m_X = Double.parseDouble(a_lineTokens[aminoNumberPos + 1]);
         double m_Y = Double.parseDouble(a_lineTokens[aminoNumberPos + 2]);
         double m_Z = Double.parseDouble(a_lineTokens[aminoNumberPos + 3]);
-        location = new Point3D(m_X, m_Y, m_Z);
+        location = new Point3d(m_X, m_Y, m_Z);
 
         //Hasta ahora no parece haber nada que contradiga que esto esta en a_lineTokens[4] segun Michael
         aminoType = a_lineTokens[3];
@@ -42,8 +42,7 @@ public class PdbAtomLine extends PdbLine {
         if (aminoNumberPos != -1) {
             if (BioUtils.isAminoSequence(a_lineTokens[aminoNumberPos - 1]) == false) {
                 sequence = a_lineTokens[aminoNumberPos - 1];
-            }
-            else // Hay una sola secuencia
+            } else // Hay una sola secuencia
             {
                 sequence = "~";
             }
@@ -101,18 +100,18 @@ public class PdbAtomLine extends PdbLine {
                 //Notar que si no hay secuencia no se puede cambiar CLARO ESTA!!!!
             }
             if (i == aminoNumberPos + 1) {
-                m_result = m_result + "	 " + this.location.getX();
-                this.LineTokens[aminoNumberPos + 1] = Double.toString(this.location.getX());
+                m_result = m_result + "	 " + this.location.x;
+                this.LineTokens[aminoNumberPos + 1] = Double.toString(this.location.x);
                 m_changed = true;
             }
             if (i == aminoNumberPos + 2) {
-                m_result = m_result + "	 " + this.location.getY();
-                this.LineTokens[aminoNumberPos + 2] = Double.toString(this.location.getY());
+                m_result = m_result + "	 " + this.location.y;
+                this.LineTokens[aminoNumberPos + 2] = Double.toString(this.location.y);
                 m_changed = true;
             }
             if (i == aminoNumberPos + 3) {
-                m_result = m_result + "	 " + this.location.getZ();
-                this.LineTokens[aminoNumberPos + 3] = Double.toString(this.location.getZ());
+                m_result = m_result + "	 " + this.location.z;
+                this.LineTokens[aminoNumberPos + 3] = Double.toString(this.location.z);
                 m_changed = true;
             }
             if (m_changed == false) {
@@ -123,7 +122,7 @@ public class PdbAtomLine extends PdbLine {
         this.Line = m_result;
     }//public  String UpDateString()
 
-    public Point3D getLocation() {
+    public Point3d getLocation() {
         return this.location;
     }
 
@@ -140,7 +139,7 @@ public class PdbAtomLine extends PdbLine {
         return this.atomType;
     }
 
-    public String getSequence(){
+    public String getSequence() {
         return this.sequence;
     }
 }// PdbAtomLine class

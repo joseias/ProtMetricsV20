@@ -134,7 +134,6 @@ public class DMDataSet {
             PrintStream ps = new PrintStream(path);
 
             //-> Imprimir el encabezado
-
             List<DMAtt> attList = this.atts.stream().collect(Collectors.toList());
             Collections.sort(attList, (o1, o2) -> {
                 int order = Integer.compare(o1.getAttOrder(), o2.getAttOrder());
@@ -155,12 +154,11 @@ public class DMDataSet {
             });
 
             List<String> headerAsStr = attList.stream().map(at -> {
-                    return at.getAttName();
-                }).collect(Collectors.toList());
-            
+                return at.getAttName();
+            }).collect(Collectors.toList());
+
             String headerCSV = String.join(",", headerAsStr);
             ps.println(headerCSV);
-               
 
             instances.stream().forEach(i -> {
                 List<String> attAsStr = attList.stream().map(at -> {

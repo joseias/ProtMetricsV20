@@ -23,8 +23,8 @@ public class IntervalTree<Type> {
      * Instantiate a new interval tree with no intervals
      */
     public IntervalTree() {
-        this.head = new IntervalNode<Type>();
-        this.intervalList = new ArrayList<IntervalData<Type>>();
+        this.head = new IntervalNode<>();
+        this.intervalList = new ArrayList<>();
         this.inSync = true;
         this.size = 0;
     }
@@ -35,8 +35,8 @@ public class IntervalTree<Type> {
      * @param intervalList the list of intervals to use
      */
     public IntervalTree(List<IntervalData<Type>> intervalList) {
-        this.head = new IntervalNode<Type>(intervalList);
-        this.intervalList = new ArrayList<IntervalData<Type>>();
+        this.head = new IntervalNode<>(intervalList);
+        this.intervalList = new ArrayList<>();
         this.intervalList.addAll(intervalList);
         this.inSync = true;
         this.size = intervalList.size();
@@ -87,11 +87,11 @@ public class IntervalTree<Type> {
             return "";
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < level; i++) {
             sb.append("\t");
         }
-        sb.append(node + "\n");
+        sb.append(node).append("\n");
         sb.append(nodeString(node.getLeft(), level + 1));
         sb.append(nodeString(node.getRight(), level + 1));
         return sb.toString();

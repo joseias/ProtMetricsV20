@@ -10,6 +10,7 @@ package protmetrics.utils;
  * @author Docente
  */
 public class Formats {
+
     public static final String ARFF = "arff";
     public static final String CSV = "csv";
     public static final String TXT = "txt";
