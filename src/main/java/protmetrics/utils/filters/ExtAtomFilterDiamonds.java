@@ -34,8 +34,7 @@ public class ExtAtomFilterDiamonds extends ExtAtomsFilter {
         int extCount = 0;
         if (graph.degreeOf(vertex) <= 3) {
             return true;
-        }
-        else {
+        } else {
             if (graph.degreeOf(vertex) == 4) {
                 Set<DefaultWeightedEdge> edgesOf = graph.edgesOf(vertex);
                 /*Determine if all neighbors have degree 4*/

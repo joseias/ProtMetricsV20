@@ -8,5 +8,6 @@ import org.jgrapht.graph.WeightedPseudograph;
 import protmetrics.dao.files.XYZ.GAtom;
 
 public abstract class ExtAtomsFilter {
-	public abstract Set<GAtom> getExteriorVertices(WeightedPseudograph<GAtom,DefaultWeightedEdge> graph);
+
+    public abstract Set<GAtom> getExteriorVertices(WeightedPseudograph<GAtom, DefaultWeightedEdge> graph);
 }

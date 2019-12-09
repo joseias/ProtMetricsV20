@@ -10,7 +10,7 @@ package protmetrics.utils;
  * @author Docente
  */
 public class GlobalConstants {
-    
-        public static final String SPACE_PATTERN = "[\\s]+";
-        public static final String EMPTY_STRING = "";
+
+    public static final String SPACE_PATTERN = "[\\s]+";
+    public static final String EMPTY_STRING = "";
 }

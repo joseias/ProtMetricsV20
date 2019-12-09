@@ -15,7 +15,7 @@ public class DMAtt {
 
     private final String attName;
     private final Class attType;
-    private int attOrder;
+    private final int attOrder;
 
     private static String SPECIAL_ATT_NAME = "StructID";
 

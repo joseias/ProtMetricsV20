@@ -27,8 +27,7 @@ public class ExtAtomFilterGraphene extends ExtAtomsFilter {
         int extCount = 0;
         if (graph.degreeOf(vertex) == 2) {
             return true;
-        }
-        else {
+        } else {
             if (graph.degreeOf(vertex) == 3) {
                 Set<DefaultWeightedEdge> edgesOf = graph.edgesOf(vertex);
                 for (DefaultWeightedEdge edge : edgesOf) {

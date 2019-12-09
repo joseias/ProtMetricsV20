@@ -2,9 +2,7 @@ package protmetrics.utils.propertymatrix;
 /// <summary>
 /// Summary description for PropertyMatrix.
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.LineNumberReader;
 import protmetrics.utils.BioUtils;
 
@@ -69,7 +67,7 @@ public class PropertyMatrix {
         for (int i = 0; i < m_length; i++) {
             /*Ahora no se chequeara que el valor indicado sea menor que la longitud
                 de PropertyVectorColumns*/
-            m_PVC[i] = this.getPropertyVectorsColumns()[a_selectedPVC[i]];
+            m_PVC[i - 1] = this.getPropertyVectorsColumns()[a_selectedPVC[i - 1]];
         }
         return new PropertyMatrix(m_PVC);
     }

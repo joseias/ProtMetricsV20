@@ -1,16 +1,12 @@
 package protmetrics.utils;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.jgrapht.Graph;
 
 import protmetrics.dao.files.XYZ.GAtom;
 import protmetrics.dao.files.pdb.PdbAtomLine;
@@ -302,11 +298,8 @@ public class BioUtils {
         }
         for (int i = 0; i < caData.length; i++) {
             for (int j = i; j < caData.length; j++) {
-                x = Math.pow(caData[i].getLocation().getX() - caData[j].getLocation().getX(), 2);
-                y = Math.pow(caData[i].getLocation().getY() - caData[j].getLocation().getY(), 2);
-                z = Math.pow(caData[i].getLocation().getZ() - caData[j].getLocation().getZ(), 2);
-
-                result[i + 1][j + 1] = result[j + 1][i + 1] = Double.toString(MyMath.round(Math.sqrt(x + y + z), 4));
+                double caDist = caData[i].getLocation().distance(caData[j].getLocation());
+                result[i + 1][j + 1] = result[j + 1][i + 1] = Double.toString(MyMath.round(caDist, 4));
             }
         }
         return result;
@@ -360,8 +353,7 @@ public class BioUtils {
 
             return new Interval(lld, uld, itype);
 
-        }
-        else {
+        } else {
             System.err.println("Interval " + desc + " specification is wrong, check it...");
             return null;
         }

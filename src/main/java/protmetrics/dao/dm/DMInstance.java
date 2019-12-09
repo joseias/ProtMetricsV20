@@ -10,31 +10,32 @@ import java.util.Set;
 
 /**
  * Represent an instance in matrix data (column or row)
+ *
  * @author Docente
  */
 public class DMInstance {
-    
+
     HashMap<DMAtt, DMAttValue> attValues;
     String instID;
-    
-    public DMInstance(String id){
+
+    public DMInstance(String id) {
         this.instID = id;
         attValues = new HashMap<>();
     }
-    
-    public void setAttValue(DMAtt att, DMAttValue value){
+
+    public void setAttValue(DMAtt att, DMAttValue value) {
         attValues.put(att, value);
     }
-    
-    public DMAttValue getAttValue(DMAtt att){
-          return attValues.get(att);
+
+    public DMAttValue getAttValue(DMAtt att) {
+        return attValues.get(att);
     }
-    
-    public Set<DMAtt> getAtts(){
+
+    public Set<DMAtt> getAtts() {
         return attValues.keySet();
     }
-    
-    public String getInstID(){
+
+    public String getInstID() {
         return this.instID;
     }
 }

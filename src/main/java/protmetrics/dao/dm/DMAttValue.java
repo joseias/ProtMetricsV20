@@ -10,10 +10,10 @@ package protmetrics.dao.dm;
  * @author Docente
  */
 public class DMAttValue {
-    
+
     private String value;
 
-    public DMAttValue(String value){
+    public DMAttValue(String value) {
         this.value = value;
     }
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import protmetrics.errors.SomeErrorException;
 import protmetrics.utils.BioUtils;
 
-public class PdbFile {
+public final class PdbFile {
 
     private int[] caLinesIndex; //Numeros de lineas donde estan los CA.
     private int[] atomLinesIndex; //Numero de las lineas que son ATOM.
@@ -100,8 +100,7 @@ public class PdbFile {
             this.caLinesIndex = this.toInt(m_CALinesIndex);
             this.atomLinesIndex = this.toInt(m_ATOMLinesIndex);
             m_sr.close();
-        }
-        catch (IOException m_ioe) {
+        } catch (IOException m_ioe) {
             throw m_ioe;
         } catch (Exception m_e) {
             throw new SomeErrorException("ERROR AT->" + pdbPath);
@@ -136,7 +135,7 @@ public class PdbFile {
         return m_result;
     }
 
-    public String getProteinName(){
+    public String getProteinName() {
         return proteinName;
     }
 }//class
