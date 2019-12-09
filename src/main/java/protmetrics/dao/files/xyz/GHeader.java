@@ -6,15 +6,16 @@ import protmetrics.metrics.Wiener3D.MolType;
  *
  * @author sijfg
  */
-public  class GHeader {
+public class GHeader {
+
     private int size;
     private int edges;
     private MolType type;
-    
-    public GHeader(int size,int edges,MolType type){
-        this.size=size;
-        this.edges=edges;
-        this.type=type;
+
+    public GHeader(int size, int edges, MolType type) {
+        this.size = size;
+        this.edges = edges;
+        this.type = type;
     }
 
     /**
@@ -58,5 +59,5 @@ public  class GHeader {
     public void setType(MolType type) {
         this.type = type;
     }
-    
+
 }

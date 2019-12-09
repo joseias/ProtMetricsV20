@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.geometry.Point3D;
+import javax.vecmath.Point3d;
 import protmetrics.utils.GlobalConstants;
 
 public class XYZFile {
@@ -46,7 +46,7 @@ public class XYZFile {
         while (currentLine != null) {
             String[] tokens = currentLine.trim().split(GlobalConstants.SPACE_PATTERN);
 
-            Point3D aloc = new Point3D(Double.parseDouble(tokens[1]),
+            Point3d aloc = new Point3d(Double.parseDouble(tokens[1]),
                     Double.parseDouble(tokens[2]),
                     Double.parseDouble(tokens[3]));
 
