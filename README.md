@@ -48,7 +48,7 @@ DO_MAX = true
 DO_MIN = true
 
 
-## Related works
+### Related works
 [1] Fernández M, Abreu J, Shi H, Barnard AS. “Machine Learning Prediction of the Energy Gap of Graphene Nanoflakes Using Topological Autocorrelation Vectors” ACS Combinatorial Science.  Vol. 18, pp. 661-664, 2016.
 
 [2] Fernández M, Abreu J, Caballero J, Garriga M and Fernández L, "Comparative modeling of the conformational stability of chymotrypsin inhibitor 2 protein mutants using amino acid sequence autocorrelation (AASA) and amino acid 3D autocorrelation (AA3DA) vectors and ensembles of Bayesian-regularized genetic neural networks", Molecular Simulation. Vol. 33(13), pp. 1045-1056, 2007
