@@ -2,7 +2,7 @@
 
 ProtMetrics
 
-Library to compute protein descriptors.
+Library to compute molecular descriptors.
 
 Basic usage:
 
@@ -46,3 +46,12 @@ DO_MAX = true
 
 #### true or false whether the min index will be included
 DO_MIN = true
+
+
+## Related works
+[1] Fernández M, Abreu J, Shi H, Barnard AS. “Machine Learning Prediction of the Energy Gap of Graphene Nanoflakes Using Topological Autocorrelation Vectors” ACS Combinatorial Science.  Vol. 18, pp. 661-664, 2016.
+
+[2] Fernández M, Abreu J, Caballero J, Garriga M and Fernández L, "Comparative modeling of the conformational stability of chymotrypsin inhibitor 2 protein mutants using amino acid sequence autocorrelation (AASA) and amino acid 3D autocorrelation (AA3DA) vectors and ensembles of Bayesian-regularized genetic neural networks", Molecular Simulation. Vol. 33(13), pp. 1045-1056, 2007
+
+[3] Fernández M, Caballero J, Fernández L, Abreu J and Garriga M, "Protein radial distribution function (P-RDF) and Bayesian-Regularized Genetic Neural Networks for modeling protein conformational stability: Chymotrypsin inhibitor 2 mutants", Journal of Molecular Graphics and Modelling 26(4), pp. 748-759, 2007.
+
