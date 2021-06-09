@@ -48,7 +48,7 @@ DO_MIN = true
 ### Citation 
 ProMetrics is provided as free open-source software. If you have used ProMetrics in your research, authors will be grateful if you fill and submit to [joseias@gmail.com](joseias@gmail.com) the following [Usage-Acknowledgment-ProtMetrics](https://github.com/joseias/ProtMetricsV20/blob/master/Usage-Acknowledgment-ProtMetrics.docx) acknowledging our contribution. If citing, please reference to:
 
-Caballero J, Fernández M, Abreu J, Fernández L. "Amino Acid Sequence Autocorrelation vectors and ensembles of Bayesian-Regularized Genetic Neural Networks for prediction of conformational stability of human lysozyme mutants" Journal of Chemical Information and Modeling. Vol. 46(3), pp. 1255-168.
+Caballero J, Fernández L, Abreu J, Fernández M. "Amino Acid Sequence Autocorrelation vectors and ensembles of Bayesian-Regularized Genetic Neural Networks for prediction of conformational stability of human lysozyme mutants" Journal of Chemical Information and Modeling. Vol. 46(3), pp. 1255-168.
 
 
 ### Other related works
