@@ -46,9 +46,12 @@ DO_MAX = true
 DO_MIN = true
 
 ### Citation 
-ProMetrics is provided as free open-source software. If you have used ProMetrics in your research, authors will be grateful if you fill and submit to [joseias@gmail.com](joseias@gmail.com) the following [Usage-Acknowledgment-ProtMetrics](https://github.com/joseias/ProtMetricsV20/blob/master/Usage-Acknowledgment-ProtMetrics.docx) acknowledging our contribution.
+ProMetrics is provided as free open-source software. If you have used ProMetrics in your research, authors will be grateful if you fill and submit to [joseias@gmail.com](joseias@gmail.com) the following [Usage-Acknowledgment-ProtMetrics](https://github.com/joseias/ProtMetricsV20/blob/master/Usage-Acknowledgment-ProtMetrics.docx) acknowledging our contribution. If citing, please reference to:
 
-### Related works
+Caballero J, Fernández M, Abreu J, Fernández L. "Amino Acid Sequence Autocorrelation vectors and ensembles of Bayesian-Regularized Genetic Neural Networks for prediction of conformational stability of human lysozyme mutants" Journal of Chemical Information and Modeling. Vol. 46(3), pp. 1255-168.
+
+
+### Other related works
 [1] Fernández M, Abreu J, Shi H, Barnard AS. “Machine Learning Prediction of the Energy Gap of Graphene Nanoflakes Using Topological Autocorrelation Vectors” ACS Combinatorial Science.  Vol. 18, pp. 661-664, 2016.
 
 [2] Fernández M, Abreu J, Caballero J, Garriga M, and Fernández L, "Comparative modeling of the conformational stability of chymotrypsin inhibitor 2 protein mutants using amino acid sequence autocorrelation (AASA) and amino acid 3D autocorrelation (AA3DA) vectors and ensembles of Bayesian-regularized genetic neural networks", Molecular Simulation. Vol. 33(13), pp. 1045-1056, 2007
