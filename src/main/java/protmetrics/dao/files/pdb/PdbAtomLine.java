@@ -158,7 +158,7 @@ public final class PdbAtomLine extends PdbLine {
 
     /**
      *
-     * @return the atom type of type
+     * @return the atom type of type.
      */
     public String getAtomType() {
         return this.atomType;
@@ -166,7 +166,7 @@ public final class PdbAtomLine extends PdbLine {
 
     /**
      *
-     * @return
+     * @return the sequence within the atom line.
      */
     public String getSequence() {
         return this.sequence;
