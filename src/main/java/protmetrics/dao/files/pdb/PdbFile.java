@@ -10,8 +10,8 @@ import protmetrics.utils.BioUtils;
 
 public final class PdbFile {
 
-    private int[] caLinesIndex; //Numeros de lineas donde estan los CA.
-    private int[] atomLinesIndex; //Numero de las lineas que son ATOM.
+    private int[] caLinesIndex; // indices of the lines with CA 
+    private int[] atomLinesIndex; //indices of the lines of type ATOM 
     private PdbLine[] lines;
     private String proteinName;
     private String pdbPath = "";
@@ -28,7 +28,7 @@ public final class PdbFile {
             throw m_see;
         }
 
-    }//public PdbFile(String a_pdbFilePath)
+    }
 
     public PdbAtomLine[] getCALines() {
 
@@ -40,13 +40,12 @@ public final class PdbFile {
         }
         return m_result;
 
-    }//public AtomLines[] getCALines()
+    }
 
     public void intPDB(String a_pdbFilePath, String a_seq) throws Exception {
 
         try {
 
-            //C#-> StreamReader m_sr=new StreamReader(a_pdbFilePath);
             java.io.LineNumberReader m_sr = new LineNumberReader(new FileReader(a_pdbFilePath));
 
             String m_actualLine = m_sr.readLine();
@@ -63,25 +62,22 @@ public final class PdbFile {
 
             int m_totalPdbLines = 0;
 
-            /*Leer el nombre de la proteina, ver si siempre esta en la misma posicion de la primera linea.*/
+            /* read the protein name, check if always is the first line */
             m_tokens = BioUtils.procSplitString(m_actualLine.trim().split("[\\s]+", 0));
             this.proteinName = m_tokens[1];
             while (m_actualLine != null) {
-                //Aqui se ira poniendo la inicializacion de todas la variable necesarias en PdbFile
 
-                //Parece que hacer m_actualLines.Split(m_sep) da alguna cacharra, verificar
-                //m_tokens=BioUtils.procSplitString(m_actualLine.split(new String(new String(m_sep))));
                 m_tokens = BioUtils.procSplitString(m_actualLine.trim().split("[\\s]+", 0));
 
                 if (m_tokens[0].equals("ATOM")) {
 
-                    //Si es de la secuencia seleccionada
+                    /* if it is from the selected sequence*/
                     m_alaux = new PdbAtomLine(m_actualLine, m_tokens);
                     if (m_alaux.getSequence().equals(a_seq)) {
-                        //Es una linea ATOM asi que adicionarala a m_ATOMLineIndex
+                        /* is an ATOM line, add it to m_ATOMLinesIndex*/
                         m_ATOMLinesIndex.add(m_totalPdbLines);
 
-                        // Si es un CA entonces adicionarla a m_CALinesIndex
+                        /*if it is CA line, add it to m_CALinesIndex*/
                         if (m_alaux.getAtomType().equals("CA")) {
                             m_CALinesIndex.add(m_totalPdbLines);
                         }
@@ -94,7 +90,7 @@ public final class PdbFile {
                 m_actualLine = m_sr.readLine();
                 m_totalPdbLines++;
 
-            }//while(m_actualLine!=null)
+            }
 
             this.lines = this.toPDBLine(m_lines);
             this.caLinesIndex = this.toInt(m_CALinesIndex);
@@ -105,17 +101,17 @@ public final class PdbFile {
         } catch (Exception m_e) {
             throw new SomeErrorException("ERROR AT->" + pdbPath);
         }
-    }//public void intPDB(String a_pdbFilePath)
+    }
 
     private int[] toInt(ArrayList a_AL) {
         int[] m_result = new int[a_AL.size()];
         Integer m_aux;
         for (int i = 0; i < m_result.length; i++) {
             m_aux = (Integer) a_AL.get(i);
-            m_result[i] = m_aux.intValue();
+            m_result[i] = m_aux;
         }
         return m_result;
-    } //private int[] ToInt(ArrayList a_AL)
+    }
 
     private PdbLine[] toPDBLine(ArrayList a_AL) {
         PdbLine[] m_result = new PdbLine[a_AL.size()];
@@ -123,14 +119,13 @@ public final class PdbFile {
             m_result[i] = (PdbLine) a_AL.get(i);
         }
         return m_result;
-    }//private PdbLine[] toPDBLine(ArrayList a_AL)
+    }
 
     public String getSequence() {
         PdbAtomLine[] m_CALines = this.getCALines();
         String m_result = "";
-        for (int i = 0; i < m_CALines.length; i++) {
-            //System.out.println(m_CALines[i].getAminoType());
-            m_result = m_result + BioUtils.aminoThreetoOne(m_CALines[i].getAminoType());
+        for (PdbAtomLine m_CALine : m_CALines) {
+            m_result = m_result + BioUtils.aminoThreetoOne(m_CALine.getAminoType());
         }
         return m_result;
     }
@@ -138,4 +133,4 @@ public final class PdbFile {
     public String getProteinName() {
         return proteinName;
     }
-}//class
+}

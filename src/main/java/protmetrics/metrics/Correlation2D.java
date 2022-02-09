@@ -1,11 +1,3 @@
-/*
- * Correlation2D.java
- *
- * Created on 19 de junio de 2007, 12:44
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
 package protmetrics.metrics;
 
 import com.beust.jcommander.JCommander;
@@ -30,11 +22,9 @@ import protmetrics.dao.dm.DMInstance;
 import protmetrics.utils.Formats;
 
 /**
- * [1] G. Moreau, P. Broto. Autocorrelation of a topological structure: 
- * A new molecular descriptor. 
- * Nouv. J. Chim., 4, 359 (1980).
-
- * @author personal
+ * [1] G. Moreau, P. Broto. Autocorrelation of a topological structure: A new
+ * molecular descriptor. Nouv. J. Chim., 4, 359 (1980).
+ *
  */
 public class Correlation2D {
 
@@ -59,16 +49,17 @@ public class Correlation2D {
         ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
 
         for (ProtWrapper pw : protList) {
+            Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, String.format("Computing 2D Correlation Index for %s", pw.name));
             DMInstance inst = new DMInstance(pw.getName());
             inst.setAttValue(attPN, new DMAttValue(inst.getInstID()));
 
             String seq = pw.getSequence();
             for (PropertyVector pv : propMatrix.getPropertyVectorsColumns()) {
                 int currentDist = minDist;
-                
+
                 while (currentDist <= maxDist) {
                     if (doProduct) {
-                        /* Calcular el indice */
+                        /* compute the index*/
                         DMAttValue r = this.get2DProd(pv, seq, currentDist);
 
                         String attName = pv.PropertyName + "_" + (double) currentDist;
@@ -78,7 +69,7 @@ public class Correlation2D {
                     }
 
                     if (doMax) {
-                        /* Calcular el indice */
+                        /* compute the index*/
                         DMAttValue r = this.get2DMax(pv, seq, currentDist);
 
                         String attName = pv.PropertyName + "_Max_" + (double) currentDist;
@@ -88,7 +79,7 @@ public class Correlation2D {
                     }
 
                     if (doMin) {
-                        /* Calcular el indice */
+                        /* compute the index*/
                         DMAttValue r = this.get2DMin(pv, seq, currentDist);
 
                         String attName = pv.PropertyName + "_Min_" + (double) currentDist;
@@ -101,6 +92,7 @@ public class Correlation2D {
                 }
             }
             ds.addInstance(inst);
+            Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, String.format("Computing 2D Correlation Index for %s. Done", pw.name));
         }
         return ds;
     }
@@ -119,7 +111,7 @@ public class Correlation2D {
         boolean[] found = {true};
         double pi;
         double pj;
-        double sum = 0;        
+        double sum = 0;
         int L = 0;
 
         for (int i = 0; i < seq.length(); i++) {
@@ -149,7 +141,7 @@ public class Correlation2D {
         boolean[] found = {true};
         double pi;
         double pj;
-        double max = Double.MIN_VALUE;        
+        double max = Double.MIN_VALUE;
         int L = 0;
 
         for (int i = 0; i < seq.length(); i++) {
@@ -178,7 +170,7 @@ public class Correlation2D {
         boolean[] found = {true};
         double pi;
         double pj;
-        double min = Double.MAX_VALUE;        
+        double min = Double.MAX_VALUE;
         int L = 0;
 
         for (int i = 0; i < seq.length(); i++) {
@@ -195,14 +187,14 @@ public class Correlation2D {
 
     public Properties init(String cfgPath) throws Exception {
 
-        /*Properties file*/
+        /* properties file */
         File cfgFile = new File(cfgPath);
         if (cfgFile.exists() == false) {
             throw new IOException(cfgPath + " does not exist...");
         }
         Properties p = BioUtils.loadProperties(cfgPath);
 
-        /*PDBs directory*/
+        /* PDBs folder */
         String pdbsPath = p.getProperty(Constants.PDBS_DIRECTORY_PATH);
         File pdbsFile = new File(pdbsPath);
         if (pdbsFile.exists() == false) {
@@ -231,39 +223,37 @@ public class Correlation2D {
         }
         p.put(Constants.PROTEIN_LIST, protList);
 
-        /*Properties matrix path*/
+        /* properties matrix path */
         String pmPath = p.getProperty(Constants.PROP_MATRIX_PATH);
         File pmFile = new File(pmPath);
         if (pmFile.exists() == false) {
             throw new IOException(pmPath + " does not exist...");
         }
 
-        /*Min radius*/
+        /* min radius */
         if (!p.containsKey(Constants.MIN_DIST)) {
             throw new IllegalArgumentException("Min Distance not specified for 2D Correlation...");
         }
 
-        /*Max radius*/
+        /* max radius */
         if (!p.containsKey(Constants.MAX_DIST)) {
             throw new IllegalArgumentException("Max Distance not specified for 2D Correlation...");
         }
 
-        /*Step*/
+        /* step */
         if (!p.containsKey(Constants.STEP)) {
             throw new IllegalArgumentException("Step not specified for 2D Correlation...");
-        }
-        else{
+        } else {
             double step = Double.parseDouble(p.getProperty(Constants.STEP));
-            if(step<=0){
+            if (step <= 0) {
                 throw new IllegalArgumentException("Step mut be > 0 for 2D Correlation...");
             }
         }
 
-        /*Output formar*/
+        /* output format */
         if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
             throw new IllegalArgumentException("Output format not specified for 2D Correlation...");
         }
-
 
         PropertyMatrix pmAll = new PropertyMatrix(pmPath);
         int[] indices = BioUtils.getSelectedIndices(p.getProperty(Constants.SELECTED_INDICES));
@@ -274,6 +264,7 @@ public class Correlation2D {
     }
 
     public static void main(String[] args) {
+        Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, "Computing 2D Correlation Index...");
         try {
             Args a = new Args();
             JCommander.newBuilder()
@@ -296,12 +287,14 @@ public class Correlation2D {
                         ds.toCSV(outFile);
                         break;
                 }
+
             } else {
                 throw new IllegalArgumentException("Configuration file not specified... must supply -cfg option...");
             }
         } catch (Exception ex) {
             Logger.getLogger(Correlation2D.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, "Computing 2D Correlation Index. Done!");
     }
 
     private static class Constants {

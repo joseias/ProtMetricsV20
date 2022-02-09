@@ -1,3 +1,4 @@
+/* based in https://github.com/kevinjdolan/intervaltree (WTFPL) */
 package protmetrics.dao.intervals;
 
 import java.util.ArrayList;
@@ -6,12 +7,7 @@ import java.util.List;
 /**
  * An Interval Tree is essentially a map from intervals to objects, which can be
  * queried for all data associated with a particular interval of time
- * https://github.com/kevinjdolan/intervaltree/tree/master/src/intervalTree
- *
- * @author Kevin Dolan
- *
- * @param <Type> the type of objects to associate
- */
+*/
 public class IntervalTree<Type> {
 
     private IntervalNode<Type> head;

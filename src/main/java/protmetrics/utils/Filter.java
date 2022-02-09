@@ -15,5 +15,4 @@ public class Filter implements FileFilter {
 
         return a_file.getName().endsWith(c_pattern);
     }
-
 }

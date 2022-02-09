@@ -11,3 +11,12 @@ target/maven-archiver/
 target/surefire/
 target/test-classes/
 
+examples/correlation2d/*.jar
+examples/correlation3d/*.jar
+examples/morse3d/*.jar
+examples/rdf3d/*.jar
+examples/wiener3d/*.jar
+
+copy_jar2examples.bat
+
+Usage-Acknowledgment-ProtMetrics-UCT.docx

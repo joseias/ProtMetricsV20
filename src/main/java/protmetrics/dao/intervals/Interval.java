@@ -1,13 +1,7 @@
+/* based in https://github.com/kevinjdolan/intervaltree (WTFPL) */
+
 package protmetrics.dao.intervals;
 
-/**
- * The Interval class maintains an interval with some associated data
- * https://github.com/kevinjdolan/intervaltree/tree/master/src/intervalTree
- *
- * @author Kevin Dolan
- *
- * @param <Type> The type of data being stored
- */
 public class Interval implements Comparable<Interval> {
 
     protected double start;
@@ -74,7 +68,6 @@ public class Interval implements Comparable<Interval> {
     }
 
     /**
-     * @param time
      * @return	true if this interval contains time (inclusive)
      */
     public boolean contains(double value) {
@@ -121,6 +114,7 @@ public class Interval implements Comparable<Interval> {
      * @param other
      * @return 1 or -1
      */
+    @Override
     public int compareTo(Interval other) {
         if (start < other.getStart()) {
             return -1;
@@ -141,5 +135,4 @@ public class Interval implements Comparable<Interval> {
         LCLOSED_ROPEN,
         LCLOSED_RCLOSED;
     }
-
 }

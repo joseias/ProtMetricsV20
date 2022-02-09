@@ -1,16 +1,10 @@
+/* based in https://github.com/kevinjdolan/intervaltree (WTFPL) */
+
 package protmetrics.dao.intervals;
 
 import protmetrics.dao.json.BondDescJSON;
 import protmetrics.utils.BioUtils;
 
-/**
- * The Interval class maintains an interval with some associated data
- * https://github.com/kevinjdolan/intervaltree/tree/master/src/intervalTree
- *
- * @author Kevin Dolan
- *
- * @param <Type> The type of data being stored
- */
 public class IntervalData<Type> extends Interval {
 
     protected Type data;
@@ -38,7 +32,7 @@ public class IntervalData<Type> extends Interval {
         IntervalData<Double> result;
 
         if (tmp != null) {
-            result = new IntervalData<Double>(tmp, bd.getW());
+            result = new IntervalData<>(tmp, bd.getW());
             return result;
         } else {
             System.err.println("Interval " + bd.getSpec() + " specification is wrong, check it...");

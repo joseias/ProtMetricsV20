@@ -22,7 +22,7 @@ public class ExtAtomFilterDiamonds extends ExtAtomsFilter {
     }
 
     /**
-     * Determines if a carbon is external, i.e. have degree 3, or have degree 4
+     * Determines if carbon is external, i.e. have degree 3, or have degree 4
      * but don�t have 4 neighbors of degree 4.
      *
      * @param graph
@@ -37,7 +37,8 @@ public class ExtAtomFilterDiamonds extends ExtAtomsFilter {
         } else {
             if (graph.degreeOf(vertex) == 4) {
                 Set<DefaultWeightedEdge> edgesOf = graph.edgesOf(vertex);
-                /*Determine if all neighbors have degree 4*/
+
+                /* determines if all neighbors have degree 4*/
                 for (DefaultWeightedEdge edge : edgesOf) {
                     targetAtom = graph.getEdgeTarget(edge).equals(vertex) ? graph.getEdgeSource(edge) : graph.getEdgeTarget(edge);
                     extCount = graph.degreeOf(targetAtom) == 4 ? extCount + 1 : extCount;
@@ -47,5 +48,4 @@ public class ExtAtomFilterDiamonds extends ExtAtomsFilter {
 
         return extCount < 4;
     }
-
 }

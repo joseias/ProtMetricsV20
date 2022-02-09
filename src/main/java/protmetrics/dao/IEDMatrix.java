@@ -1,7 +1,4 @@
 package protmetrics.dao;
-/// <summary>
-/// Summary description for IEDMatrix.
-/// </summary>
 
 public class IEDMatrix {
 
@@ -34,5 +31,4 @@ public class IEDMatrix {
     public int getColumns() {
         return this.InterCAMatrix.length;
     }
-
-} //IEDMatrix Class
+}

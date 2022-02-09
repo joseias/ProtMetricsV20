@@ -15,7 +15,7 @@ public class ExtAtomFilterGraphene extends ExtAtomsFilter {
         Set<GAtom> result = new HashSet<>(graph.vertexSet().size());
         for (GAtom vertex : graph.vertexSet()) {
             if (isExternal(graph, vertex)) {
-                boolean add = result.add(vertex);
+                result.add(vertex);
             }
         }
 

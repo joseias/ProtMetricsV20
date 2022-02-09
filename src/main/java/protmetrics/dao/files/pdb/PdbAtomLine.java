@@ -1,7 +1,7 @@
 package protmetrics.dao.files.pdb;
 
 import javax.vecmath.Point3d;
-//import import javax.vecmath.Point3d;
+
 import protmetrics.utils.BioUtils;
 
 public final class PdbAtomLine extends PdbLine {
@@ -15,10 +15,10 @@ public final class PdbAtomLine extends PdbLine {
 
     public PdbAtomLine(String a_line, String[] a_lineTokens) {
         super(a_line, a_lineTokens);
-        //El numero del aminoacido debe ser el segundo numero en a_lineTokens
+
+        /* the amino acid number must be the 2nd number in a_lineTokens */
         this.LineTokens = a_lineTokens;
 
-        //Si no lo encuentra entonces !!!! El CAOS
         aminoNumberPos = this.getAminoNumberLocation(a_lineTokens);
         if (aminoNumberPos != -1) {
             aminoNumber = a_lineTokens[aminoNumberPos];
@@ -26,29 +26,25 @@ public final class PdbAtomLine extends PdbLine {
             aminoNumber = "~";
         }
 
-        //Parece que son los 3 que siguen a AminoNumber
+        /* they seem to be the 3 numbers after the amino acid number  */
         double m_X = Double.parseDouble(a_lineTokens[aminoNumberPos + 1]);
         double m_Y = Double.parseDouble(a_lineTokens[aminoNumberPos + 2]);
         double m_Z = Double.parseDouble(a_lineTokens[aminoNumberPos + 3]);
         location = new Point3d(m_X, m_Y, m_Z);
 
-        //Hasta ahora no parece haber nada que contradiga que esto esta en a_lineTokens[4] segun Michael
         aminoType = a_lineTokens[3];
 
-        //Parece estar en la a_lineTokens[2]
         atomType = a_lineTokens[2];
 
-        //Basados en que delante del numero de aminoacido o esta la secuencia o el tipo de amino
+        /* before the amino acid number we found the sequence or the type */
         if (aminoNumberPos != -1) {
             if (BioUtils.isAminoSequence(a_lineTokens[aminoNumberPos - 1]) == false) {
                 sequence = a_lineTokens[aminoNumberPos - 1];
-            } else // Hay una sola secuencia
-            {
+            } else {
+                /* only one sequence */
                 sequence = "~";
             }
-
         }
-
     }
 
     public int getAminoNumberLocation(String[] a_lineTokens) {
@@ -56,9 +52,7 @@ public final class PdbAtomLine extends PdbLine {
         int m_result = -1;
         int m_numbersFind = 0;
         int m_pos = 0;
-        if (a_lineTokens == null) {
-            System.out.println("ES NULL");
-        }
+
         int m_length = a_lineTokens.length;
 
         while (m_pos < m_length && m_numbersFind < 2) {
@@ -69,7 +63,7 @@ public final class PdbAtomLine extends PdbLine {
                 m_result = m_pos;
             }
             m_pos++;
-        }//while
+        }
         return m_result;
 
     }
@@ -79,7 +73,6 @@ public final class PdbAtomLine extends PdbLine {
         boolean m_changed = false;
         int m_tlength = LineTokens.length;
         for (int i = 1; i < m_tlength; i++) {
-            //Esto sera BRUTAL
             m_changed = false;
             if (i == 2) {
                 m_result = m_result + "	 " + this.atomType;
@@ -97,7 +90,7 @@ public final class PdbAtomLine extends PdbLine {
                     this.LineTokens[aminoNumberPos - 1] = this.sequence;
                     m_changed = true;
                 }
-                //Notar que si no hay secuencia no se puede cambiar CLARO ESTA!!!!
+                /* note that if no sequence, no changes can be done */
             }
             if (i == aminoNumberPos + 1) {
                 m_result = m_result + "	 " + this.location.x;
@@ -118,9 +111,9 @@ public final class PdbAtomLine extends PdbLine {
                 m_result = m_result + "	 " + this.LineTokens[i];
             }
 
-        }//for(int i=0;i<m_tlength;i++)
+        }
         this.Line = m_result;
-    }//public  String UpDateString()
+    }
 
     public Point3d getLocation() {
         return this.location;
@@ -142,4 +135,4 @@ public final class PdbAtomLine extends PdbLine {
     public String getSequence() {
         return this.sequence;
     }
-}// PdbAtomLine class
+}

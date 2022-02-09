@@ -1,17 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package protmetrics.dao.dm;
 
 import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Represent an instance in matrix data (column or row)
+ * Represents an instance in matrix data (column or row)
  *
- * @author Docente
  */
 public class DMInstance {
 

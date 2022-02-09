@@ -1,9 +1,6 @@
 package protmetrics.utils.propertymatrix;
 
 import java.util.*;
-/// <summary>
-/// Summary description for PropertyVector.
-/// </summary>
 
 public class PropertyVector {
 
@@ -32,9 +29,9 @@ public class PropertyVector {
         }
         o_found[0] = false;
         return m_result;
-    }//public double getValueFromName()
+    }
 
     public void addVectorElement(PropertyVectorElement a_vectorElement) {
         this.VectorElements.add(a_vectorElement);
-    }//public void addVectorElement(PropertyVectorElement a_vectorElement)
-}//Class
+    }
+}

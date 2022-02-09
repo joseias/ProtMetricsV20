@@ -22,8 +22,9 @@ import protmetrics.utils.MyMath;
 import protmetrics.utils.Filter;
 
 public class RDF3D {
+
     public static final String INDEX_ID = "RDF";
-    
+
     public DMDataSet calcRDFIndex(Properties p) throws Exception {
 
         int attOrder = 0;
@@ -38,22 +39,22 @@ public class RDF3D {
         double step = Double.parseDouble(p.getProperty(Constants.STEP));
         double rdfB = Double.parseDouble(p.getProperty(Constants.RDF_B));
         double rdfF = Double.parseDouble(p.getProperty(Constants.RDF_F));
-        
-        
+
         int stepDesp = (int) Math.round((maxDist - minDist) / step) + 1; //-> Para ver el rango de distancia.;
 
         ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
 
-        //-> Para cada Pdb calcular el indice según los parámetros.
+        /* for each PDB, compute the index */
         for (ProtWrapper pw : protList) {
+            Logger.getLogger(RDF3D.class.getName()).log(Level.INFO, String.format("Computing 3D RDF Index for %s", pw.name));
             DMInstance inst = new DMInstance(pw.getName());
             inst.setAttValue(attPN, new DMAttValue(inst.getInstID()));
 
-            //-> Para cada propiedad, calcular los indices a distintos pasos
+            /* for each property, compute the indices at different steps */
             for (PropertyVector pv : propMatrix.getPropertyVectorsColumns()) {
                 double rstep = minDist;
 
-                //-> Por cada paso en el rango.
+                /* for each step, compute the indice*/
                 for (int j = 0; j < stepDesp; j++) {
                     DMAttValue r = this.getRDF(pv, pw.getInterCADistMatrix(), rstep, rdfF, rdfB);
 
@@ -66,6 +67,7 @@ public class RDF3D {
                 }
             }
             ds.addInstance(inst);
+            Logger.getLogger(RDF3D.class.getName()).log(Level.INFO, String.format("Computing 3D RDF Index for %s. Done!", pw.name));
         }
 
         return ds;
@@ -92,14 +94,14 @@ public class RDF3D {
     }
 
     public Properties init(String cfgPath) throws Exception {
-        /*Properties file*/
+        /* properties file */
         File cfgFile = new File(cfgPath);
         if (cfgFile.exists() == false) {
             throw new IOException(cfgPath + " does not exist...");
         }
         Properties p = BioUtils.loadProperties(cfgPath);
 
-        /*PDBs directory*/
+        /* PDBs folder */
         String pdbsPath = p.getProperty(Constants.PDBS_DIRECTORY_PATH);
         File pdbsFile = new File(pdbsPath);
         if (pdbsFile.exists() == false) {
@@ -121,24 +123,24 @@ public class RDF3D {
 
         p.put(Constants.PROTEIN_LIST, protList);
 
-        /*Properties matrix path*/
+        /* properties matrix path*/
         String pmPath = p.getProperty(Constants.PROP_MATRIX_PATH);
         File pmFile = new File(pmPath);
         if (pmFile.exists() == false) {
             throw new IOException(pmPath + " does not exist...");
         }
 
-        /*Min radius*/
+        /* min radius */
         if (!p.containsKey(Constants.MIN_DIST)) {
             throw new IllegalArgumentException("Min Distance not specified for RDF...");
         }
 
-        /*Max radius*/
+        /* max radius */
         if (!p.containsKey(Constants.MAX_DIST)) {
             throw new IllegalArgumentException("Max Distance not specified for RDF...");
         }
 
-        /*Step*/
+        /* step */
         if (!p.containsKey(Constants.STEP)) {
             throw new IllegalArgumentException("Step not specified for RDF...");
         } else {
@@ -148,17 +150,17 @@ public class RDF3D {
             }
         }
 
-        /*Max rdfF*/
+        /* max rdfF */
         if (!p.containsKey(Constants.RDF_F)) {
             throw new IllegalArgumentException("RDF F not specified for RDF...");
         }
-        
-        /*Max rdfB*/
+
+        /* max rdfB */
         if (!p.containsKey(Constants.RDF_B)) {
             throw new IllegalArgumentException("RDF B not specified for RDF...");
         }
-        
-        /*Output formar*/
+
+        /* output format */
         if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
             throw new IllegalArgumentException("Output format not specified for RDF...");
         }
@@ -172,6 +174,7 @@ public class RDF3D {
     }
 
     public static void main(String[] args) {
+        Logger.getLogger(RDF3D.class.getName()).log(Level.INFO, "Computing 3D RDF Index...");
         try {
             Args a = new Args();
             JCommander.newBuilder()
@@ -200,6 +203,7 @@ public class RDF3D {
         } catch (Exception ex) {
             Logger.getLogger(RDF3D.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Logger.getLogger(RDF3D.class.getName()).log(Level.INFO, "Computing 3D RDF Index. Done!");
     }
 
     private static class Constants {

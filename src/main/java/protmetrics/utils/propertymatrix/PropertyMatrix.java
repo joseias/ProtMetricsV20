@@ -1,12 +1,10 @@
 package protmetrics.utils.propertymatrix;
-/// <summary>
-/// Summary description for PropertyMatrix.
 
 import java.io.FileReader;
 import java.io.LineNumberReader;
 import protmetrics.utils.BioUtils;
 
-/// </summary>
+
 public class PropertyMatrix {
 
     private PropertyVector[] propertyVectorsColumns;
@@ -21,20 +19,20 @@ public class PropertyMatrix {
 
         m_actualLine = m_sr.readLine();
         if (m_actualLine != null) {
-            //-> Obtener los indices de las propiedades.
+            /* get property indices */
             m_actualLineElements = m_actualLine.trim().split("[\\s]+", 0);
             m_actualLineElements = BioUtils.procSplitString(m_actualLineElements);
             propertyVectorsColumns = new PropertyVector[m_actualLineElements.length];
 
             m_actualLine = m_sr.readLine();
 
-            //-> Obtener los nombres de las propiedades
+             /* get property indices */
             if (m_actualLine != null) //2
             {
                 m_actualLineElements = m_actualLine.trim().split("[\\s]+", 0);
                 m_actualLineElements = BioUtils.procSplitString(m_actualLineElements);
 
-                //-> Crear los PropertyVectors
+                /* create property vectors*/
                 for (int i = 0; i < m_actualLineElements.length; i++) {
                     propertyVectorsColumns[i] = new PropertyVector(m_actualLineElements[i]);
                 }
@@ -59,20 +57,18 @@ public class PropertyMatrix {
     }
 
     /***
-     * Index of properties (the first property has index 1)
+     * Index of properties (the first property has index 0)
+     * returns a subset of the PropertyVectorsColumns as a new PropertyMatrix
      * @param a_selectedPVC
      * @return 
      */
     public PropertyMatrix getSubPropertyMatrix(int[] a_selectedPVC) {
-        /*Devuelve una nueva PropertyMatrix cuyo PropertyVectorsColumns es 
-            un subconjunto de los de esta, especificados por los valores en el arreglo*/
         int m_length = a_selectedPVC.length;
         PropertyVector[] m_PVC = new PropertyVector[m_length];
 
         for (int i = 0; i < m_length; i++) {
-            /*Ahora no se chequeara que el valor indicado sea menor que la longitud
-                de PropertyVectorColumns*/
-            m_PVC[i] = this.getPropertyVectorsColumns()[a_selectedPVC[i]-1];
+            /* not checking if value is < PropertyVectorColumns length */
+            m_PVC[i] = this.getPropertyVectorsColumns()[a_selectedPVC[i]];
         }
         return new PropertyMatrix(m_PVC);
     }
@@ -83,5 +79,4 @@ public class PropertyMatrix {
     public PropertyVector[] getPropertyVectorsColumns() {
         return propertyVectorsColumns;
     }
-
 }

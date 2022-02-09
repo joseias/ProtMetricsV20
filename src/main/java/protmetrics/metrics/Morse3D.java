@@ -42,16 +42,17 @@ public class Morse3D {
 
         ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
 
-        //-> Para cada Pdb calcular el indice según los parámetros.
+        /* for each PDB, compute the index */
         for (ProtWrapper pw : protList) {
+            Logger.getLogger(Morse3D.class.getName()).log(Level.INFO, String.format("Computing 3D Morse Index for %s", pw.name));
             DMInstance inst = new DMInstance(pw.getName());
             inst.setAttValue(attPN, new DMAttValue(inst.getInstID()));
 
-            //-> Para cada propiedad, calcular los indices a distintos pasos
+            /* for each property, compute the indices at different steps */
             for (PropertyVector pv : propMatrix.getPropertyVectorsColumns()) {
                 double rstep = minDist;
 
-                //-> Por cada paso en el rango.
+                /* for each step, compute the indice*/
                 for (int j = 0; j < stepDesp; j++) {
                     DMAttValue r = this.get3DMorse(pv, pw.getInterCADistMatrix(), rstep);
 
@@ -64,6 +65,7 @@ public class Morse3D {
                 }
             }
             ds.addInstance(inst);
+            Logger.getLogger(Morse3D.class.getName()).log(Level.INFO, String.format("Computing 3D Morse Index for %s. Done!", pw.name));
         }
 
         return ds;
@@ -97,14 +99,14 @@ public class Morse3D {
     }
 
     public Properties init(String cfgPath) throws Exception {
-        /*Properties file*/
+        /* properties file */
         File cfgFile = new File(cfgPath);
         if (cfgFile.exists() == false) {
             throw new IOException(cfgPath + " does not exist...");
         }
         Properties p = BioUtils.loadProperties(cfgPath);
 
-        /*PDBs directory*/
+        /* PDBs folder */
         String pdbsPath = p.getProperty(Constants.PDBS_DIRECTORY_PATH);
         File pdbsFile = new File(pdbsPath);
         if (pdbsFile.exists() == false) {
@@ -126,35 +128,34 @@ public class Morse3D {
 
         p.put(Constants.PROTEIN_LIST, protList);
 
-        /*Properties matrix path*/
+        /* properties matrix path */
         String pmPath = p.getProperty(Constants.PROP_MATRIX_PATH);
         File pmFile = new File(pmPath);
         if (pmFile.exists() == false) {
             throw new IOException(pmPath + " does not exist...");
         }
 
-        /*Min radius*/
+        /* min radius */
         if (!p.containsKey(Constants.MIN_DIST)) {
             throw new IllegalArgumentException("Min Distance not specified for 3D MORSE...");
         }
 
-        /*Max radius*/
+        /* max radius */
         if (!p.containsKey(Constants.MAX_DIST)) {
             throw new IllegalArgumentException("Max Distance not specified for 3D MORSE...");
         }
 
-        /*Step*/
+        /* step */
         if (!p.containsKey(Constants.STEP)) {
             throw new IllegalArgumentException("Step not specified for 3D MORSE...");
-        }
-        else{
+        } else {
             double step = Double.parseDouble(p.getProperty(Constants.STEP));
-            if(step<=0){
+            if (step <= 0) {
                 throw new IllegalArgumentException("Step mut be > 0 for 3D MORSE...");
             }
         }
 
-        /*Output formar*/
+        /* output format */
         if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
             throw new IllegalArgumentException("Output format not specified for 3D MORSE...");
         }
@@ -168,6 +169,7 @@ public class Morse3D {
     }
 
     public static void main(String[] args) {
+        Logger.getLogger(Morse3D.class.getName()).log(Level.INFO, "Computing 3D Morse Index...");
         try {
             Args a = new Args();
             JCommander.newBuilder()
@@ -196,6 +198,7 @@ public class Morse3D {
         } catch (Exception ex) {
             Logger.getLogger(Morse3D.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Logger.getLogger(Morse3D.class.getName()).log(Level.INFO, "Computing 3D Morse Index. Done!");
     }
 
     private static class Constants {

@@ -21,6 +21,5 @@ public class PropertyVectorElement {
         }
         o_found[0] = false;
         return 0;
-    }//public double getValueFromName(String a_elementName)
-
+    }
 }

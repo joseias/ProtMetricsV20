@@ -66,5 +66,4 @@ public class BondAtomDescJSON {
     public void setBondDesc(List<BondDescJSON> bondDesc) {
         this.bondDesc = bondDesc;
     }
-
 }

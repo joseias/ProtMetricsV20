@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package protmetrics.metrics;
 
 import com.beust.jcommander.JCommander;
@@ -40,7 +35,6 @@ import protmetrics.utils.filters.ExtAtomsFilter;
  *
  * Paths goes through the interior of the molecule
  *
- * @author Docente
  */
 public class Wiener3D {
 
@@ -67,19 +61,20 @@ public class Wiener3D {
 
         ArrayList<MolFile> protList = (ArrayList<MolFile>) p.get(Constants.INSTANCES);
 
-        //-> Para cada Pdb calcular el indice según los parámetros.
+        /* for each PDB, compute the index */
         for (MolFile mol : protList) {
+            Logger.getLogger(Wiener3D.class.getName()).log(Level.INFO, String.format("Computing 3D Wiener Index for %s", mol.getID()));
             DMInstance inst = new DMInstance(mol.getID());
             inst.setAttValue(attPN, new DMAttValue(inst.getInstID()));
             int currentPathL = minPathL;
 
             WeightedPseudograph<GAtom, DefaultWeightedEdge> wpsg = mol.getBonds();
 
-            /*For eficiency, only one instance of this class must be create since it caches precomputed values*/
+            /* for eficiency, only one instance of this class must be create since it caches precomputed values */
             FloydWarshallShortestPaths<GAtom, DefaultWeightedEdge> fwsPath = new FloydWarshallShortestPaths<>(wpsg);
 
             while (currentPathL <= maxPathL) {
-                /* Calcular el indice (still a bit inefficient since path lengh are explored progressively) */
+                /* compute the index (still a bit inefficient since path lengh are explored progressively) */
                 DMAttValue r = this.getWienerThrough(wpsg, fwsPath, extAtomFilter, currentPathL, normalized, onlyExt, extNodeTagL, intNodeTagL, precision);
 
                 String attName = "PL_" + Integer.toString(currentPathL);
@@ -91,6 +86,7 @@ public class Wiener3D {
             }
 
             ds.addInstance(inst);
+            Logger.getLogger(Wiener3D.class.getName()).log(Level.INFO, String.format("Computing 3D Wiener Index for %s. Done!", mol.getID()));
         }
 
         return ds;
@@ -122,17 +118,16 @@ public class Wiener3D {
         int pathLength;
         GraphPath<GAtom, DefaultWeightedEdge> path;
         for (int i = 0; i < procVerticesA.length - 1; i++) {
-            double iP = extVertices.contains(procVerticesA[i])? extNodeTagL: intNodeTagL;
-            
+            double iP = extVertices.contains(procVerticesA[i]) ? extNodeTagL : intNodeTagL;
+
             for (int j = i + 1; j < procVerticesA.length; j++) {
-                double jP = extVertices.contains(procVerticesA[j])? extNodeTagL: intNodeTagL;
+                double jP = extVertices.contains(procVerticesA[j]) ? extNodeTagL : intNodeTagL;
                 path = fwsPath.getPath(procVerticesA[i], procVerticesA[j]);
-                
+
                 if (path != null) {
-                    /*The weights are supposed to be integers*/
+                    /* the weights are supposed to be integers */
                     pathLength = (int) path.getWeight();
                     if (pathLength == pathL) {
-//                        System.out.println(procVerticesA[i].getID() + "," + procVerticesA[j].getID() + "," + pathLength);
                         count = count + (iP * jP);
                         L++;
                     }
@@ -148,25 +143,23 @@ public class Wiener3D {
     }
 
     public Properties init(String cfgPath) throws Exception {
-        /*Properties file*/
+        /* properties file */
         File cfgFile = new File(cfgPath);
         if (cfgFile.exists() == false) {
             throw new IOException(cfgPath + " does not exist...");
         }
         Properties p = BioUtils.loadProperties(cfgPath);
 
-        /*Precision*/
+        /* precision */
         if (!p.containsKey(Constants.PRECISION)) {
             throw new IllegalArgumentException(Constants.PRECISION + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             p.put(Constants.PRECISION, Integer.parseInt(p.getProperty(Constants.PRECISION)));
         }
 
         if (!p.containsKey(Constants.BOND_DESC_FILE)) {
             throw new IllegalArgumentException(Constants.BOND_DESC_FILE + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             String bdPath = p.getProperty(Constants.BOND_DESC_FILE);
             File pmFile = new File(bdPath);
             if (!pmFile.exists()) {
@@ -180,8 +173,7 @@ public class Wiener3D {
 
         if (!p.containsKey(Constants.LOAD_XYZ_DEPLETED)) {
             throw new IllegalArgumentException(Constants.LOAD_XYZ_DEPLETED + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             p.put(Constants.LOAD_XYZ_DEPLETED, Boolean.parseBoolean(p.getProperty(Constants.LOAD_XYZ_DEPLETED, "true")));
         }
 
@@ -189,17 +181,15 @@ public class Wiener3D {
             throw new IllegalArgumentException(Constants.BOND_DESC_FILE + " not specified for 3D Wiener...");
         }
 
-        /*XYZs directory*/
+        /* XYZs folder */
         if (!p.containsKey(Constants.XYZ_DIRECTORY_PATH)) {
             throw new IllegalArgumentException(Constants.XYZ_DIRECTORY_PATH + " input folder not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             String xyzsPath = p.getProperty(Constants.XYZ_DIRECTORY_PATH);
             File xyzFilesDir = new File(xyzsPath);
             if (xyzFilesDir.exists() == false) {
                 throw new IOException(xyzsPath + " does not exist...");
-            }
-            else {
+            } else {
                 Filter xyzFilter = new Filter("." + Formats.XYZ);
                 File[] xyzFiles = xyzFilesDir.listFiles(xyzFilter);
 
@@ -217,59 +207,52 @@ public class Wiener3D {
 
         }
 
-        /*Output format*/
+        /* output format */
         if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
             throw new IllegalArgumentException(Constants.OUTPUT_FORMAT + "  format not specified for 3D Wiener...");
         }
 
-        /*Min radius*/
+        /* min radius */
         if (!p.containsKey(Constants.MIN_DIST)) {
             throw new IllegalArgumentException(Constants.MIN_DIST + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             p.put(Constants.MIN_DIST, Integer.parseInt(p.getProperty(Constants.MIN_DIST)));
         }
 
-        /*Max radius*/
+        /* max radius */
         if (!p.containsKey(Constants.MAX_DIST)) {
             throw new IllegalArgumentException(Constants.MAX_DIST + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             p.put(Constants.MAX_DIST, Integer.parseInt(p.getProperty(Constants.MAX_DIST)));
         }
 
         if (!p.containsKey(Constants.GINDEX_NORMALIZED)) {
             throw new IllegalArgumentException(Constants.GINDEX_NORMALIZED + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             p.put(Constants.GINDEX_NORMALIZED, Boolean.parseBoolean(p.getProperty(Constants.GINDEX_NORMALIZED)));
         }
 
         if (!p.containsKey(Constants.GINDEX_ONLY_EXT)) {
             throw new IllegalArgumentException(Constants.GINDEX_ONLY_EXT + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             p.put(Constants.GINDEX_ONLY_EXT, Boolean.parseBoolean(p.getProperty(Constants.GINDEX_ONLY_EXT)));
         }
 
         if (!p.containsKey(Constants.GINDEX_INT_ATOM_TAG)) {
             throw new IllegalArgumentException(Constants.GINDEX_INT_ATOM_TAG + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             p.put(Constants.GINDEX_INT_ATOM_TAG, Integer.parseInt(p.getProperty(Constants.GINDEX_INT_ATOM_TAG)));
         }
 
         if (!p.containsKey(Constants.GINDEX_EXT_ATOM_TAG)) {
             throw new IllegalArgumentException(Constants.GINDEX_EXT_ATOM_TAG + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             p.put(Constants.GINDEX_EXT_ATOM_TAG, Integer.parseInt(p.getProperty(Constants.GINDEX_EXT_ATOM_TAG)));
         }
 
         if (!p.containsKey(Constants.EXTERNAL_ATOM_FILTER)) {
             throw new IllegalArgumentException(Constants.EXTERNAL_ATOM_FILTER + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             String extAtomFilterCN = p.getProperty(Constants.EXTERNAL_ATOM_FILTER);
             Class<?> extAFC = Class.forName(extAtomFilterCN);
             ExtAtomsFilter extAtomFilter = (ExtAtomsFilter) extAFC.newInstance();
@@ -278,8 +261,7 @@ public class Wiener3D {
 
         if (!p.containsKey(Constants.MAX_EDGES_BY_ATOM)) {
             throw new IllegalArgumentException(Constants.MAX_EDGES_BY_ATOM + " not specified for 3D Wiener...");
-        }
-        else {
+        } else {
             p.put(Constants.MAX_EDGES_BY_ATOM, Double.parseDouble(p.getProperty(Constants.MAX_EDGES_BY_ATOM)));
         }
 
@@ -291,6 +273,7 @@ public class Wiener3D {
     }
 
     public static void main(String[] args) {
+        Logger.getLogger(Wiener3D.class.getName()).log(Level.INFO, "Computing 3D Wiener Index...");
         try {
             Args a = new Args();
             JCommander.newBuilder()
@@ -313,13 +296,13 @@ public class Wiener3D {
                         ds.toCSV(outFile);
                         break;
                 }
-            }
-            else {
+            } else {
                 throw new IllegalArgumentException("Configuration file not specified... must supply -cfg option...");
             }
         } catch (Exception ex) {
             Logger.getLogger(Wiener3D.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Logger.getLogger(Wiener3D.class.getName()).log(Level.INFO, "Computing 3D Wiener Index. Done!");
     }
 
     public static class Constants {

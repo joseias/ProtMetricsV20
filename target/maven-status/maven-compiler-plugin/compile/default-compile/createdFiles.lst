@@ -36,7 +36,6 @@ protmetrics\dao\json\BondAtomDescJSON.class
 protmetrics\dao\files\xyz\GHeader.class
 protmetrics\metrics\Morse3D$Constants.class
 protmetrics\utils\propertymatrix\PropertyVectorElement.class
-protmetrics\metrics\Test.class
 protmetrics\utils\ParamCodes.class
 protmetrics\dao\files\xyz\GAtom.class
 protmetrics\dao\dm\DMAtt.class

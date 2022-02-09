@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package protmetrics.dao.dm;
 
 import java.io.IOException;
@@ -16,13 +11,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import protmetrics.metrics.Correlation2D;
 
-/**
- *
- * @author Docente
- */
 public class DMDataSet {
 
-    private String dsID;
+    private final String dsID;
     private Set<DMInstance> instances;
     private Set<DMAtt> atts;
 
@@ -79,7 +70,7 @@ public class DMDataSet {
         try {
             PrintStream ps = new PrintStream(path);
 
-            //-> Imprimir el encabezado
+            /* print the header */
             ps.println("@relation " + dsID);
 
             List<DMAtt> attList = this.atts.stream().collect(Collectors.toList());
@@ -133,7 +124,7 @@ public class DMDataSet {
         try {
             PrintStream ps = new PrintStream(path);
 
-            //-> Imprimir el encabezado
+            /* print the header */
             List<DMAtt> attList = this.atts.stream().collect(Collectors.toList());
             Collections.sort(attList, (o1, o2) -> {
                 int order = Integer.compare(o1.getAttOrder(), o2.getAttOrder());

@@ -17,14 +17,6 @@ import protmetrics.metrics.Wiener3D.MolType;
 import protmetrics.utils.BioUtils;
 import protmetrics.utils.MyMath;
 
-/**
- * *
- * In the original v1.0, used until 2016/06/26 intervals seems to be wrong,
- * asuming that doubleBond < aromaticBond < singleBond which is not true in
- * conf.properties usually used SINGLE_BOND=1.46 DOUBLE_BOND=1.31
- * AROMATIC_BOND=1.27 THRESHOLD=0.02 @author Docente
- *
- */
 public class XYZMOLConverter {
 
     public MolFile convert(XYZFile input, Properties prop) throws Exception {

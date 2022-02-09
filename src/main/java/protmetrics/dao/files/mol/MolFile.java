@@ -5,10 +5,6 @@ import org.jgrapht.graph.WeightedPseudograph;
 import protmetrics.dao.files.xyz.GAtom;
 import protmetrics.dao.files.xyz.GHeader;
 
-/**
- *
- * @author sijfg
- */
 public class MolFile {
 
     private String ID;

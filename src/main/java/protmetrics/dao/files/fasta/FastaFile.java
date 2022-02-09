@@ -1,13 +1,5 @@
 package protmetrics.dao.files.fasta;
 
-/*
- * FastaFile.java
- *
- * Created on 15 de junio de 2007, 10:18
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -15,15 +7,8 @@ import java.util.ArrayList;
 
 import protmetrics.errors.SomeErrorException;
 
-/**
- *
- * @author personal
- */
 public class FastaFile {
 
-    /**
-     * Creates a new instance of FastaFile
-     */
     String[][] Sequences;
 
     String c_fastaPath = "";
@@ -31,7 +16,6 @@ public class FastaFile {
     public FastaFile(String a_fastaPath) throws Exception {
         c_fastaPath = a_fastaPath;
         try {
-
             this.initFasta(a_fastaPath);
         } catch (SomeErrorException m_see) {
             throw m_see;
@@ -70,7 +54,6 @@ public class FastaFile {
                             m_protName = m_tokens[0].substring(1, m_tokens[0].length());
 
                         }
-                        //m_actualLine=m_lnr.readLine();
                     }
                     if (m_actualLine == null) {
                         m_pSequences.add(m_protSequence);
@@ -79,7 +62,7 @@ public class FastaFile {
                 } else {
                     m_actualLine = m_lnr.readLine();
                 }
-            }//while
+            }
 
             Sequences = new String[m_pNames.size()][2];
             for (int i = 0; i < m_pNames.size(); i++) {
@@ -87,12 +70,9 @@ public class FastaFile {
                 Sequences[i][1] = m_pSequences.get(i);
             }
 
-        }//try
-        catch (IOException m_ioe) {
-            //m_ioe.printStackTrace();
+        } catch (IOException m_ioe) {
             throw m_ioe;
         } catch (Exception m_e) {
-            //m_e.printStackTrace();
             throw new SomeErrorException("ERROR AT->" + c_fastaPath);
 
         }

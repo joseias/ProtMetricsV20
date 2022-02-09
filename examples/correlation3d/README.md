@@ -1,0 +1,1 @@
+java -cp ProtMetricsV20-1.0-SNAPSHOT-jar-with-dependencies.jar protmetrics.metrics.Correlation3D -cfg correlation3d.cfg

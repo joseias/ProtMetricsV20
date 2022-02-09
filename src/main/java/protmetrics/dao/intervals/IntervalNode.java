@@ -1,3 +1,5 @@
+/* based in https://github.com/kevinjdolan/intervaltree (WTFPL) */
+
 package protmetrics.dao.intervals;
 
 import java.util.ArrayList;
@@ -10,10 +12,7 @@ import java.util.Map.Entry;
 
 /**
  * The Node class contains the interval tree information for one single node
- * https://github.com/kevinjdolan/intervaltree/tree/master/src/intervalTree
- *
- * @author Kevin Dolan
- */
+*/
 public class IntervalNode<Type> {
 
     private SortedMap<IntervalData<Type>, List<IntervalData<Type>>> intervals;
@@ -22,7 +21,7 @@ public class IntervalNode<Type> {
     private IntervalNode<Type> rightNode;
 
     public IntervalNode() {
-        intervals = new TreeMap<IntervalData<Type>, List<IntervalData<Type>>>();
+        intervals = new TreeMap<>();
         center = 0;
         leftNode = null;
         rightNode = null;
@@ -30,9 +29,9 @@ public class IntervalNode<Type> {
 
     public IntervalNode(List<IntervalData<Type>> intervalList) {
 
-        intervals = new TreeMap<IntervalData<Type>, List<IntervalData<Type>>>();
+        intervals = new TreeMap<>();
 
-        SortedSet<Double> endpoints = new TreeSet<Double>();
+        SortedSet<Double> endpoints = new TreeSet<>();
 
         for (IntervalData<Type> interval : intervalList) {
             endpoints.add(interval.getStart());
@@ -42,8 +41,8 @@ public class IntervalNode<Type> {
         double median = getMedian(endpoints);
         center = median;
 
-        List<IntervalData<Type>> left = new ArrayList<IntervalData<Type>>();
-        List<IntervalData<Type>> right = new ArrayList<IntervalData<Type>>();
+        List<IntervalData<Type>> left = new ArrayList<>();
+        List<IntervalData<Type>> right = new ArrayList<>();
 
         for (IntervalData<Type> interval : intervalList) {
             if (interval.getEnd() < median) {
@@ -53,18 +52,18 @@ public class IntervalNode<Type> {
             } else {
                 List<IntervalData<Type>> posting = intervals.get(interval);
                 if (posting == null) {
-                    posting = new ArrayList<IntervalData<Type>>();
+                    posting = new ArrayList<>();
                     intervals.put(interval, posting);
                 }
                 posting.add(interval);
             }
         }
 
-        if (left.size() > 0) {
-            leftNode = new IntervalNode<Type>(left);
+        if (!left.isEmpty()) {
+            leftNode = new IntervalNode<>(left);
         }
-        if (right.size() > 0) {
-            rightNode = new IntervalNode<Type>(right);
+        if (!right.isEmpty()) {
+            rightNode = new IntervalNode<>(right);
         }
     }
 
@@ -75,7 +74,7 @@ public class IntervalNode<Type> {
      * @return	all intervals containing time
      */
     public List<IntervalData<Type>> stab(double time) {
-        List<IntervalData<Type>> result = new ArrayList<IntervalData<Type>>();
+        List<IntervalData<Type>> result = new ArrayList<>();
 
         for (Entry<IntervalData<Type>, List<IntervalData<Type>>> entry : intervals.entrySet()) {
             if (entry.getKey().contains(time)) {
@@ -102,7 +101,7 @@ public class IntervalNode<Type> {
      * @return	all intervals containing time
      */
     public List<IntervalData<Type>> query(IntervalData<?> target) {
-        List<IntervalData<Type>> result = new ArrayList<IntervalData<Type>>();
+        List<IntervalData<Type>> result = new ArrayList<>();
 
         for (Entry<IntervalData<Type>, List<IntervalData<Type>>> entry : intervals.entrySet()) {
             if (entry.getKey().intersects(target)) {
@@ -165,7 +164,7 @@ public class IntervalNode<Type> {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(center + ": ");
         for (Entry<IntervalData<Type>, List<IntervalData<Type>>> entry : intervals.entrySet()) {
             sb.append("[" + entry.getKey().getStart() + "," + entry.getKey().getEnd() + "]:{");
@@ -176,5 +175,4 @@ public class IntervalNode<Type> {
         }
         return sb.toString();
     }
-
 }

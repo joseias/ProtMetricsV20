@@ -19,26 +19,20 @@ public class BioUtils {
 
     public static final String SEPARATOR = ",";
 
-    public BioUtils() {
-        //
-        // TODO: add constructor logic here
-        //
-    }
-
     public static String[] procSplitString(String[] a_input) {
         ArrayList m_aux = new ArrayList();
 
         for (int i = 0; i < a_input.length; i++) {
-            if (a_input[i] != "") {
+            if (!"".equals(a_input[i])) {
                 m_aux.add(a_input[i]);
-            }//f(a_input[i]!="")
-        }//for(int i=0;i<a_input.length;i++)
+            }
+        }
         String[] m_result = new String[m_aux.size()];
         for (int j = 0; j < m_result.length; j++) {
             m_result[j] = (String) m_aux.get(j);
         }
         return m_result;
-    }//public String[] procSplitString(String a_input)
+    }
 
     public static String aminoThreetoOne(String a_aminoTLCode) {
 
@@ -186,7 +180,7 @@ public class BioUtils {
         }
         return m_result;
 
-    }//public boolean isInteger(String a_chars)
+    }
 
     public static boolean isAminoSequence(String a_aminoTLCode) {
 
@@ -252,7 +246,7 @@ public class BioUtils {
         }
 
         return false;
-    }//public static boolean isAminoSequence(String a_sequence)
+    }
 
     public static Properties loadProperties(String confFilePath) {
         try {
@@ -283,16 +277,12 @@ public class BioUtils {
      */
     public static String[][] getInterCADistMatrixN(PdbFile pdb) throws Exception {
 
-        double x;
-        double y;
-        double z;
-
         PdbAtomLine[] caData = pdb.getCALines();
         String[][] result = new String[caData.length + 1][caData.length + 1];
 
         result[0][0] = "ELEMENTS";
         for (int f = 0; f < caData.length; f++) {
-            //El arreglo de CA comienza en 0
+            /* CA array start at 0*/
             result[f + 1][0] = result[0][f + 1] = (f + 1) + "_" + caData[f].getAtomType() + "_" + caData[f].getAminoType();
 
         }
@@ -305,7 +295,7 @@ public class BioUtils {
         return result;
     }
 
-    private static int precision = -1;
+    private static final int precision = -1;
 
     public static double getDistance(GAtom a, GAtom b) {
         return a.getLocation().distance(b.getLocation());
@@ -333,7 +323,7 @@ public class BioUtils {
 
             IntervalType itype = IntervalType.LCLOSED_ROPEN;
 
-            /*Better implementation with nested if, but for readability and because if are exclusive*/
+            /* better implementation with nested if, but for readability and because if are exclusive */
             if (lclosed_rclosed) {
                 itype = IntervalType.LCLOSED_RCLOSED;
             }
@@ -358,5 +348,4 @@ public class BioUtils {
             return null;
         }
     }
-
 }
