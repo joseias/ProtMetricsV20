@@ -3,6 +3,9 @@ package protmetrics.dao.json;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Description of an atom bond in json format.
+ */
 public class BondDescJSON {
 
     @SerializedName("spec")

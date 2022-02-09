@@ -5,6 +5,9 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Represents the description of the bond between atoms in json format.
+ */
 public class BondAtomDescJSON {
 
     @SerializedName("AtomA")

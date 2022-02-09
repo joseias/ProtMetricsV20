@@ -1,5 +1,3 @@
-/* based in https://github.com/kevinjdolan/intervaltree (WTFPL) */
-
 package protmetrics.dao.intervals;
 
 import java.util.ArrayList;
@@ -12,7 +10,9 @@ import java.util.Map.Entry;
 
 /**
  * The Node class contains the interval tree information for one single node
-*/
+ * based in https://github.com/kevinjdolan/intervaltree (WTFPL)
+ * @param <Type>
+ */
 public class IntervalNode<Type> {
 
     private SortedMap<IntervalData<Type>, List<IntervalData<Type>>> intervals;
@@ -20,6 +20,9 @@ public class IntervalNode<Type> {
     private IntervalNode<Type> leftNode;
     private IntervalNode<Type> rightNode;
 
+    /**
+    *    
+    */
     public IntervalNode() {
         intervals = new TreeMap<>();
         center = 0;
@@ -27,6 +30,10 @@ public class IntervalNode<Type> {
         rightNode = null;
     }
 
+    /**
+     *
+     * @param intervalList
+     */
     public IntervalNode(List<IntervalData<Type>> intervalList) {
 
         intervals = new TreeMap<>();
@@ -122,26 +129,50 @@ public class IntervalNode<Type> {
         return result;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getCenter() {
         return center;
     }
 
+    /**
+     *
+     * @param center
+     */
     public void setCenter(double center) {
         this.center = center;
     }
 
+    /**
+     *
+     * @return
+     */
     public IntervalNode<Type> getLeft() {
         return leftNode;
     }
 
+    /**
+     *
+     * @param left
+     */
     public void setLeft(IntervalNode<Type> left) {
         this.leftNode = left;
     }
 
+    /**
+     *
+     * @return
+     */
     public IntervalNode<Type> getRight() {
         return rightNode;
     }
 
+    /**
+     *
+     * @param right
+     */
     public void setRight(IntervalNode<Type> right) {
         this.rightNode = right;
     }
@@ -157,7 +188,7 @@ public class IntervalNode<Type> {
             if (i == middle) {
                 return point;
             }
-            i++;
+            ++i;
         }
         return null;
     }

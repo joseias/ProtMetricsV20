@@ -8,8 +8,16 @@ import org.jgrapht.graph.WeightedPseudograph;
 
 import protmetrics.dao.files.xyz.GAtom;
 
+/**
+ * Utility class to get only exterior vertices in graphene structures.
+ */
 public class ExtAtomFilterGraphene extends ExtAtomsFilter {
 
+    /**
+     *
+     * @param graph
+     * @return
+     */
     @Override
     public Set<GAtom> getExteriorVertices(WeightedPseudograph<GAtom, DefaultWeightedEdge> graph) {
         Set<GAtom> result = new HashSet<>(graph.vertexSet().size());

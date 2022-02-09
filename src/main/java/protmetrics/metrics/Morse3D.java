@@ -21,10 +21,29 @@ import protmetrics.utils.Formats;
 import protmetrics.utils.MyMath;
 import protmetrics.utils.Filter;
 
+/**
+ * Implements a variation of the 3D Morse molecular descriptor considering only
+ * alpha carbons.
+ *
+ * [1] Schuur, J. H., Selzer, P., & Gasteiger, J. (1996). The coding of the
+ * three-dimensional structure of molecules by molecular transforms and its
+ * application to structure-spectra correlations and studies of biological
+ * activity. Journal of Chemical Information and Computer Sciences, 36(2),
+ * 334-344.
+ */
 public class Morse3D {
 
+    /**
+     *
+     */
     public static final String INDEX_ID = "3DMorse";
 
+    /**
+     *
+     * @param p
+     * @return
+     * @throws Exception
+     */
     public DMDataSet calc3DMorseIndex(Properties p) throws Exception {
 
         int attOrder = 0;
@@ -53,7 +72,7 @@ public class Morse3D {
                 double rstep = minDist;
 
                 /* for each step, compute the indice*/
-                for (int j = 0; j < stepDesp; j++) {
+                for (int j = 0; j < stepDesp; ++j) {
                     DMAttValue r = this.get3DMorse(pv, pw.getInterCADistMatrix(), rstep);
 
                     String attName = pv.PropertyName + "_" + (double) rstep;
@@ -71,6 +90,13 @@ public class Morse3D {
         return ds;
     }
 
+    /**
+     *
+     * @param pv
+     * @param interCAMatrix
+     * @param S
+     * @return
+     */
     public DMAttValue get3DMorse(PropertyVector pv, IEDMatrix interCAMatrix, double S) {
 
         boolean[] found = {true};
@@ -82,9 +108,9 @@ public class Morse3D {
         double p1;
         double p2;
 
-        for (int f = 2; f < interCAMatrix.getRows(); f++) {
+        for (int f = 2; f < interCAMatrix.getRows(); ++f) {
             p1 = pv.getValueFromName(interCAMatrix.getElementAt(f), found);
-            for (int c = 1; c < f; c++) {
+            for (int c = 1; c < f; ++c) {
                 p2 = pv.getValueFromName(interCAMatrix.getElementAt(c), found);
 
                 pMult = p1 * p2;
@@ -98,6 +124,12 @@ public class Morse3D {
         return new DMAttValue(Double.toString(MyMath.round(sum, 2)));
     }
 
+    /**
+     *
+     * @param cfgPath
+     * @return
+     * @throws Exception
+     */
     public Properties init(String cfgPath) throws Exception {
         /* properties file */
         File cfgFile = new File(cfgPath);
@@ -168,6 +200,10 @@ public class Morse3D {
         return p;
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Logger.getLogger(Morse3D.class.getName()).log(Level.INFO, "Computing 3D Morse Index...");
         try {

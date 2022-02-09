@@ -7,16 +7,24 @@ import java.util.ArrayList;
 
 import protmetrics.errors.SomeErrorException;
 
+/**
+ * Wrapper to represent a .fasta file.
+ */
 public class FastaFile {
 
     String[][] Sequences;
 
     String c_fastaPath = "";
 
-    public FastaFile(String a_fastaPath) throws Exception {
-        c_fastaPath = a_fastaPath;
+    /**
+     *
+     * @param path path to the .fasta file.
+     * @throws Exception
+     */
+    public FastaFile(String path) throws Exception {
+        c_fastaPath = path;
         try {
-            this.initFasta(a_fastaPath);
+            this.initFasta(path);
         } catch (SomeErrorException m_see) {
             throw m_see;
         } catch (Exception m_e) {
@@ -24,9 +32,13 @@ public class FastaFile {
         }
     }
 
-    private void initFasta(String a_fastaPath) throws Exception {
+    /**
+     * @param path path to the .fasta file.
+     * @throws Exception
+     */
+    private void initFasta(String path) throws Exception {
         try {
-            LineNumberReader m_lnr = new LineNumberReader(new FileReader(a_fastaPath));
+            LineNumberReader m_lnr = new LineNumberReader(new FileReader(path));
             String m_actualLine = m_lnr.readLine();
             String[] m_tokens;
             String m_protName = "";
@@ -65,7 +77,7 @@ public class FastaFile {
             }
 
             Sequences = new String[m_pNames.size()][2];
-            for (int i = 0; i < m_pNames.size(); i++) {
+            for (int i = 0; i < m_pNames.size(); ++i) {
                 Sequences[i][0] = m_pNames.get(i);
                 Sequences[i][1] = m_pSequences.get(i);
             }
@@ -78,10 +90,18 @@ public class FastaFile {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String[][] getSequences() {
         return Sequences;
     }
 
+    /**
+     *
+     * @param sequences
+     */
     public void setSequences(String[][] sequences) {
         Sequences = sequences;
     }

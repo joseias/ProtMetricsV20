@@ -21,10 +21,35 @@ import protmetrics.utils.Formats;
 import protmetrics.utils.MyMath;
 import protmetrics.utils.Filter;
 
+/**
+ * Implements the Protein Radial Distribution Function (PRDF) molecular
+ * descriptor.
+ *
+ * [1] Fernández, M., Caballero, J., Fernández, L., Abreu, J. I., & Garriga, M.
+ * (2007). Protein radial distribution function (P-RDF) and Bayesian-Regularized
+ * Genetic Neural Networks for modeling protein conformational stability:
+ * Chymotrypsin inhibitor 2 mutants. Journal of Molecular Graphics and
+ * Modelling, 26(4), 748-759.
+ *
+ * [2] Schuur, J. H., Selzer, P., & Gasteiger, J. (1996). The coding of the
+ * three-dimensional structure of molecules by molecular transforms and its
+ * application to structure-spectra correlations and studies of biological
+ * activity. Journal of Chemical Information and Computer Sciences, 36(2),
+ * 334-344.
+ */
 public class RDF3D {
 
+    /**
+     *
+     */
     public static final String INDEX_ID = "RDF";
 
+    /**
+     *
+     * @param p
+     * @return
+     * @throws Exception
+     */
     public DMDataSet calcRDFIndex(Properties p) throws Exception {
 
         int attOrder = 0;
@@ -55,7 +80,7 @@ public class RDF3D {
                 double rstep = minDist;
 
                 /* for each step, compute the indice*/
-                for (int j = 0; j < stepDesp; j++) {
+                for (int j = 0; j < stepDesp; ++j) {
                     DMAttValue r = this.getRDF(pv, pw.getInterCADistMatrix(), rstep, rdfF, rdfB);
 
                     String attName = pv.PropertyName + "_" + (double) rstep;
@@ -73,6 +98,15 @@ public class RDF3D {
         return ds;
     }
 
+    /**
+     *
+     * @param pv
+     * @param interCAMatrix
+     * @param radius
+     * @param rdfF
+     * @param rdfB
+     * @return
+     */
     public DMAttValue getRDF(PropertyVector pv, IEDMatrix interCAMatrix, double radius, double rdfF, double rdfB) {
 
         boolean[] m_found = {true};
@@ -80,8 +114,8 @@ public class RDF3D {
         double exp;
         double pMult;
 
-        for (int f = 1; f < interCAMatrix.getRows() - 1; f++) {
-            for (int c = f + 1; c < interCAMatrix.getColumns(); c++) {
+        for (int f = 1; f < interCAMatrix.getRows() - 1; ++f) {
+            for (int c = f + 1; c < interCAMatrix.getColumns(); ++c) {
                 /* Af Aj e(-B(r-rij)) */
                 pMult = pv.getValueFromName(interCAMatrix.getElementAt(f), m_found) * pv.getValueFromName(interCAMatrix.getElementAt(c), m_found);
 
@@ -93,6 +127,12 @@ public class RDF3D {
         return new DMAttValue(Double.toString(MyMath.round(rdfIndexSum, 2)));
     }
 
+    /**
+     *
+     * @param cfgPath
+     * @return
+     * @throws Exception
+     */
     public Properties init(String cfgPath) throws Exception {
         /* properties file */
         File cfgFile = new File(cfgPath);
@@ -173,6 +213,10 @@ public class RDF3D {
         return p;
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Logger.getLogger(RDF3D.class.getName()).log(Level.INFO, "Computing 3D RDF Index...");
         try {

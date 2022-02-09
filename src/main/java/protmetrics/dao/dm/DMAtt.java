@@ -2,6 +2,9 @@ package protmetrics.dao.dm;
 
 import java.util.Objects;
 
+/**
+ * Represents an attribute within the result matrix (DataSet) when computing an index.
+ */
 public class DMAtt {
 
     private final String attName;
@@ -10,6 +13,12 @@ public class DMAtt {
 
     private static String SPECIAL_ATT_NAME = "StructID";
 
+    /**
+     *
+     * @param attName attribute name.
+     * @param attType class of the attribute.
+     * @param order order of the attribute.
+     */
     public DMAtt(String attName, Class attType, int order) {
         this.attName = attName;
         this.attType = attType;
@@ -65,9 +74,9 @@ public class DMAtt {
     }
 
     /**
-     * @param aSPECIAL_ATT_NAME the SPECIAL_ATT_NAME to set
+     * @param specialAttName the SPECIAL_ATT_NAME to set
      */
-    public static void setSPECIAL_ATT_NAME(String aSPECIAL_ATT_NAME) {
-        SPECIAL_ATT_NAME = aSPECIAL_ATT_NAME;
+    public static void setSPECIAL_ATT_NAME(String specialAttName) {
+        SPECIAL_ATT_NAME = specialAttName;
     }
 }

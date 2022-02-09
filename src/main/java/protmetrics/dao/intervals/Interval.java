@@ -1,47 +1,95 @@
-/* based in https://github.com/kevinjdolan/intervaltree (WTFPL) */
-
 package protmetrics.dao.intervals;
 
+/**
+ * Represents an interval.
+ * based in https://github.com/kevinjdolan/intervaltree (WTFPL)
+ */
 public class Interval implements Comparable<Interval> {
 
+    /**
+     *
+     */
     protected double start;
+
+    /**
+     *
+     */
     protected double end;
+
+    /**
+     *
+     */
     protected IntervalType itype;
     private boolean lopen;
     private boolean ropen;
 
+    /**
+     *
+     * @param start
+     * @param end
+     */
     public Interval(double start, double end) {
         this.start = start;
         this.end = end;
         this.setItype(IntervalType.LCLOSED_ROPEN);
     }
 
+    /**
+     *
+     * @param start
+     * @param end
+     * @param itype
+     */
     public Interval(double start, double end, IntervalType itype) {
         this.start = start;
         this.end = end;
         this.setItype(itype);
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isLopen() {
         return lopen;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isRopen() {
         return ropen;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getStart() {
         return start;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getEnd() {
         return end;
     }
 
+    /**
+     *
+     * @return
+     */
     public IntervalType getItype() {
         return itype;
     }
 
+    /**
+     *
+     * @param itype
+     */
     public void setItype(IntervalType itype) {
         this.itype = itype;
         switch (itype) {
@@ -68,6 +116,7 @@ public class Interval implements Comparable<Interval> {
     }
 
     /**
+     * @param value
      * @return	true if this interval contains time (inclusive)
      */
     public boolean contains(double value) {
@@ -129,10 +178,29 @@ public class Interval implements Comparable<Interval> {
         }
     }
 
+    /**
+     *
+     */
     public enum IntervalType {
+
+        /**
+         *
+         */
         LOPEN_ROPEN,
+
+        /**
+         *
+         */
         LOPEN_RCLOSED,
+
+        /**
+         *
+         */
         LCLOSED_ROPEN,
+
+        /**
+         *
+         */
         LCLOSED_RCLOSED;
     }
 }

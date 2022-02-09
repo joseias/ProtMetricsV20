@@ -8,30 +8,48 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import protmetrics.dao.IEDMatrix;
-import protmetrics.dao.files.pdb.PdbFile;
-import protmetrics.utils.propertymatrix.PropertyMatrix;
-import protmetrics.utils.propertymatrix.PropertyVector;
 import protmetrics.dao.dm.DMAtt;
 import protmetrics.dao.dm.DMAttValue;
 import protmetrics.dao.dm.DMDataSet;
 import protmetrics.dao.dm.DMInstance;
+import protmetrics.dao.files.pdb.PdbFile;
 import protmetrics.utils.BioUtils;
+import protmetrics.utils.Filter;
 import protmetrics.utils.Formats;
 import protmetrics.utils.MyMath;
-import protmetrics.utils.Filter;
+import protmetrics.utils.propertymatrix.PropertyMatrix;
+import protmetrics.utils.propertymatrix.PropertyVector;
 
 /**
- * *
- * [1] M. Wagener, J. Sadowski, J. Gasteiger. Autocorrelation of molecular
- * properties for modelling corticosteroid binding globulin and cytosolic ah
- * receptor activity by neural networks. J. Am. Chem. Soc., 117, 7769 (1995)
+ * Implements the 2D Amino Acid Sequence Autocorrelation Vectors molecular
+ * descriptor.
+ *
+ * [1] Fernandez, M., Abreu, J. I., Caballero, J., Garriga, M., & Fernandez,
+ * len. (2007). Comparative modeling of the conformational stability of
+ * chymotrypsin inhibitor 2 protein mutants using amino acid sequence
+ * autocorrelation (AASA) and amino acid 3D autocorrelation (AA3DA) vectors and
+ * ensembles of Bayesian-regularized genetic neural networks. Molecular
+ * Simulation, 33(13), 1045-1056.
+ *
+ * [2] Wagener, M., Sadowski, J., & Gasteiger, J. (1995). Autocorrelation of
+ * molecular surface properties for modeling corticosteroid binding globulin and
+ * cytosolic Ah receptor activity by neural networks. Journal of the American
+ * Chemical Society, 117(29), 7769-7775.
  */
 public class Correlation3D {
 
-    public static final String INDEX_ID = "Correlation3D";
+    /**
+     *
+     */
+    public static final String INDEX_ID = "AA3DA";
 
+    /**
+     *
+     * @param p
+     * @return
+     * @throws Exception
+     */
     public DMDataSet calc3DCorrelationIndex(Properties p) throws Exception {
 
         int attOrder = 0;
@@ -123,9 +141,9 @@ public class Correlation3D {
         double sum = 0;
         int L = 0;
 
-        for (int i = 1; i < interCAMatrix.getRows() - 1; i++) {
+        for (int i = 1; i < interCAMatrix.getRows() - 1; ++i) {
             pi = pv.getValueFromName(interCAMatrix.getElementAt(i), found);
-            for (int j = i + 1; j < interCAMatrix.getColumns(); j++) {
+            for (int j = i + 1; j < interCAMatrix.getColumns(); ++j) {
                 pj = pv.getValueFromName(interCAMatrix.getElementAt(j), found);
                 dij = interCAMatrix.getValueAt(i, j);
 
@@ -157,9 +175,9 @@ public class Correlation3D {
         double max = Double.MIN_VALUE;
         int L = 0;
 
-        for (int i = 1; i < interCAMatrix.getRows() - 1; i++) {
+        for (int i = 1; i < interCAMatrix.getRows() - 1; ++i) {
             pi = pv.getValueFromName(interCAMatrix.getElementAt(i), found);
-            for (int j = i + 1; j < interCAMatrix.getColumns(); j++) {
+            for (int j = i + 1; j < interCAMatrix.getColumns(); ++j) {
                 pj = pv.getValueFromName(interCAMatrix.getElementAt(j), found);
                 dij = interCAMatrix.getValueAt(i, j);
 
@@ -192,9 +210,9 @@ public class Correlation3D {
         double min = Double.MAX_VALUE;
         int L = 0;
 
-        for (int i = 1; i < interCAMatrix.getRows() - 1; i++) {
+        for (int i = 1; i < interCAMatrix.getRows() - 1; ++i) {
             pi = pv.getValueFromName(interCAMatrix.getElementAt(i), found);
-            for (int j = i + 1; j < interCAMatrix.getColumns(); j++) {
+            for (int j = i + 1; j < interCAMatrix.getColumns(); ++j) {
                 pj = pv.getValueFromName(interCAMatrix.getElementAt(j), found);
                 dij = interCAMatrix.getValueAt(i, j);
 
@@ -209,6 +227,12 @@ public class Correlation3D {
         return new DMAttValue(Double.toString(result));
     }
 
+    /**
+     *
+     * @param cfgPath
+     * @return
+     * @throws Exception
+     */
     public Properties init(String cfgPath) throws Exception {
         /* properties file*/
         File cfgFile = new File(cfgPath);
@@ -279,6 +303,10 @@ public class Correlation3D {
         return p;
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Logger.getLogger(Correlation3D.class.getName()).log(Level.INFO, "Computing 3D Correlation Index...");
         try {

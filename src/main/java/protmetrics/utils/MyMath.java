@@ -3,8 +3,17 @@ package protmetrics.utils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * Implement some utility math functions.
+ */
 public class MyMath {
 
+    /**
+     *
+     * @param value
+     * @param precision
+     * @return
+     */
     public static double round(double value, int precision) {
 
         if (precision < 0) {

@@ -1,35 +1,52 @@
 package protmetrics.metrics;
 
 import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import protmetrics.dao.files.fasta.FastaFile;
-import protmetrics.dao.files.pdb.PdbFile;
-import protmetrics.utils.propertymatrix.PropertyMatrix;
-import protmetrics.utils.propertymatrix.PropertyVector;
-import protmetrics.utils.BioUtils;
-import protmetrics.utils.MyMath;
-import protmetrics.utils.Filter;
-import com.beust.jcommander.Parameter;
-import java.util.ArrayList;
-import protmetrics.dao.dm.DMAttValue;
 import protmetrics.dao.dm.DMAtt;
+import protmetrics.dao.dm.DMAttValue;
 import protmetrics.dao.dm.DMDataSet;
 import protmetrics.dao.dm.DMInstance;
+import protmetrics.dao.files.fasta.FastaFile;
+import protmetrics.dao.files.pdb.PdbFile;
+import protmetrics.utils.BioUtils;
+import protmetrics.utils.Filter;
 import protmetrics.utils.Formats;
+import protmetrics.utils.MyMath;
+import protmetrics.utils.propertymatrix.PropertyMatrix;
+import protmetrics.utils.propertymatrix.PropertyVector;
 
 /**
- * [1] G. Moreau, P. Broto. Autocorrelation of a topological structure: A new
- * molecular descriptor. Nouv. J. Chim., 4, 359 (1980).
+ * Implements the 2D Amino Acid Sequence Autocorrelation Vectors molecular
+ * descriptor.
  *
+ * [1] Caballero, J., Fernandez, L., Abreu, J. I., & Fernández, M. (2006). Amino
+ * Acid Sequence Autocorrelation vectors and ensembles of Bayesian-Regularized
+ * Genetic Neural Networks for prediction of conformational stability of human
+ * lysozyme mutants. Journal of Chemical Information and Modeling, 46(3),
+ * 1255-1268.
+ *
+ * [2] Moreau, G. (1980). The autocorrelation of a topological structure: A new
+ * molecular descriptor. Nouv. J. Chim, 1980, 4, 359-360.
  */
 public class Correlation2D {
 
-    public static final String INDEX_ID = "Correlation2D";
+    /**
+     *
+     */
+    public static final String INDEX_ID = "AASA-2D";
 
+    /**
+     *
+     * @param p
+     * @return
+     * @throws Exception
+     */
     public DMDataSet calc2DCorrelationIndex(Properties p) throws Exception {
 
         int attOrder = 0;
@@ -114,7 +131,7 @@ public class Correlation2D {
         double sum = 0;
         int L = 0;
 
-        for (int i = 0; i < seq.length(); i++) {
+        for (int i = 0; i < seq.length(); ++i) {
             pi = pv.getValueFromName(seq.substring(i, i + 1), found);
             if (i + lag < seq.length()) {
                 pj = pv.getValueFromName(seq.substring(i + lag, i + lag + 1), found);
@@ -144,7 +161,7 @@ public class Correlation2D {
         double max = Double.MIN_VALUE;
         int L = 0;
 
-        for (int i = 0; i < seq.length(); i++) {
+        for (int i = 0; i < seq.length(); ++i) {
             pi = pv.getValueFromName(seq.substring(i, i + 1), found);
             if (i + lag < seq.length()) {
                 pj = pv.getValueFromName(seq.substring(i + lag, i + lag + 1), found);
@@ -173,7 +190,7 @@ public class Correlation2D {
         double min = Double.MAX_VALUE;
         int L = 0;
 
-        for (int i = 0; i < seq.length(); i++) {
+        for (int i = 0; i < seq.length(); ++i) {
             pi = pv.getValueFromName(seq.substring(i, i + 1), found);
             if (i + lag < seq.length()) {
                 pj = pv.getValueFromName(seq.substring(i + lag, i + lag + 1), found);
@@ -185,6 +202,12 @@ public class Correlation2D {
         return new DMAttValue(Double.toString(result));
     }
 
+    /**
+     *
+     * @param cfgPath
+     * @return
+     * @throws Exception
+     */
     public Properties init(String cfgPath) throws Exception {
 
         /* properties file */
@@ -263,6 +286,10 @@ public class Correlation2D {
         return p;
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, "Computing 2D Correlation Index...");
         try {

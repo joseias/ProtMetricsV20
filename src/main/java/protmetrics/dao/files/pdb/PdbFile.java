@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import protmetrics.errors.SomeErrorException;
 import protmetrics.utils.BioUtils;
 
+/**
+ * Wrapper to represent a .pdb file.
+ * 
+ */
 public final class PdbFile {
 
     private int[] caLinesIndex; // indices of the lines with CA 
@@ -16,10 +20,18 @@ public final class PdbFile {
     private String proteinName;
     private String pdbPath = "";
 
+    /**
+     *
+     */
     public PdbFile() {
 
     }
 
+    /**
+     *
+     * @param string
+     * @throws Exception
+     */
     public PdbFile(String a_pdbFilePath) throws Exception {
         pdbPath = a_pdbFilePath;
         try {
@@ -30,6 +42,10 @@ public final class PdbFile {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public PdbAtomLine[] getCALines() {
 
         PdbAtomLine[] m_result = new PdbAtomLine[this.caLinesIndex.length];
@@ -42,6 +58,12 @@ public final class PdbFile {
 
     }
 
+    /**
+     *
+     * @param a_pdbFilePath
+     * @param a_seq
+     * @throws Exception
+     */
     public void intPDB(String a_pdbFilePath, String a_seq) throws Exception {
 
         try {
@@ -106,7 +128,7 @@ public final class PdbFile {
     private int[] toInt(ArrayList a_AL) {
         int[] m_result = new int[a_AL.size()];
         Integer m_aux;
-        for (int i = 0; i < m_result.length; i++) {
+        for (int i = 0; i < m_result.length; ++i) {
             m_aux = (Integer) a_AL.get(i);
             m_result[i] = m_aux;
         }
@@ -115,12 +137,16 @@ public final class PdbFile {
 
     private PdbLine[] toPDBLine(ArrayList a_AL) {
         PdbLine[] m_result = new PdbLine[a_AL.size()];
-        for (int i = 0; i < m_result.length; i++) {
+        for (int i = 0; i < m_result.length; ++i) {
             m_result[i] = (PdbLine) a_AL.get(i);
         }
         return m_result;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSequence() {
         PdbAtomLine[] m_CALines = this.getCALines();
         String m_result = "";
@@ -130,6 +156,10 @@ public final class PdbFile {
         return m_result;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getProteinName() {
         return proteinName;
     }

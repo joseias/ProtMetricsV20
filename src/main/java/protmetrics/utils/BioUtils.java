@@ -15,25 +15,41 @@ import protmetrics.dao.intervals.Interval;
 import protmetrics.dao.intervals.Interval.IntervalType;
 import protmetrics.metrics.Wiener3D.IntervalTypeCodes;
 
+/**
+ * Class with utility functions.
+ */
 public class BioUtils {
 
+    /**
+     *
+     */
     public static final String SEPARATOR = ",";
 
+    /**
+     *
+     * @param a_input
+     * @return
+     */
     public static String[] procSplitString(String[] a_input) {
         ArrayList m_aux = new ArrayList();
 
-        for (int i = 0; i < a_input.length; i++) {
+        for (int i = 0; i < a_input.length; ++i) {
             if (!"".equals(a_input[i])) {
                 m_aux.add(a_input[i]);
             }
         }
         String[] m_result = new String[m_aux.size()];
-        for (int j = 0; j < m_result.length; j++) {
+        for (int j = 0; j < m_result.length; ++j) {
             m_result[j] = (String) m_aux.get(j);
         }
         return m_result;
     }
 
+    /**
+     *
+     * @param a_aminoTLCode
+     * @return
+     */
     public static String aminoThreetoOne(String a_aminoTLCode) {
 
         if ((a_aminoTLCode.toUpperCase()).equals("ALA")) {
@@ -100,6 +116,11 @@ public class BioUtils {
         return "";
     }
 
+    /**
+     *
+     * @param a_aminoOLCode
+     * @return
+     */
     public static String aminoOnetoThree(String a_aminoOLCode) {
 
         if ((a_aminoOLCode.toUpperCase()).equals("A")) {
@@ -168,6 +189,11 @@ public class BioUtils {
 
     }
 
+    /**
+     *
+     * @param a_chars
+     * @return
+     */
     public static boolean isInteger(String a_chars) {
 
         boolean m_result = true;
@@ -182,6 +208,11 @@ public class BioUtils {
 
     }
 
+    /**
+     *
+     * @param a_aminoTLCode
+     * @return
+     */
     public static boolean isAminoSequence(String a_aminoTLCode) {
 
         if ((a_aminoTLCode.toUpperCase()).equals("ALA")) {
@@ -248,6 +279,11 @@ public class BioUtils {
         return false;
     }
 
+    /**
+     *
+     * @param confFilePath
+     * @return
+     */
     public static Properties loadProperties(String confFilePath) {
         try {
             Properties p = new Properties();
@@ -259,6 +295,11 @@ public class BioUtils {
         }
     }
 
+    /**
+     *
+     * @param indices
+     * @return
+     */
     public static int[] getSelectedIndices(String indices) {
 
         String[] tokens = indices.split(SEPARATOR);
@@ -281,13 +322,13 @@ public class BioUtils {
         String[][] result = new String[caData.length + 1][caData.length + 1];
 
         result[0][0] = "ELEMENTS";
-        for (int f = 0; f < caData.length; f++) {
+        for (int f = 0; f < caData.length; ++f) {
             /* CA array start at 0*/
             result[f + 1][0] = result[0][f + 1] = (f + 1) + "_" + caData[f].getAtomType() + "_" + caData[f].getAminoType();
 
         }
-        for (int i = 0; i < caData.length; i++) {
-            for (int j = i; j < caData.length; j++) {
+        for (int i = 0; i < caData.length; ++i) {
+            for (int j = i; j < caData.length; ++j) {
                 double caDist = caData[i].getLocation().distance(caData[j].getLocation());
                 result[i + 1][j + 1] = result[j + 1][i + 1] = Double.toString(MyMath.round(caDist, 4));
             }
@@ -297,10 +338,21 @@ public class BioUtils {
 
     private static final int precision = -1;
 
+    /**
+     *
+     * @param a
+     * @param b
+     * @return
+     */
     public static double getDistance(GAtom a, GAtom b) {
         return a.getLocation().distance(b.getLocation());
     }
 
+    /**
+     *
+     * @param desc
+     * @return
+     */
     public static Interval getIntervalFromDesc(String desc) {
         String regex = "([\\[]|[\\(])(([0-9]+.[0-9]+),([0-9]+.[0-9]+))([\\]]|[\\)])";
 

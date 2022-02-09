@@ -9,6 +9,9 @@ import com.google.gson.annotations.SerializedName;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
+/**
+ * Wrapper to represent a bond description file (json format).
+ */
 public class BondDescFileJSON {
 
     @SerializedName("bondAtomDesc")
@@ -31,6 +34,12 @@ public class BondDescFileJSON {
         this.bondAtomDes = bondAtomDes;
     }
 
+    /**
+     *
+     * @param jsonFilePath
+     * @return
+     * @throws FileNotFoundException
+     */
     public static BondDescFileJSON buildFromFile(String jsonFilePath) throws FileNotFoundException {
 
         Gson gson = new Gson();

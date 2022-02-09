@@ -1,6 +1,8 @@
 package protmetrics.utils;
 
-
+/**
+ * Constants for command-line arguments.
+ */
 public class ParamCodes {
 
     /**

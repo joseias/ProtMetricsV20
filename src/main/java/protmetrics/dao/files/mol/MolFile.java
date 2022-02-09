@@ -5,16 +5,25 @@ import org.jgrapht.graph.WeightedPseudograph;
 import protmetrics.dao.files.xyz.GAtom;
 import protmetrics.dao.files.xyz.GHeader;
 
+/**
+ * Wrapper to represent a .mol file.
+ */
 public class MolFile {
 
     private String ID;
     private GHeader header;
     private WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds;
 
-    public MolFile(String ID, GHeader header, WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds) {
+    /**
+     *
+     * @param id id of the .mol
+     * @param header header object.
+     * @param bonds object representing the graph.
+     */
+    public MolFile(String id, GHeader header, WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds) {
         this.header = header;
         this.bonds = bonds;
-        this.ID = "ID";
+        this.ID = id;
     }
 
     /**
@@ -31,10 +40,18 @@ public class MolFile {
         this.header = header;
     }
 
+    /**
+     *
+     * @return
+     */
     public WeightedPseudograph<GAtom, DefaultWeightedEdge> getBonds() {
         return bonds;
     }
 
+    /**
+     *
+     * @param bonds
+     */
     public void setBonds(WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds) {
         this.bonds = bonds;
     }
@@ -47,9 +64,9 @@ public class MolFile {
     }
 
     /**
-     * @param ID the ID to set
+     * @param id the id to set
      */
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setID(String id) {
+        this.ID = id;
     }
 }

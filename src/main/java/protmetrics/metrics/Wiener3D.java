@@ -28,18 +28,29 @@ import protmetrics.dao.files.mol.MolFile;
 import protmetrics.utils.filters.ExtAtomsFilter;
 
 /**
- * Implements Wiener index as described in [1] Machine Learning Prediction of
- * the Energy Gap of Graphene Nanoflakes Using Topological Autocorrelation
- * Vectors M Fernandez, JI Abreu, H Shi, AS Barnard ACS Combinatorial Science 18
- * (11), 661-664
- *
+ * Implements the Topological Autocorrelation Vectors molecular descriptor.
  * Paths goes through the interior of the molecule
+ *
+ * [1]Fernandez, M., Abreu, J. I., Shi, H., & Barnard, A. S. (2016). Machine
+ * learning prediction of the energy gap of graphene nanoflakes using
+ * topological autocorrelation vectors. ACS combinatorial science, 18(11),
+ * 661-664.
+ *
  *
  */
 public class Wiener3D {
 
+    /**
+     *
+     */
     public static final String INDEX_ID = "Wiener3D";
 
+    /**
+     *
+     * @param p
+     * @return
+     * @throws Exception
+     */
     public DMDataSet calcWiener3D(Properties p) throws Exception {
 
         int attOrder = 0;
@@ -92,6 +103,19 @@ public class Wiener3D {
         return ds;
     }
 
+    /**
+     *
+     * @param wpsg
+     * @param fwsPath
+     * @param extAtomFilter
+     * @param pathL
+     * @param normalized
+     * @param onlyExt
+     * @param extNodeTagL
+     * @param intNodeTagL
+     * @param precision
+     * @return
+     */
     public DMAttValue getWienerThrough(WeightedPseudograph<GAtom, DefaultWeightedEdge> wpsg,
             FloydWarshallShortestPaths<GAtom, DefaultWeightedEdge> fwsPath,
             ExtAtomsFilter extAtomFilter,
@@ -117,10 +141,10 @@ public class Wiener3D {
 
         int pathLength;
         GraphPath<GAtom, DefaultWeightedEdge> path;
-        for (int i = 0; i < procVerticesA.length - 1; i++) {
+        for (int i = 0; i < procVerticesA.length - 1; ++i) {
             double iP = extVertices.contains(procVerticesA[i]) ? extNodeTagL : intNodeTagL;
 
-            for (int j = i + 1; j < procVerticesA.length; j++) {
+            for (int j = i + 1; j < procVerticesA.length; ++j) {
                 double jP = extVertices.contains(procVerticesA[j]) ? extNodeTagL : intNodeTagL;
                 path = fwsPath.getPath(procVerticesA[i], procVerticesA[j]);
 
@@ -142,6 +166,12 @@ public class Wiener3D {
         return new DMAttValue(Double.toString(MyMath.round(count, precision)));
     }
 
+    /**
+     *
+     * @param cfgPath
+     * @return
+     * @throws Exception
+     */
     public Properties init(String cfgPath) throws Exception {
         /* properties file */
         File cfgFile = new File(cfgPath);
@@ -272,6 +302,10 @@ public class Wiener3D {
         return p;
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Logger.getLogger(Wiener3D.class.getName()).log(Level.INFO, "Computing 3D Wiener Index...");
         try {
@@ -305,49 +339,157 @@ public class Wiener3D {
         Logger.getLogger(Wiener3D.class.getName()).log(Level.INFO, "Computing 3D Wiener Index. Done!");
     }
 
+    /**
+     * Contains constants required by this class.
+     */
     public static class Constants {
 
+        /**
+         *
+         */
         public static final int DEFAULT_PRECISION = 2;
+
+        /**
+         *
+         */
         public static final String PRECISION = "PRECISION";
 
+        /**
+         *
+         */
         public static final String XYZ_DIRECTORY_PATH = "XYZ_DIRECTORY_PATH";
+
+        /**
+         *
+         */
         public static final String OUTPUT_FILE_PATH = "OUTPUT_FILE_PATH";
+
+        /**
+         *
+         */
         public static final String OUTPUT_FORMAT = "OUTPUT_FORMAT";
 
+        /**
+         *
+         */
         public static final String EXTERNAL_ATOM_FILTER = "EXTERNAL_ATOM_FILTER";
+
+        /**
+         *
+         */
         public static final String BOND_DESC_FILE = "BOND_DESC_FILE";
 
+        /**
+         *
+         */
         public static final String MAX_DIST = "MAX_DIST";
+
+        /**
+         *
+         */
         public static final String MIN_DIST = "MIN_DIST";
 
+        /**
+         *
+         */
         public static final String GINDEX_INT_ATOM_TAG = "GINDEX_INT_ATOM_TAG";
+
+        /**
+         *
+         */
         public static final String GINDEX_EXT_ATOM_TAG = "GINDEX_EXT_ATOM_TAG";
 
+        /**
+         *
+         */
         public static final String LOAD_XYZ_DEPLETED = "LOAD_XYZ_DEPLETED";
+
+        /**
+         *
+         */
         public static final String GINDEX_ONLY_EXT = "GINDEX_ONLY_EXT";
+
+        /**
+         *
+         */
         public static final String GINDEX_NORMALIZED = "GINDEX_NORMALIZED";
+
+        /**
+         *
+         */
         public static final String LOAD_BOND_TYPE = "LOAD_BOND_TYPE";
 
+        /**
+         *
+         */
         public static final String MOL_TYPE = "MOL_TYPE";
+
+        /**
+         *
+         */
         public static final String V2K = "V2000";
+
+        /**
+         *
+         */
         public static final String V3K = "V3000";
+
+        /**
+         *
+         */
         public static final String MAX_EDGES_BY_ATOM = "MAX_EDGES_BY_ATOM";
 
+        /**
+         *
+         */
         public static final double DEFAULT_EDGE_WEIGHT = 1;
 
+        /**
+         *
+         */
         public static final String INSTANCES = "INSTANCES";
     }
 
+    /**
+     * Encodes interval codes.
+     */
     public static class IntervalTypeCodes {
 
+        /**
+         *
+         */
         public static final String LOPEN = "(";
+
+        /**
+         *
+         */
         public static final String LCLOSED = "[";
+
+        /**
+         *
+         */
         public static final String ROPEN = ")";
+
+        /**
+         *
+         */
         public static final String RCLOSED = "]";
     }
 
+    /**
+     * Enum to encode molecule type.
+     */
     public static enum MolType {
-        V2000, V3000
+
+        /**
+         *
+         */
+        V2000,
+
+        /**
+         *
+         */
+        V3000
     };
 
     private static class Args {

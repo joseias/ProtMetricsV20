@@ -11,22 +11,37 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import protmetrics.metrics.Correlation2D;
 
+/**
+ * Represents the result matrix (DataSet) when computing an index for several molecules.
+ */
 public class DMDataSet {
 
     private final String dsID;
     private Set<DMInstance> instances;
     private Set<DMAtt> atts;
 
+    /**
+     *
+     * @param dsID id of the dataset.
+     */
     public DMDataSet(String dsID) {
         this.dsID = dsID;
         this.instances = new HashSet<>();
         this.atts = new HashSet<>();
     }
 
+    /**
+     *
+     * @param att attribute.
+     */
     public void addAtt(DMAtt att) {
         this.atts.add(att);
     }
 
+    /**
+     *
+     * @param inst dataset instance.
+     */
     public void addInstance(DMInstance inst) {
         instances.add(inst);
     }
@@ -46,14 +61,14 @@ public class DMDataSet {
     }
 
     /**
-     * @return the atts
+     * @return the attributes.
      */
     public Set<DMAtt> getAtts() {
         return atts;
     }
 
     /**
-     * @param atts the atts to set
+     * @param atts the attributes to set
      */
     public void setAtts(Set<DMAtt> atts) {
         this.atts = atts;
@@ -63,7 +78,7 @@ public class DMDataSet {
      * *
      * Prints de data set to arff file...
      *
-     * @param path
+     * @param path path to file to write .arff file.
      */
     public void toARFF(String path) {
 
@@ -118,7 +133,7 @@ public class DMDataSet {
      * *
      * Prints de data set to csv file...
      *
-     * @param path
+     * @param path path to file to write .csv file.
      */
     public void toCSV(String path) {
         try {

@@ -2,23 +2,31 @@ package protmetrics.dao.converters;
 
 import java.util.List;
 import java.util.Properties;
-
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedPseudograph;
-
+import protmetrics.dao.files.mol.MolFile;
 import protmetrics.dao.files.xyz.BondDescFile;
 import protmetrics.dao.files.xyz.GAtom;
 import protmetrics.dao.files.xyz.GHeader;
 import protmetrics.dao.files.xyz.XYZFile;
-import protmetrics.dao.files.mol.MolFile;
 import protmetrics.dao.intervals.IntervalData;
 import protmetrics.metrics.Wiener3D;
 import protmetrics.metrics.Wiener3D.MolType;
 import protmetrics.utils.BioUtils;
 import protmetrics.utils.MyMath;
 
+/**
+ * Implements conversion utilities from XYZ files.
+ */
 public class XYZMOLConverter {
 
+    /**
+     *
+     * @param input .xyz file wrapper.
+     * @param prop properties object.
+     * @return a .mol file object from a .xyz file object.
+     * @throws Exception
+     */
     public MolFile convert(XYZFile input, Properties prop) throws Exception {
 
         boolean loadBondType = Boolean.parseBoolean(prop.getProperty(Wiener3D.Constants.LOAD_BOND_TYPE));
@@ -34,9 +42,9 @@ public class XYZMOLConverter {
 
         int precision = (Integer) prop.get(Wiener3D.Constants.PRECISION);
 
-        for (int i = 0; i < input.getAtoms().size() - 1; i++) {
+        for (int i = 0; i < input.getAtoms().size() - 1; ++i) {
             atomi = input.getAtoms().get(i);
-            for (int j = i + 1; j < input.getAtoms().size(); j++) {
+            for (int j = i + 1; j < input.getAtoms().size(); ++j) {
                 atomj = input.getAtoms().get(j);
 
                 double distance = BioUtils.getDistance(atomi, atomj);
