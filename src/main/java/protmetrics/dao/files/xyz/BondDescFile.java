@@ -15,7 +15,7 @@ public class BondDescFile {
     private Pseudograph<AtomType, DefaultEdgeJ> desc;
 
     /**
-     * @param path path to the bond description file.
+     * @param path the path to the bond description file.
      * @throws Exception for problems while loading the file.
      */
     public BondDescFile(String path) throws Exception {

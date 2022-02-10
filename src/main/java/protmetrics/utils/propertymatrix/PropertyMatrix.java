@@ -12,7 +12,7 @@ public class PropertyMatrix {
     private PropertyVector[] propertyVectorsColumns;
 
     /**
-     * @param path path to the configuration file.
+     * @param path the path to the configuration file.
      * @throws Exception for problems while loading the file.
      */
     public PropertyMatrix(String path) throws Exception {
@@ -71,7 +71,7 @@ public class PropertyMatrix {
      * the PropertyVectorsColumns as a new PropertyMatrix.
      *
      * @param selectedPVC int array of the selected property vectors.
-     * @return the sub property matrix from selected property vector columns.
+     * @return the sub-property matrix from selected property vector columns.
      */
     public PropertyMatrix getSubPropertyMatrix(int[] selectedPVC) {
         int m_length = selectedPVC.length;

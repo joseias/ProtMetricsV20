@@ -13,8 +13,8 @@ public class GAtom {
 
     /**
      * @param location coordinates of the atom.
-     * @param type type of the atom.
-     * @param id id of the atom.
+     * @param type the type of the atom.
+     * @param id the id of the atom.
      */
     public GAtom(Point3d location, AtomType type, int id) {
         this.location = location;

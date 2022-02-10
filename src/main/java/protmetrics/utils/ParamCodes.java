@@ -10,12 +10,12 @@ public class ParamCodes {
      */
     public static String Mt = "-Mt";
     /**
-     * -O: full name of output file , with no extension.
+     * -O: full name of output file, with no extension.
      */
     public static String outFile = "-O";
 
     /**
-     * -P: path to directory containing PDBs
+     * -P: path to the directory containing PDBs
      */
     public static String pdbFile = "-P";
 
@@ -52,7 +52,7 @@ public class ParamCodes {
     public static String rMn = "-rMn";
 
     /**
-     * -S: step for RDF,3DMorse and 3DCorrelation Indices, 1 by default
+     * -S: a step for RDF,3DMorse, and 3DCorrelation Indices, 1 by default
      */
     public static String S = "-S";
 
@@ -61,5 +61,4 @@ public class ParamCodes {
      * default.
      */
     public static String fmt = "-fmt";
-
 }

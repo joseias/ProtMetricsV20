@@ -127,7 +127,7 @@ public class Correlation3D {
      * @param pv the property vector.
      * @param interCAMatrix inter CA matrix of the molecule.
      * @param dLower lower bound.
-     * @param dUpper uppe bound.
+     * @param dUpper upper bound.
      * @return descriptor value for the given molecule.
      */
     public DMAttValue get3DProd(PropertyVector pv, IEDMatrix interCAMatrix, double dLower, double dUpper) {
@@ -159,7 +159,7 @@ public class Correlation3D {
      * @param pv the property vector.
      * @param interCAMatrix inter CA matrix of the molecule.
      * @param dLower lower bound.
-     * @param dUpper uppe bound.
+     * @param dUpper upper bound.
      * @return descriptor value for the given sequence.
      */
     public DMAttValue get3DMax(PropertyVector pv, IEDMatrix interCAMatrix, double dLower, double dUpper) {
@@ -192,7 +192,7 @@ public class Correlation3D {
      * @param pv the property vector.
      * @param interCAMatrix inter CA matrix of the molecule.
      * @param dLower lower bound.
-     * @param dUpper uppe bound.
+     * @param dUpper upper bound.
      * @return descriptor value for the given sequence.
      */
     public DMAttValue get3DMin(PropertyVector pv, IEDMatrix interCAMatrix, double dLower, double dUpper) {
@@ -222,7 +222,7 @@ public class Correlation3D {
     }
 
     /**
-     * @param path path to the configuration file.
+     * @param path the path to the configuration file.
      * @return Properties object encoding configuration.
      * @throws Exception for problems while loading the file.
      */

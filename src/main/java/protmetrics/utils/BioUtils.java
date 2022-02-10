@@ -26,7 +26,7 @@ public class BioUtils {
 
     /**
      * Removes "" from an array of string tokens.
-     * @param input input string array.
+     * @param input the input string array.
      * @return the tokens filtered.
      */
     public static String[] procSplitString(String[] input) {
@@ -305,7 +305,7 @@ public class BioUtils {
      * *
      * Creates the inter CA distance matrix, for 3D indices...
      *
-     * @param pdb pdb file wrapper.
+     * @param pdb the pdb file wrapper.
      * @return inter CA distance matrix with values as string.
      * @throws Exception for problems computing inter CA distance matrix.
      */

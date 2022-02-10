@@ -521,7 +521,7 @@ public enum AtomType {
     }
 
     /**
-     * @param code code of the AtomType.
+     * @param code the code of the AtomType.
      * @return AtomType of the code or null if no AtomType is associated with code.
      */
     public static AtomType getTypeFromCode(String code) {

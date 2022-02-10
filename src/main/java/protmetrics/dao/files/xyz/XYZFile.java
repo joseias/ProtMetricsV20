@@ -40,7 +40,7 @@ public class XYZFile {
     }
 
     /**
-     * @param path path to the .xyz file.
+     * @param path the path to the .xyz file.
      * @param hDepleted if consider H depleted.
      * @throws IOException for problems while loading the file.
      * @throws NumberFormatException for casting errors.

@@ -12,9 +12,9 @@ public class GHeader {
     private MolType type;
 
     /**
-     * @param size size of the molecule.
+     * @param size the size of the molecule.
      * @param edges number of edges.
-     * @param type type of the .xyz file.
+     * @param type the type of the .xyz file.
      */
     public GHeader(int size, int edges, MolType type) {
         this.size = size;

@@ -8,7 +8,7 @@ public class DMAttValue {
     private String value;
 
     /**
-     * @param value value of the attribute.
+     * @param value the value of the attribute.
      */
     public DMAttValue(String value) {
         this.value = value;

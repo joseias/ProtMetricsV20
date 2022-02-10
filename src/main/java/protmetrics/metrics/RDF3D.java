@@ -125,7 +125,7 @@ public class RDF3D {
     }
 
     /**
-     * @param path path to the configuration file.
+     * @param path the path to the configuration file.
      * @return Properties object encoding configuration.
      * @throws Exception for problems while loading the file.
      */

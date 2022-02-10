@@ -150,7 +150,7 @@ public class IntervalNode<Type> {
     }
 
     /**
-     * @param left left node to set.
+     * @param left the left node to set.
      */
     public void setLeft(IntervalNode<Type> left) {
         this.leftNode = left;
@@ -164,7 +164,7 @@ public class IntervalNode<Type> {
     }
 
     /**
-     * @param right right node to set.
+     * @param right the right node to set.
      */
     public void setRight(IntervalNode<Type> right) {
         this.rightNode = right;

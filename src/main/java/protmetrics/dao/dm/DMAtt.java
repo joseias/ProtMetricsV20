@@ -16,7 +16,7 @@ public class DMAtt {
     /**
      * @param name attribute name.
      * @param type class of the attribute.
-     * @param order order of the attribute.
+     * @param order the order of the attribute.
      */
     public DMAtt(String name, Class type, int order) {
         this.name = name;

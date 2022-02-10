@@ -15,8 +15,8 @@ public class MolFile {
     private WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds;
 
     /**
-     * @param id id of the .mol
-     * @param header header object.
+     * @param id the id of the .mol
+     * @param header the header object.
      * @param bonds object representing the graph.
      */
     public MolFile(String id, GHeader header, WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds) {
@@ -47,7 +47,7 @@ public class MolFile {
     }
 
     /**
-     * @param bonds bonds to set.
+     * @param bonds the bonds to set.
      */
     public void setBonds(WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds) {
         this.bonds = bonds;

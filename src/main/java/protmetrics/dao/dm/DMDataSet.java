@@ -73,9 +73,9 @@ public class DMDataSet {
 
     /**
      * *
-     * Prints de data set to arff file.
+     * Prints de data set to .arff file.
      *
-     * @param path path to file to write .arff file.
+     * @param path the path to file to write .arff file.
      */
     public void toARFF(String path) {
 

@@ -17,7 +17,7 @@ public class FastaFile {
     String c_fastaPath = "";
 
     /**
-     * @param path path to the .fasta file.
+     * @param path the path to the .fasta file.
      * @throws Exception for problems while loading the file.
      */
     public FastaFile(String path) throws Exception {
@@ -32,7 +32,7 @@ public class FastaFile {
     }
 
     /**
-     * @param path path to the .fasta file.
+     * @param path the path to the .fasta file.
      * @throws Exception for problems while loading the file.
      */
     private void initFasta(String path) throws Exception {
@@ -97,7 +97,7 @@ public class FastaFile {
     }
 
     /**
-     * @param sequences sequences of the molecules to set.
+     * @param sequences the sequences of the molecules to set.
      */
     public void setSequences(String[][] sequences) {
         Sequences = sequences;

@@ -29,7 +29,7 @@ import protmetrics.utils.filters.ExtAtomsFilter;
 
 /**
  * Implements the Topological Autocorrelation Vectors molecular descriptor.
- * Paths goes through the interior of the molecule.
+ * Path goes through the interior of the molecule.
  *
  * [1]Fernandez, M., Abreu, J. I., Shi, H., Barnard, A. S. (2016). Machine
  * learning prediction of the energy gap of graphene nanoflakes using
@@ -79,7 +79,7 @@ public class Wiener3D {
 
             WeightedPseudograph<GAtom, DefaultWeightedEdge> wpsg = mol.getBonds();
 
-            /* for eficiency, only one instance of this class must be create since it caches precomputed values */
+            /* for efficiency, only one instance of this class must be created since it caches precomputed values */
             FloydWarshallShortestPaths<GAtom, DefaultWeightedEdge> fwsPath = new FloydWarshallShortestPaths<>(wpsg);
 
             while (currentPathL <= maxPathL) {

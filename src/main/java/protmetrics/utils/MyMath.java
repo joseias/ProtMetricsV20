@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 public class MyMath {
 
     /**
-     * @param value value to round.
+     * @param value the value to round.
      * @param precision required precision.
      * @return the value rounded to the precision.
      */

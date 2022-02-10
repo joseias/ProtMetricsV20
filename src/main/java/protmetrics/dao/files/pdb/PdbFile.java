@@ -48,7 +48,7 @@ public final class PdbFile {
     }
 
     /**
-     * @param path path to the .pdb file.
+     * @param path the path to the .pdb file.
      * @param seq sequence to be searched.
      * @throws Exception for problems while loading the file.
      */

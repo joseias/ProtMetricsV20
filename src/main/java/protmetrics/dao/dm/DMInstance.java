@@ -12,7 +12,7 @@ public class DMInstance {
     String instID;
 
     /**
-     * @param id id of the instance.
+     * @param id the id of the instance.
      */
     public DMInstance(String id) {
         this.instID = id;
@@ -21,7 +21,7 @@ public class DMInstance {
 
     /**
      * @param att attribute of the instance.
-     * @param value value of the instance.
+     * @param value the value of the instance.
      */
     public void setAttValue(DMAtt att, DMAttValue value) {
         attValues.put(att, value);

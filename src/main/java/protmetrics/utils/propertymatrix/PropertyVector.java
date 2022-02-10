@@ -3,7 +3,7 @@ package protmetrics.utils.propertymatrix;
 import java.util.*;
 
 /**
- * Represents values for a give property for each amino acid.
+ * Represents values for a given property for each amino acid.
  */
 public class PropertyVector {
 
@@ -24,7 +24,7 @@ public class PropertyVector {
     }
 
     /**
-     * @param name name of the property to get its value.
+     * @param name the name of the property to get its value.
      * @param found used as output value to check if was found.
      * @return the value of the given name.
      */

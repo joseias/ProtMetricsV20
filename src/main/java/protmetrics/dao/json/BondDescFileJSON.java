@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 /**
- * Wrapper to represent a bond description file (json format).
+ * Wrapper to represent a bond description file (JSON format).
  */
 public class BondDescFileJSON {
 
@@ -33,7 +33,7 @@ public class BondDescFileJSON {
     }
 
     /**
-     * @param path path to .json file with bond descriptions.
+     * @param path the path to .json file with bond descriptions.
      * @return bond description wrapper.
      * @throws FileNotFoundException for problems while loading the file.
      */

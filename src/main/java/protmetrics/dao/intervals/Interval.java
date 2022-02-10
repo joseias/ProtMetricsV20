@@ -126,8 +126,8 @@ public class Interval implements Comparable<Interval> {
     }
 
     /**
-     * @param other interval to check intersects.
-     * @return return true if this interval intersects other
+     * @param another interval to check intersects.
+     * @return returns true if this interval intersects other
      */
     public boolean intersects(Interval other) {
         double istart = Math.max(this.start, other.getStart());
@@ -149,7 +149,7 @@ public class Interval implements Comparable<Interval> {
      * greater In the event of a tie, -1 if this interval's end time is less
      * than the other, 1 if greater, 0 if same
      *
-     * @param other other interval.
+     * @param other the other interval.
      * @return 1 or -1
      */
     @Override

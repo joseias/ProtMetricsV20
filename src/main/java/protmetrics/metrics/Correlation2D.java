@@ -149,7 +149,7 @@ public class Correlation2D {
      * @param pv the property vector.
      * @param seq the sequence.
      * @param lag the step.
-     * @return descriptor value for the given sequence, property and step.
+     * @return descriptor value for the given sequence, property, and step.
      */
     public DMAttValue get2DMax(PropertyVector pv, String seq, int lag) {
 
@@ -178,7 +178,7 @@ public class Correlation2D {
      * @param pv the property vector.
      * @param seq the sequence.
      * @param lag the step.
-     * @return descriptor value for the given sequence, property and step.
+     * @return descriptor value for the given sequence, property, and step.
      */
     public DMAttValue get2DMin(PropertyVector pv, String seq, int lag) {
 
@@ -201,7 +201,7 @@ public class Correlation2D {
     }
 
     /**
-     * @param path path to the configuration file.
+     * @param path the path to the configuration file.
      * @return Properties object encoding configuration.
      * @throws Exception for problems while loading the file.
      */

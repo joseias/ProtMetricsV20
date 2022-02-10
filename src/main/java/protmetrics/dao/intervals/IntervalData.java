@@ -15,8 +15,8 @@ public class IntervalData<Type> extends Interval {
     protected Type data;
 
     /**
-     * @param inter Interval.
-     * @param data Type.
+     * @param inter the interval.
+     * @param data the type.
      */
     public IntervalData(Interval inter, Type data) {
         super(inter.start, inter.end, inter.getItype());
