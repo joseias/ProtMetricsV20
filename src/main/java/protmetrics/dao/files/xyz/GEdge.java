@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package protmetrics.dao.files.xyz;
 
+
 /**
- *
- * @author sijfg
+ * Represents an edge within a molecule in .xyz files.
  */
 public class GEdge {
 
@@ -16,42 +11,42 @@ public class GEdge {
     private double weight;
 
     /**
-     * @return the target
+     * @return the target.
      */
     public GAtom getTarget() {
         return target;
     }
 
     /**
-     * @param target the target to set
+     * @param target the target to set.
      */
     public void setTarget(GAtom target) {
         this.target = target;
     }
 
     /**
-     * @return the source
+     * @return the source.
      */
     public GAtom getSource() {
         return source;
     }
 
     /**
-     * @param source the source to set
+     * @param source the source to set.
      */
     public void setSource(GAtom source) {
         this.source = source;
     }
 
     /**
-     * @return the weight
+     * @return the weight.
      */
     public double getWeight() {
         return weight;
     }
 
     /**
-     * @param weight the weight to set
+     * @param weight the weight to set.
      */
     public void setWeight(double weight) {
         this.weight = weight;

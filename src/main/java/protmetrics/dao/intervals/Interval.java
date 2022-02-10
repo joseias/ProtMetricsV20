@@ -106,7 +106,7 @@ public class Interval implements Comparable<Interval> {
 
     /**
      * @param value the value to search for within the interval.
-     * @return	true if this interval contains time (inclusive)
+     * @return true if this interval contains time (inclusive)
      */
     public boolean contains(double value) {
         /* add the = */
@@ -127,7 +127,7 @@ public class Interval implements Comparable<Interval> {
 
     /**
      * @param other interval to check intersects.
-     * @return	return true if this interval intersects other
+     * @return return true if this interval intersects other
      */
     public boolean intersects(Interval other) {
         double istart = Math.max(this.start, other.getStart());

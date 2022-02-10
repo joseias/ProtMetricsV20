@@ -88,18 +88,18 @@ public final class PdbAtomLine extends PdbLine {
         for (int i = 1; i < m_tlength; ++i) {
             m_changed = false;
             if (i == 2) {
-                m_result = m_result + "	 " + this.atomType;
+                m_result = m_result + " " + this.atomType;
                 this.lineTokens[2] = this.atomType;
                 m_changed = true;
             }
             if (i == 3) {
-                m_result = m_result + "	 " + this.aminoType;
+                m_result = m_result + " " + this.aminoType;
                 this.lineTokens[3] = this.aminoType;
                 m_changed = true;
             }
             if (i == aminoNumberPos - 1) {
                 if (BioUtils.isAminoSequence(this.lineTokens[aminoNumberPos - 1]) == false) {
-                    m_result = m_result + "	 " + this.sequence;
+                    m_result = m_result + " " + this.sequence;
                     this.lineTokens[aminoNumberPos - 1] = this.sequence;
                     m_changed = true;
                 }
@@ -116,14 +116,13 @@ public final class PdbAtomLine extends PdbLine {
                 m_changed = true;
             }
             if (i == aminoNumberPos + 3) {
-                m_result = m_result + "	 " + this.location.z;
+                m_result = m_result + " " + this.location.z;
                 this.lineTokens[aminoNumberPos + 3] = Double.toString(this.location.z);
                 m_changed = true;
             }
             if (m_changed == false) {
-                m_result = m_result + "	 " + this.lineTokens[i];
+                m_result = m_result + " " + this.lineTokens[i];
             }
-
         }
         this.line = m_result;
     }

@@ -104,7 +104,7 @@ public class IntervalNode<Type> {
      * Perform an interval intersection query on the node.
      *
      * @param target the interval to intersect.
-     * @return	all intervals containing time.
+     * @return all intervals containing time.
      */
     public List<IntervalData<Type>> query(IntervalData<?> target) {
         List<IntervalData<Type>> result = new ArrayList<>();
@@ -172,7 +172,7 @@ public class IntervalNode<Type> {
 
     /**
      * @param set the set to look on.
-     * @return	the median of the set, not interpolated
+     * @return the median of the set, not interpolated
      */
     private Double getMedian(SortedSet<Double> set) {
         int i = 0;

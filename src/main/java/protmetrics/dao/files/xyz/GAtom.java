@@ -1,15 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package protmetrics.dao.files.xyz;
 
 import javax.vecmath.Point3d;
 
 /**
- *
- * @author sijfg
+ * Represents an atom within a molecule in .xyz files.
  */
 public class GAtom {
 
@@ -17,29 +11,40 @@ public class GAtom {
     private int ID;
     private AtomType type;
 
+    /**
+     * @param location coordinates of the atom.
+     * @param type type of the atom.
+     * @param id id of the atom.
+     */
     public GAtom(Point3d location, AtomType type, int id) {
         this.location = location;
         this.type = type;
         this.ID = id;
     }
 
+    /**
+     * @return the atom type.
+     */
     public AtomType getType() {
         return type;
     }
 
+    /**
+     * @param type the type to set.
+     */
     public void setType(AtomType type) {
         this.type = type;
     }
 
     /**
-     * @return the ID
+     * @return the ID.
      */
     public int getID() {
         return ID;
     }
 
     /**
-     * @param ID the ID to set
+     * @param ID the ID to set.
      */
     public void setID(int ID) {
         this.ID = ID;
@@ -68,14 +73,14 @@ public class GAtom {
     }
 
     /**
-     * @return the location
+     * @return the location.
      */
     public Point3d getLocation() {
         return location;
     }
 
     /**
-     * @param location the location to set
+     * @param location the location to set.
      */
     public void setLocation(Point3d location) {
         this.location = location;

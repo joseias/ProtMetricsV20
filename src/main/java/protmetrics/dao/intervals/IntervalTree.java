@@ -44,7 +44,7 @@ public class IntervalTree<Type> {
      * tree if out of sync.
      *
      * @param time the time to stab.
-     * @return	all intervals that contain time.
+     * @return all intervals that contain time.
      */
     public List<IntervalData<Type>> getIntervals(double time) {
         build();
