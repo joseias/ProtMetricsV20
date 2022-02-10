@@ -25,7 +25,7 @@ import protmetrics.utils.Filter;
  * Implements a variation of the 3D Morse molecular descriptor considering only
  * alpha carbons.
  *
- * [1] Schuur, J. H., Selzer, P., & Gasteiger, J. (1996). The coding of the
+ * [1] Schuur, J. H., Selzer, P., Gasteiger, J. (1996). The coding of the
  * three-dimensional structure of molecules by molecular transforms and its
  * application to structure-spectra correlations and studies of biological
  * activity. Journal of Chemical Information and Computer Sciences, 36(2),
@@ -34,32 +34,30 @@ import protmetrics.utils.Filter;
 public class Morse3D {
 
     /**
-     *
      */
     public static final String INDEX_ID = "3DMorse";
 
     /**
-     *
-     * @param p
-     * @return
-     * @throws Exception
+     * @param prop properties.
+     * @return dataset representing the descriptor for each of the input files.
+     * @throws Exception for problems while computing the descriptor.
      */
-    public DMDataSet calc3DMorseIndex(Properties p) throws Exception {
+    public DMDataSet calc3DMorseIndex(Properties prop) throws Exception {
 
         int attOrder = 0;
         DMDataSet ds = new DMDataSet(Morse3D.INDEX_ID);
         DMAtt attPN = new DMAtt(DMAtt.getSPECIAL_ATT_NAME(), String.class, attOrder++);
         ds.addAtt(attPN);
 
-        PropertyMatrix propMatrix = (PropertyMatrix) p.get(Constants.PROP_MATRIX);
+        PropertyMatrix propMatrix = (PropertyMatrix) prop.get(Constants.PROP_MATRIX);
 
-        double maxDist = Double.parseDouble(p.getProperty(Constants.MAX_DIST));
-        double minDist = Double.parseDouble(p.getProperty(Constants.MIN_DIST));
-        double step = Double.parseDouble(p.getProperty(Constants.STEP));
+        double maxDist = Double.parseDouble(prop.getProperty(Constants.MAX_DIST));
+        double minDist = Double.parseDouble(prop.getProperty(Constants.MIN_DIST));
+        double step = Double.parseDouble(prop.getProperty(Constants.STEP));
 
-        int stepDesp = (int) Math.round((maxDist - minDist) / step) + 1; //-> Para ver el rango de distancia.;
+        int stepDesp = (int) Math.round((maxDist - minDist) / step) + 1; /* if within the distance interval */
 
-        ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
+        ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) prop.get(Constants.PROTEIN_LIST);
 
         /* for each PDB, compute the index */
         for (ProtWrapper pw : protList) {
@@ -91,11 +89,10 @@ public class Morse3D {
     }
 
     /**
-     *
-     * @param pv
-     * @param interCAMatrix
-     * @param S
-     * @return
+     * @param pv the property vector. 
+     * @param interCAMatrix inter CA matrix of the molecule.
+     * @param S the S parameter.
+     * @return descriptor value for the given molecule.
      */
     public DMAttValue get3DMorse(PropertyVector pv, IEDMatrix interCAMatrix, double S) {
 
@@ -125,21 +122,20 @@ public class Morse3D {
     }
 
     /**
-     *
-     * @param cfgPath
-     * @return
-     * @throws Exception
+     * @param path path to the configuration file.
+     * @return Properties object encoding configuration.
+     * @throws Exception for problems while loading the file.
      */
-    public Properties init(String cfgPath) throws Exception {
+    public Properties init(String path) throws Exception {
         /* properties file */
-        File cfgFile = new File(cfgPath);
+        File cfgFile = new File(path);
         if (cfgFile.exists() == false) {
-            throw new IOException(cfgPath + " does not exist...");
+            throw new IOException(path + " does not exist...");
         }
-        Properties p = BioUtils.loadProperties(cfgPath);
+        Properties prop = BioUtils.loadProperties(path);
 
         /* PDBs folder */
-        String pdbsPath = p.getProperty(Constants.PDBS_DIRECTORY_PATH);
+        String pdbsPath = prop.getProperty(Constants.PDBS_DIRECTORY_PATH);
         File pdbsFile = new File(pdbsPath);
         if (pdbsFile.exists() == false) {
             throw new IOException(pdbsPath + " does not exist...");
@@ -158,51 +154,50 @@ public class Morse3D {
             protList.add(new ProtWrapper(pdbC.getProteinName(), pdbInterDistMatrix));
         }
 
-        p.put(Constants.PROTEIN_LIST, protList);
+        prop.put(Constants.PROTEIN_LIST, protList);
 
         /* properties matrix path */
-        String pmPath = p.getProperty(Constants.PROP_MATRIX_PATH);
+        String pmPath = prop.getProperty(Constants.PROP_MATRIX_PATH);
         File pmFile = new File(pmPath);
         if (pmFile.exists() == false) {
             throw new IOException(pmPath + " does not exist...");
         }
 
         /* min radius */
-        if (!p.containsKey(Constants.MIN_DIST)) {
+        if (!prop.containsKey(Constants.MIN_DIST)) {
             throw new IllegalArgumentException("Min Distance not specified for 3D MORSE...");
         }
 
         /* max radius */
-        if (!p.containsKey(Constants.MAX_DIST)) {
+        if (!prop.containsKey(Constants.MAX_DIST)) {
             throw new IllegalArgumentException("Max Distance not specified for 3D MORSE...");
         }
 
         /* step */
-        if (!p.containsKey(Constants.STEP)) {
+        if (!prop.containsKey(Constants.STEP)) {
             throw new IllegalArgumentException("Step not specified for 3D MORSE...");
         } else {
-            double step = Double.parseDouble(p.getProperty(Constants.STEP));
+            double step = Double.parseDouble(prop.getProperty(Constants.STEP));
             if (step <= 0) {
                 throw new IllegalArgumentException("Step mut be > 0 for 3D MORSE...");
             }
         }
 
         /* output format */
-        if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
+        if (!prop.containsKey(Constants.OUTPUT_FORMAT)) {
             throw new IllegalArgumentException("Output format not specified for 3D MORSE...");
         }
 
         PropertyMatrix pmAll = new PropertyMatrix(pmPath);
-        int[] indices = BioUtils.getSelectedIndices(p.getProperty(Constants.SELECTED_INDICES));
+        int[] indices = BioUtils.getSelectedIndices(prop.getProperty(Constants.SELECTED_INDICES));
         PropertyMatrix pm = pmAll.getSubPropertyMatrix(indices);
-        p.put(Constants.PROP_MATRIX, pm);
+        prop.put(Constants.PROP_MATRIX, pm);
 
-        return p;
+        return prop;
     }
 
     /**
-     *
-     * @param args
+     * @param args arguments for the call.
      */
     public static void main(String[] args) {
         Logger.getLogger(Morse3D.class.getName()).log(Level.INFO, "Computing 3D Morse Index...");
@@ -215,11 +210,11 @@ public class Morse3D {
 
             if (a.cfgPath != null) {
                 Morse3D tdc = new Morse3D();
-                Properties p = tdc.init(a.cfgPath);
+                Properties prop = tdc.init(a.cfgPath);
 
-                DMDataSet ds = tdc.calc3DMorseIndex(p);
-                String format = p.getProperty(Constants.OUTPUT_FORMAT);
-                String outFile = p.getProperty(Constants.OUTPUT_FILE_PATH);
+                DMDataSet ds = tdc.calc3DMorseIndex(prop);
+                String format = prop.getProperty(Constants.OUTPUT_FORMAT);
+                String outFile = prop.getProperty(Constants.OUTPUT_FILE_PATH);
                 switch (format) {
                     case Formats.ARFF:
                         ds.toARFF(outFile);
@@ -278,14 +273,14 @@ public class Morse3D {
         }
 
         /**
-         * @return the name
+         * @return the name.
          */
         public String getName() {
             return name;
         }
 
         /**
-         * @return the interCADistMatrix
+         * @return the interCADistMatrix.
          */
         public IEDMatrix getInterCADistMatrix() {
             return interCADistMatrix;

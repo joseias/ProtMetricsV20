@@ -23,48 +23,42 @@ public class BondAtomDescJSON {
     private List<BondDescJSON> bondDesc = new ArrayList<BondDescJSON>();
 
     /**
-     *
-     * @return The atomA
+     * @return the atomA.
      */
     public String getAtomA() {
         return atomA;
     }
 
     /**
-     *
-     * @param atomA The AtomA
+     * @param atomA the AtomA.
      */
     public void setAtomA(String atomA) {
         this.atomA = atomA;
     }
 
     /**
-     *
-     * @return The atomB
+     * @return the atomB.
      */
     public String getAtomB() {
         return atomB;
     }
 
     /**
-     *
-     * @param atomB The AtomB
+     * @param atomB the AtomB.
      */
     public void setAtomB(String atomB) {
         this.atomB = atomB;
     }
 
     /**
-     *
-     * @return The bondDesc
+     * @return the bondDesc.
      */
     public List<BondDescJSON> getBondDesc() {
         return bondDesc;
     }
 
     /**
-     *
-     * @param bondDesc The bondDesc
+     * @param bondDesc the bondDesc.
      */
     public void setBondDesc(List<BondDescJSON> bondDesc) {
         this.bondDesc = bondDesc;

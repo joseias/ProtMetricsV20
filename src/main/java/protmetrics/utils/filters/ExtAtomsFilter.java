@@ -13,9 +13,8 @@ import protmetrics.dao.files.xyz.GAtom;
 public abstract class ExtAtomsFilter {
 
     /**
-     *
-     * @param graph
-     * @return
+     * @param graph the molecule graph.
+     * @return  the set of exterior vertices.
      */
     public abstract Set<GAtom> getExteriorVertices(WeightedPseudograph<GAtom, DefaultWeightedEdge> graph);
 }

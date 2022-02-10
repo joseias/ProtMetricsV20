@@ -9,9 +9,9 @@ import java.util.TreeSet;
 import java.util.Map.Entry;
 
 /**
- * The Node class contains the interval tree information for one single node
+ * The Node class contains the interval tree information for one single node.
  * based in https://github.com/kevinjdolan/intervaltree (WTFPL)
- * @param <Type>
+ * @param <Type> type of the data within the node.
  */
 public class IntervalNode<Type> {
 
@@ -31,8 +31,7 @@ public class IntervalNode<Type> {
     }
 
     /**
-     *
-     * @param intervalList
+     * @param intervalList list of interval data.
      */
     public IntervalNode(List<IntervalData<Type>> intervalList) {
 
@@ -75,10 +74,10 @@ public class IntervalNode<Type> {
     }
 
     /**
-     * Perform a stabbing query on the node
+     * Perform a stabbing query on the node.
      *
-     * @param time the time to query at
-     * @return	all intervals containing time
+     * @param time the time to query at.
+     * @return	all intervals containing time.
      */
     public List<IntervalData<Type>> stab(double time) {
         List<IntervalData<Type>> result = new ArrayList<>();
@@ -102,10 +101,10 @@ public class IntervalNode<Type> {
     }
 
     /**
-     * Perform an interval intersection query on the node
+     * Perform an interval intersection query on the node.
      *
-     * @param target the interval to intersect
-     * @return	all intervals containing time
+     * @param target the interval to intersect.
+     * @return	all intervals containing time.
      */
     public List<IntervalData<Type>> query(IntervalData<?> target) {
         List<IntervalData<Type>> result = new ArrayList<>();
@@ -130,55 +129,49 @@ public class IntervalNode<Type> {
     }
 
     /**
-     *
-     * @return
+     * @return interval center.
      */
     public double getCenter() {
         return center;
     }
 
     /**
-     *
-     * @param center
+     * @param center interval center to set.
      */
     public void setCenter(double center) {
         this.center = center;
     }
 
     /**
-     *
-     * @return
+     * @return left node.
      */
     public IntervalNode<Type> getLeft() {
         return leftNode;
     }
 
     /**
-     *
-     * @param left
+     * @param left left node to set.
      */
     public void setLeft(IntervalNode<Type> left) {
         this.leftNode = left;
     }
 
     /**
-     *
-     * @return
+     * @return right node.
      */
     public IntervalNode<Type> getRight() {
         return rightNode;
     }
 
     /**
-     *
-     * @param right
+     * @param right right node to set.
      */
     public void setRight(IntervalNode<Type> right) {
         this.rightNode = right;
     }
 
     /**
-     * @param set the set to look on
+     * @param set the set to look on.
      * @return	the median of the set, not interpolated
      */
     private Double getMedian(SortedSet<Double> set) {

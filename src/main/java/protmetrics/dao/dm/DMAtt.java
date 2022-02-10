@@ -7,36 +7,35 @@ import java.util.Objects;
  */
 public class DMAtt {
 
-    private final String attName;
-    private final Class attType;
-    private final int attOrder;
+    private final String name;
+    private final Class type;
+    private final int order;
 
     private static String SPECIAL_ATT_NAME = "StructID";
 
     /**
-     *
-     * @param attName attribute name.
-     * @param attType class of the attribute.
+     * @param name attribute name.
+     * @param type class of the attribute.
      * @param order order of the attribute.
      */
-    public DMAtt(String attName, Class attType, int order) {
-        this.attName = attName;
-        this.attType = attType;
-        this.attOrder = order;
+    public DMAtt(String name, Class type, int order) {
+        this.name = name;
+        this.type = type;
+        this.order = order;
     }
 
     /**
-     * @return the attName
+     * @return the name of the attribute.
      */
     public String getAttName() {
-        return attName;
+        return name;
     }
 
     /**
-     * @return the attType
+     * @return the type of the attribute.
      */
     public Class getAttType() {
-        return attType;
+        return type;
     }
 
     @Override
@@ -60,14 +59,14 @@ public class DMAtt {
     }
 
     /**
-     * @return the attOrder
+     * @return the order of the attribute.
      */
     public int getAttOrder() {
-        return attOrder;
+        return order;
     }
 
     /**
-     * @return the SPECIAL_ATT_NAME
+     * @return the SPECIAL_ATT_NAME.
      */
     public static String getSPECIAL_ATT_NAME() {
         return SPECIAL_ATT_NAME;

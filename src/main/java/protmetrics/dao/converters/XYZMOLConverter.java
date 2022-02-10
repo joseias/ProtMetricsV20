@@ -21,11 +21,10 @@ import protmetrics.utils.MyMath;
 public class XYZMOLConverter {
 
     /**
-     *
      * @param input .xyz file wrapper.
      * @param prop properties object.
      * @return a .mol file object from a .xyz file object.
-     * @throws Exception
+     * @throws Exception for problems while loading the file.
      */
     public MolFile convert(XYZFile input, Properties prop) throws Exception {
 

@@ -21,21 +21,20 @@ import protmetrics.metrics.Wiener3D.IntervalTypeCodes;
 public class BioUtils {
 
     /**
-     *
      */
     public static final String SEPARATOR = ",";
 
     /**
-     *
-     * @param a_input
-     * @return
+     * Removes "" from an array of string tokens.
+     * @param input input string array.
+     * @return the tokens filtered.
      */
-    public static String[] procSplitString(String[] a_input) {
-        ArrayList m_aux = new ArrayList();
+    public static String[] procSplitString(String[] input) {
+        ArrayList<String> m_aux = new ArrayList();
 
-        for (int i = 0; i < a_input.length; ++i) {
-            if (!"".equals(a_input[i])) {
-                m_aux.add(a_input[i]);
+        for (int i = 0; i < input.length; ++i) {
+            if (!"".equals(input[i])) {
+                m_aux.add(input[i]);
             }
         }
         String[] m_result = new String[m_aux.size()];
@@ -46,70 +45,69 @@ public class BioUtils {
     }
 
     /**
-     *
-     * @param a_aminoTLCode
-     * @return
+     * @param aminoTLCode amino acid code in three letters format.
+     * @return amino acid code in one letter format.
      */
-    public static String aminoThreetoOne(String a_aminoTLCode) {
+    public static String aminoThreetoOne(String aminoTLCode) {
 
-        if ((a_aminoTLCode.toUpperCase()).equals("ALA")) {
+        if ((aminoTLCode.toUpperCase()).equals("ALA")) {
             return "A";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("ARG")) {
+        if ((aminoTLCode.toUpperCase()).equals("ARG")) {
             return "R";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("ASP")) {
+        if ((aminoTLCode.toUpperCase()).equals("ASP")) {
             return "D";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("ASN")) {
+        if ((aminoTLCode.toUpperCase()).equals("ASN")) {
             return "N";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("CYS")) {
+        if ((aminoTLCode.toUpperCase()).equals("CYS")) {
             return "C";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("GLU")) {
+        if ((aminoTLCode.toUpperCase()).equals("GLU")) {
             return "E";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("GLN")) {
+        if ((aminoTLCode.toUpperCase()).equals("GLN")) {
             return "Q";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("GLY")) {
+        if ((aminoTLCode.toUpperCase()).equals("GLY")) {
             return "G";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("HIS")) {
+        if ((aminoTLCode.toUpperCase()).equals("HIS")) {
             return "H";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("ILE")) {
+        if ((aminoTLCode.toUpperCase()).equals("ILE")) {
             return "I";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("LEU")) {
+        if ((aminoTLCode.toUpperCase()).equals("LEU")) {
             return "L";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("LYS")) {
+        if ((aminoTLCode.toUpperCase()).equals("LYS")) {
             return "K";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("MET")) {
+        if ((aminoTLCode.toUpperCase()).equals("MET")) {
             return "M";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("PHE")) {
+        if ((aminoTLCode.toUpperCase()).equals("PHE")) {
             return "F";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("PRO")) {
+        if ((aminoTLCode.toUpperCase()).equals("PRO")) {
             return "P";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("SER")) {
+        if ((aminoTLCode.toUpperCase()).equals("SER")) {
             return "S";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("THR")) {
+        if ((aminoTLCode.toUpperCase()).equals("THR")) {
             return "T";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("TRP")) {
+        if ((aminoTLCode.toUpperCase()).equals("TRP")) {
             return "W";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("TYR")) {
+        if ((aminoTLCode.toUpperCase()).equals("TYR")) {
             return "Y";
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("VAL")) {
+        if ((aminoTLCode.toUpperCase()).equals("VAL")) {
             return "V";
         }
 
@@ -117,71 +115,70 @@ public class BioUtils {
     }
 
     /**
-     *
-     * @param a_aminoOLCode
-     * @return
+     * @param aminoOLCode amino acid code in one letter format.
+     * @return amino acid code in three letters format.
      */
-    public static String aminoOnetoThree(String a_aminoOLCode) {
+    public static String aminoOnetoThree(String aminoOLCode) {
 
-        if ((a_aminoOLCode.toUpperCase()).equals("A")) {
+        if ((aminoOLCode.toUpperCase()).equals("A")) {
             return "ALA";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("R")) {
+        if ((aminoOLCode.toUpperCase()).equals("R")) {
             return "ARG";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("D")) {
+        if ((aminoOLCode.toUpperCase()).equals("D")) {
             return "ASP";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("N")) {
+        if ((aminoOLCode.toUpperCase()).equals("N")) {
             return "ASN";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("C")) {
+        if ((aminoOLCode.toUpperCase()).equals("C")) {
             return "CYS";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("E")) {
+        if ((aminoOLCode.toUpperCase()).equals("E")) {
             return "GLU";
         }
 
-        if ((a_aminoOLCode.toUpperCase()).equals("Q")) {
+        if ((aminoOLCode.toUpperCase()).equals("Q")) {
             return "GLN";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("G")) {
+        if ((aminoOLCode.toUpperCase()).equals("G")) {
             return "GLY";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("H")) {
+        if ((aminoOLCode.toUpperCase()).equals("H")) {
             return "HIS";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("I")) {
+        if ((aminoOLCode.toUpperCase()).equals("I")) {
             return "ILE";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("L")) {
+        if ((aminoOLCode.toUpperCase()).equals("L")) {
             return "LEU";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("K")) {
+        if ((aminoOLCode.toUpperCase()).equals("K")) {
             return "LYS";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("M")) {
+        if ((aminoOLCode.toUpperCase()).equals("M")) {
             return "MET";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("F")) {
+        if ((aminoOLCode.toUpperCase()).equals("F")) {
             return "PHE";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("P")) {
+        if ((aminoOLCode.toUpperCase()).equals("P")) {
             return "PRO";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("S")) {
+        if ((aminoOLCode.toUpperCase()).equals("S")) {
             return "SER";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("T")) {
+        if ((aminoOLCode.toUpperCase()).equals("T")) {
             return "THR";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("W")) {
+        if ((aminoOLCode.toUpperCase()).equals("W")) {
             return "TRP";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("Y")) {
+        if ((aminoOLCode.toUpperCase()).equals("Y")) {
             return "TYR";
         }
-        if ((a_aminoOLCode.toUpperCase()).equals("V")) {
+        if ((aminoOLCode.toUpperCase()).equals("V")) {
             return "VAL";
         }
 
@@ -190,18 +187,17 @@ public class BioUtils {
     }
 
     /**
-     *
-     * @param a_chars
-     * @return
+     * @param chars string to be evaluated.
+     * @return if the string is numeric.
      */
-    public static boolean isInteger(String a_chars) {
+    public static boolean isInteger(String chars) {
 
         boolean m_result = true;
-        int m_length = a_chars.length();
+        int m_length = chars.length();
         int m_pos = 0;
 
         while (m_pos < m_length && m_result == true) {
-            m_result = Character.isDigit(a_chars.charAt(m_pos));
+            m_result = Character.isDigit(chars.charAt(m_pos));
             m_pos++;
         }
         return m_result;
@@ -209,70 +205,69 @@ public class BioUtils {
     }
 
     /**
-     *
-     * @param a_aminoTLCode
-     * @return
+     * @param aminoTLCode amino acid three letters code.
+     * @return if the input string is an amino acid three letters code.
      */
-    public static boolean isAminoSequence(String a_aminoTLCode) {
+    public static boolean isAminoSequence(String aminoTLCode) {
 
-        if ((a_aminoTLCode.toUpperCase()).equals("ALA")) {
+        if ((aminoTLCode.toUpperCase()).equals("ALA")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("ARG")) {
+        if ((aminoTLCode.toUpperCase()).equals("ARG")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("ASP")) {
+        if ((aminoTLCode.toUpperCase()).equals("ASP")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("ASN")) {
+        if ((aminoTLCode.toUpperCase()).equals("ASN")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("CYS")) {
+        if ((aminoTLCode.toUpperCase()).equals("CYS")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("GLU")) {
+        if ((aminoTLCode.toUpperCase()).equals("GLU")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("GLN")) {
+        if ((aminoTLCode.toUpperCase()).equals("GLN")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("GLY")) {
+        if ((aminoTLCode.toUpperCase()).equals("GLY")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("HIS")) {
+        if ((aminoTLCode.toUpperCase()).equals("HIS")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("ILE")) {
+        if ((aminoTLCode.toUpperCase()).equals("ILE")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("LEU")) {
+        if ((aminoTLCode.toUpperCase()).equals("LEU")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("LYS")) {
+        if ((aminoTLCode.toUpperCase()).equals("LYS")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("MET")) {
+        if ((aminoTLCode.toUpperCase()).equals("MET")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("PHE")) {
+        if ((aminoTLCode.toUpperCase()).equals("PHE")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("PRO")) {
+        if ((aminoTLCode.toUpperCase()).equals("PRO")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("SER")) {
+        if ((aminoTLCode.toUpperCase()).equals("SER")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("THR")) {
+        if ((aminoTLCode.toUpperCase()).equals("THR")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("TRP")) {
+        if ((aminoTLCode.toUpperCase()).equals("TRP")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("TYR")) {
+        if ((aminoTLCode.toUpperCase()).equals("TYR")) {
             return true;
         }
-        if ((a_aminoTLCode.toUpperCase()).equals("VAL")) {
+        if ((aminoTLCode.toUpperCase()).equals("VAL")) {
             return true;
         }
 
@@ -280,15 +275,14 @@ public class BioUtils {
     }
 
     /**
-     *
-     * @param confFilePath
-     * @return
+     * @param path path to the configuration file.
+     * @return properties object.
      */
-    public static Properties loadProperties(String confFilePath) {
+    public static Properties loadProperties(String path) {
         try {
-            Properties p = new Properties();
-            p.load(new FileReader(confFilePath));
-            return p;
+            Properties prop = new Properties();
+            prop.load(new FileReader(path));
+            return prop;
         } catch (IOException e) {
             System.err.println(e.getMessage());
             return null;
@@ -296,9 +290,8 @@ public class BioUtils {
     }
 
     /**
-     *
-     * @param indices
-     * @return
+     * @param indices indices of the selected properties encoded as 1,2,5,...
+     * @return an array with the indices of the selected properties.
      */
     public static int[] getSelectedIndices(String indices) {
 
@@ -312,9 +305,9 @@ public class BioUtils {
      * *
      * Creates the inter CA distance matrix, for 3D indices...
      *
-     * @param pdb
-     * @return
-     * @throws Exception
+     * @param pdb pdb file wrapper.
+     * @return inter CA distance matrix with values as string.
+     * @throws Exception for problems computing inter CA distance matrix.
      */
     public static String[][] getInterCADistMatrixN(PdbFile pdb) throws Exception {
 
@@ -336,22 +329,18 @@ public class BioUtils {
         return result;
     }
 
-    private static final int precision = -1;
-
     /**
-     *
-     * @param a
-     * @param b
-     * @return
+     * @param atomA atom A.
+     * @param atomB atom B.
+     * @return the distance between atoms A and B.
      */
-    public static double getDistance(GAtom a, GAtom b) {
-        return a.getLocation().distance(b.getLocation());
+    public static double getDistance(GAtom atomA, GAtom atomB) {
+        return atomA.getLocation().distance(atomB.getLocation());
     }
 
     /**
-     *
-     * @param desc
-     * @return
+     * @param desc description of the interval.
+     * @return interval from its description.
      */
     public static Interval getIntervalFromDesc(String desc) {
         String regex = "([\\[]|[\\(])(([0-9]+.[0-9]+),([0-9]+.[0-9]+))([\\]]|[\\)])";

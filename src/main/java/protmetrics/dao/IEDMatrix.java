@@ -6,12 +6,10 @@ package protmetrics.dao;
 public class IEDMatrix {
 
     /**
-     *
      */
     public String[][] InterCAMatrix;
  
     /**
-     *
      * @param interCAMatrix Inter alpha carbon matrix.
      */
     public IEDMatrix(String[][] interCAMatrix) {
@@ -19,7 +17,6 @@ public class IEDMatrix {
     }
 
     /**
-     *
      * @param row row index.
      * @param column column index.
      * @return the value of the inter alpha carbon matrix.
@@ -29,7 +26,6 @@ public class IEDMatrix {
     }
 
     /**
-     *
      * @param elementCode code representing an element.
      * @return the element from its code.
      */

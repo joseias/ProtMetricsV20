@@ -25,14 +25,14 @@ import protmetrics.utils.propertymatrix.PropertyVector;
  * Implements the 2D Amino Acid Sequence Autocorrelation Vectors molecular
  * descriptor.
  *
- * [1] Fernandez, M., Abreu, J. I., Caballero, J., Garriga, M., & Fernandez,
+ * [1] Fernandez, M., Abreu, J. I., Caballero, J., Garriga, M., Fernandez,
  * len. (2007). Comparative modeling of the conformational stability of
  * chymotrypsin inhibitor 2 protein mutants using amino acid sequence
  * autocorrelation (AASA) and amino acid 3D autocorrelation (AA3DA) vectors and
  * ensembles of Bayesian-regularized genetic neural networks. Molecular
  * Simulation, 33(13), 1045-1056.
  *
- * [2] Wagener, M., Sadowski, J., & Gasteiger, J. (1995). Autocorrelation of
+ * [2] Wagener, M., Sadowski, J., Gasteiger, J. (1995). Autocorrelation of
  * molecular surface properties for modeling corticosteroid binding globulin and
  * cytosolic Ah receptor activity by neural networks. Journal of the American
  * Chemical Society, 117(29), 7769-7775.
@@ -40,35 +40,33 @@ import protmetrics.utils.propertymatrix.PropertyVector;
 public class Correlation3D {
 
     /**
-     *
      */
     public static final String INDEX_ID = "AA3DA";
 
     /**
-     *
-     * @param p
-     * @return
-     * @throws Exception
+     * @param prop properties.
+     * @return dataset representing the descriptor for each of the input files.
+     * @throws Exception for problems while computing the descriptor.
      */
-    public DMDataSet calc3DCorrelationIndex(Properties p) throws Exception {
+    public DMDataSet calc3DCorrelationIndex(Properties prop) throws Exception {
 
         int attOrder = 0;
         DMDataSet ds = new DMDataSet(Correlation3D.INDEX_ID);
         DMAtt attPN = new DMAtt(DMAtt.getSPECIAL_ATT_NAME(), String.class, attOrder++);
         ds.addAtt(attPN);
 
-        PropertyMatrix propMatrix = (PropertyMatrix) p.get(Constants.PROP_MATRIX);
-        boolean doProduct = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_PRODUCT));
-        boolean doMax = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_MAX));
-        boolean doMin = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_MIN));
+        PropertyMatrix propMatrix = (PropertyMatrix) prop.get(Constants.PROP_MATRIX);
+        boolean doProduct = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_PRODUCT));
+        boolean doMax = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_MAX));
+        boolean doMin = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_MIN));
 
-        double maxDist = Double.parseDouble(p.getProperty(Constants.MAX_DIST));
-        double minDist = Double.parseDouble(p.getProperty(Constants.MIN_DIST));
-        double step = Double.parseDouble(p.getProperty(Constants.STEP));
+        double maxDist = Double.parseDouble(prop.getProperty(Constants.MAX_DIST));
+        double minDist = Double.parseDouble(prop.getProperty(Constants.MIN_DIST));
+        double step = Double.parseDouble(prop.getProperty(Constants.STEP));
 
         double deltha = step / 2;
 
-        ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
+        ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) prop.get(Constants.PROTEIN_LIST);
 
         /* for each PDB, compute the index */
         for (ProtWrapper pw : protList) {
@@ -126,11 +124,11 @@ public class Correlation3D {
     /**
      * Index as described in [1] (\geq for the upper distance)
      *
-     * @param pv
-     * @param interCAMatrix
-     * @param dLower
-     * @param dUpper
-     * @return
+     * @param pv the property vector.
+     * @param interCAMatrix inter CA matrix of the molecule.
+     * @param dLower lower bound.
+     * @param dUpper uppe bound.
+     * @return descriptor value for the given molecule.
      */
     public DMAttValue get3DProd(PropertyVector pv, IEDMatrix interCAMatrix, double dLower, double dUpper) {
 
@@ -158,13 +156,11 @@ public class Correlation3D {
     }
 
     /**
-     * *
-     *
-     * @param pv
-     * @param interCAMatrix
-     * @param dLower
-     * @param dUpper
-     * @return
+     * @param pv the property vector.
+     * @param interCAMatrix inter CA matrix of the molecule.
+     * @param dLower lower bound.
+     * @param dUpper uppe bound.
+     * @return descriptor value for the given sequence.
      */
     public DMAttValue get3DMax(PropertyVector pv, IEDMatrix interCAMatrix, double dLower, double dUpper) {
 
@@ -193,13 +189,11 @@ public class Correlation3D {
     }
 
     /**
-     * *
-     *
-     * @param pv
-     * @param interCAMatrix
-     * @param dLower
-     * @param dUpper
-     * @return
+     * @param pv the property vector.
+     * @param interCAMatrix inter CA matrix of the molecule.
+     * @param dLower lower bound.
+     * @param dUpper uppe bound.
+     * @return descriptor value for the given sequence.
      */
     public DMAttValue get3DMin(PropertyVector pv, IEDMatrix interCAMatrix, double dLower, double dUpper) {
 
@@ -228,21 +222,20 @@ public class Correlation3D {
     }
 
     /**
-     *
-     * @param cfgPath
-     * @return
-     * @throws Exception
+     * @param path path to the configuration file.
+     * @return Properties object encoding configuration.
+     * @throws Exception for problems while loading the file.
      */
-    public Properties init(String cfgPath) throws Exception {
+    public Properties init(String path) throws Exception {
         /* properties file*/
-        File cfgFile = new File(cfgPath);
+        File cfgFile = new File(path);
         if (cfgFile.exists() == false) {
-            throw new IOException(cfgPath + " does not exist...");
+            throw new IOException(path + " does not exist...");
         }
-        Properties p = BioUtils.loadProperties(cfgPath);
+        Properties prop = BioUtils.loadProperties(path);
 
         /* PDBs folder*/
-        String pdbsPath = p.getProperty(Constants.PDBS_DIRECTORY_PATH);
+        String pdbsPath = prop.getProperty(Constants.PDBS_DIRECTORY_PATH);
         File pdbsFile = new File(pdbsPath);
         if (pdbsFile.exists() == false) {
             throw new IOException(pdbsPath + " does not exist...");
@@ -261,51 +254,50 @@ public class Correlation3D {
             protList.add(new ProtWrapper(pdbC.getProteinName(), pdbInterDistMatrix));
         }
 
-        p.put(Constants.PROTEIN_LIST, protList);
+        prop.put(Constants.PROTEIN_LIST, protList);
 
         /* properties matrix path*/
-        String pmPath = p.getProperty(Constants.PROP_MATRIX_PATH);
+        String pmPath = prop.getProperty(Constants.PROP_MATRIX_PATH);
         File pmFile = new File(pmPath);
         if (pmFile.exists() == false) {
             throw new IOException(pmPath + " does not exist...");
         }
 
         /* min radius*/
-        if (!p.containsKey(Constants.MIN_DIST)) {
+        if (!prop.containsKey(Constants.MIN_DIST)) {
             throw new IllegalArgumentException("Min Distance not specified for 3D Correlation...");
         }
 
         /* max radius*/
-        if (!p.containsKey(Constants.MAX_DIST)) {
+        if (!prop.containsKey(Constants.MAX_DIST)) {
             throw new IllegalArgumentException("Max Distance not specified for 3D Correlation...");
         }
 
         /* step*/
-        if (!p.containsKey(Constants.STEP)) {
+        if (!prop.containsKey(Constants.STEP)) {
             throw new IllegalArgumentException("Step not specified for 3D Correlation...");
         } else {
-            double step = Double.parseDouble(p.getProperty(Constants.STEP));
+            double step = Double.parseDouble(prop.getProperty(Constants.STEP));
             if (step <= 0) {
                 throw new IllegalArgumentException("Step mut be > 0 for 3D Correlation...");
             }
         }
 
         /* output format*/
-        if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
+        if (!prop.containsKey(Constants.OUTPUT_FORMAT)) {
             throw new IllegalArgumentException("Output format not specified for 3D Correlation...");
         }
 
         PropertyMatrix pmAll = new PropertyMatrix(pmPath);
-        int[] indices = BioUtils.getSelectedIndices(p.getProperty(Constants.SELECTED_INDICES));
+        int[] indices = BioUtils.getSelectedIndices(prop.getProperty(Constants.SELECTED_INDICES));
         PropertyMatrix pm = pmAll.getSubPropertyMatrix(indices);
-        p.put(Constants.PROP_MATRIX, pm);
+        prop.put(Constants.PROP_MATRIX, pm);
 
-        return p;
+        return prop;
     }
 
     /**
-     *
-     * @param args
+     * @param args arguments for the call.
      */
     public static void main(String[] args) {
         Logger.getLogger(Correlation3D.class.getName()).log(Level.INFO, "Computing 3D Correlation Index...");
@@ -318,11 +310,11 @@ public class Correlation3D {
 
             if (a.cfgPath != null) {
                 Correlation3D tdc = new Correlation3D();
-                Properties p = tdc.init(a.cfgPath);
+                Properties prop = tdc.init(a.cfgPath);
 
-                DMDataSet ds = tdc.calc3DCorrelationIndex(p);
-                String format = p.getProperty(Constants.OUTPUT_FORMAT);
-                String outFile = p.getProperty(Constants.OUTPUT_FILE_PATH);
+                DMDataSet ds = tdc.calc3DCorrelationIndex(prop);
+                String format = prop.getProperty(Constants.OUTPUT_FORMAT);
+                String outFile = prop.getProperty(Constants.OUTPUT_FILE_PATH);
                 switch (format) {
                     case Formats.ARFF:
                         ds.toARFF(outFile);
@@ -381,14 +373,14 @@ public class Correlation3D {
         }
 
         /**
-         * @return the name
+         * @return the name.
          */
         public String getName() {
             return name;
         }
 
         /**
-         * @return the interCADistMatrix
+         * @return the interCADistMatrix.
          */
         public IEDMatrix getInterCADistMatrix() {
             return interCADistMatrix;

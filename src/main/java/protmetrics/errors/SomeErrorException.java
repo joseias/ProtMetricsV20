@@ -6,10 +6,9 @@ package protmetrics.errors;
 public class SomeErrorException extends Exception {
 
     /**
-     *
-     * @param a_messageError
+     * @param msg error message.
      */
-    public SomeErrorException(String a_messageError) {
-        super(a_messageError);
+    public SomeErrorException(String msg) {
+        super(msg);
     }
 }

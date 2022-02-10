@@ -17,35 +17,30 @@ public class BondDescJSON {
     private double w;
 
     /**
-     *
-     * @return The spec
+     * @return the spec of the bond.
      */
     public String getSpec() {
         return spec;
     }
 
     /**
-     *
-     * @param spec The spec
+     * @param spec the spec of the bond to set.
      */
     public void setSpec(String spec) {
         this.spec = spec;
     }
 
     /**
-     *
-     * @return The w
+     * @return the weight of the bond.
      */
     public double getW() {
         return w;
     }
 
     /**
-     *
-     * @param w The w
+     * @param w the w.
      */
     public void setW(double w) {
         this.w = w;
     }
-
 }

@@ -25,7 +25,7 @@ import protmetrics.utils.propertymatrix.PropertyVector;
  * Implements the 2D Amino Acid Sequence Autocorrelation Vectors molecular
  * descriptor.
  *
- * [1] Caballero, J., Fernandez, L., Abreu, J. I., & Fernández, M. (2006). Amino
+ * [1] Caballero, J., Fernandez, L., Abreu, J. I.,  Fernández, M. (2006). Amino
  * Acid Sequence Autocorrelation vectors and ensembles of Bayesian-Regularized
  * Genetic Neural Networks for prediction of conformational stability of human
  * lysozyme mutants. Journal of Chemical Information and Modeling, 46(3),
@@ -37,33 +37,31 @@ import protmetrics.utils.propertymatrix.PropertyVector;
 public class Correlation2D {
 
     /**
-     *
      */
     public static final String INDEX_ID = "AASA-2D";
 
     /**
-     *
-     * @param p
-     * @return
-     * @throws Exception
+     * @param prop properties.
+     * @return dataset representing the descriptor for each of the input files.
+     * @throws Exception for problems while computing the descriptor.
      */
-    public DMDataSet calc2DCorrelationIndex(Properties p) throws Exception {
+    public DMDataSet calc2DCorrelationIndex(Properties prop) throws Exception {
 
         int attOrder = 0;
         DMDataSet ds = new DMDataSet(Correlation2D.INDEX_ID);
         DMAtt attPN = new DMAtt(DMAtt.getSPECIAL_ATT_NAME(), String.class, attOrder++);
         ds.addAtt(attPN);
 
-        PropertyMatrix propMatrix = (PropertyMatrix) p.get(Constants.PROP_MATRIX);
-        boolean doProduct = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_PRODUCT));
-        boolean doMax = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_MAX));
-        boolean doMin = (Boolean) Boolean.parseBoolean(p.getProperty(Constants.DO_MIN));
+        PropertyMatrix propMatrix = (PropertyMatrix) prop.get(Constants.PROP_MATRIX);
+        boolean doProduct = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_PRODUCT));
+        boolean doMax = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_MAX));
+        boolean doMin = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_MIN));
 
-        int maxDist = Integer.parseInt(p.getProperty(Constants.MAX_DIST));
-        int minDist = Integer.parseInt(p.getProperty(Constants.MIN_DIST));
-        int step = Integer.parseInt(p.getProperty(Constants.STEP));
+        int maxDist = Integer.parseInt(prop.getProperty(Constants.MAX_DIST));
+        int minDist = Integer.parseInt(prop.getProperty(Constants.MIN_DIST));
+        int step = Integer.parseInt(prop.getProperty(Constants.STEP));
 
-        ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
+        ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) prop.get(Constants.PROTEIN_LIST);
 
         for (ProtWrapper pw : protList) {
             Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, String.format("Computing 2D Correlation Index for %s", pw.name));
@@ -118,10 +116,10 @@ public class Correlation2D {
      * *
      * Compute the 2D Correlation Index for one property.
      *
-     * @param pv
-     * @param seq
-     * @param lag
-     * @return
+     * @param pv the property vector.
+     * @param seq the sequence.
+     * @param lag the step.
+     * @return descriptor value for the given molecule.
      */
     public DMAttValue get2DProd(PropertyVector pv, String seq, int lag) {
 
@@ -148,10 +146,10 @@ public class Correlation2D {
      * *
      * Compute the 2D Correlation Index Max for one property.
      *
-     * @param pv
-     * @param seq
-     * @param lag
-     * @return
+     * @param pv the property vector.
+     * @param seq the sequence.
+     * @param lag the step.
+     * @return descriptor value for the given sequence, property and step.
      */
     public DMAttValue get2DMax(PropertyVector pv, String seq, int lag) {
 
@@ -177,10 +175,10 @@ public class Correlation2D {
      * *
      * Compute the 2D Correlation Index Max for one property.
      *
-     * @param pv
-     * @param seq
-     * @param lag
-     * @return
+     * @param pv the property vector.
+     * @param seq the sequence.
+     * @param lag the step.
+     * @return descriptor value for the given sequence, property and step.
      */
     public DMAttValue get2DMin(PropertyVector pv, String seq, int lag) {
 
@@ -203,22 +201,21 @@ public class Correlation2D {
     }
 
     /**
-     *
-     * @param cfgPath
-     * @return
-     * @throws Exception
+     * @param path path to the configuration file.
+     * @return Properties object encoding configuration.
+     * @throws Exception for problems while loading the file.
      */
-    public Properties init(String cfgPath) throws Exception {
+    public Properties init(String path) throws Exception {
 
         /* properties file */
-        File cfgFile = new File(cfgPath);
+        File cfgFile = new File(path);
         if (cfgFile.exists() == false) {
-            throw new IOException(cfgPath + " does not exist...");
+            throw new IOException(path + " does not exist...");
         }
-        Properties p = BioUtils.loadProperties(cfgPath);
+        Properties prop = BioUtils.loadProperties(path);
 
         /* PDBs folder */
-        String pdbsPath = p.getProperty(Constants.PDBS_DIRECTORY_PATH);
+        String pdbsPath = prop.getProperty(Constants.PDBS_DIRECTORY_PATH);
         File pdbsFile = new File(pdbsPath);
         if (pdbsFile.exists() == false) {
             throw new IOException(pdbsPath + " does not exist...");
@@ -244,51 +241,50 @@ public class Correlation2D {
                 protList.add(new ProtWrapper(ns1[0], ns1[1]));
             }
         }
-        p.put(Constants.PROTEIN_LIST, protList);
+        prop.put(Constants.PROTEIN_LIST, protList);
 
         /* properties matrix path */
-        String pmPath = p.getProperty(Constants.PROP_MATRIX_PATH);
+        String pmPath = prop.getProperty(Constants.PROP_MATRIX_PATH);
         File pmFile = new File(pmPath);
         if (pmFile.exists() == false) {
             throw new IOException(pmPath + " does not exist...");
         }
 
         /* min radius */
-        if (!p.containsKey(Constants.MIN_DIST)) {
+        if (!prop.containsKey(Constants.MIN_DIST)) {
             throw new IllegalArgumentException("Min Distance not specified for 2D Correlation...");
         }
 
         /* max radius */
-        if (!p.containsKey(Constants.MAX_DIST)) {
+        if (!prop.containsKey(Constants.MAX_DIST)) {
             throw new IllegalArgumentException("Max Distance not specified for 2D Correlation...");
         }
 
         /* step */
-        if (!p.containsKey(Constants.STEP)) {
+        if (!prop.containsKey(Constants.STEP)) {
             throw new IllegalArgumentException("Step not specified for 2D Correlation...");
         } else {
-            double step = Double.parseDouble(p.getProperty(Constants.STEP));
+            double step = Double.parseDouble(prop.getProperty(Constants.STEP));
             if (step <= 0) {
                 throw new IllegalArgumentException("Step mut be > 0 for 2D Correlation...");
             }
         }
 
         /* output format */
-        if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
+        if (!prop.containsKey(Constants.OUTPUT_FORMAT)) {
             throw new IllegalArgumentException("Output format not specified for 2D Correlation...");
         }
 
         PropertyMatrix pmAll = new PropertyMatrix(pmPath);
-        int[] indices = BioUtils.getSelectedIndices(p.getProperty(Constants.SELECTED_INDICES));
+        int[] indices = BioUtils.getSelectedIndices(prop.getProperty(Constants.SELECTED_INDICES));
         PropertyMatrix pm = pmAll.getSubPropertyMatrix(indices);
-        p.put(Constants.PROP_MATRIX, pm);
+        prop.put(Constants.PROP_MATRIX, pm);
 
-        return p;
+        return prop;
     }
 
     /**
-     *
-     * @param args
+     * @param args arguments for the call.
      */
     public static void main(String[] args) {
         Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, "Computing 2D Correlation Index...");
@@ -301,11 +297,11 @@ public class Correlation2D {
 
             if (a.cfgPath != null) {
                 Correlation2D tdc = new Correlation2D();
-                Properties p = tdc.init(a.cfgPath);
+                Properties prop = tdc.init(a.cfgPath);
 
-                DMDataSet ds = tdc.calc2DCorrelationIndex(p);
-                String format = p.getProperty(Constants.OUTPUT_FORMAT);
-                String outFile = p.getProperty(Constants.OUTPUT_FILE_PATH);
+                DMDataSet ds = tdc.calc2DCorrelationIndex(prop);
+                String format = prop.getProperty(Constants.OUTPUT_FORMAT);
+                String outFile = prop.getProperty(Constants.OUTPUT_FILE_PATH);
                 switch (format) {
                     case Formats.ARFF:
                         ds.toARFF(outFile);
@@ -365,14 +361,14 @@ public class Correlation2D {
         }
 
         /**
-         * @return the name
+         * @return the name.
          */
         public String getName() {
             return name;
         }
 
         /**
-         * @return the sequence
+         * @return the sequence.
          */
         public String getSequence() {
             return sequence;

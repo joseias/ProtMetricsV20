@@ -12,7 +12,6 @@ public class DMInstance {
     String instID;
 
     /**
-     *
      * @param id id of the instance.
      */
     public DMInstance(String id) {
@@ -21,7 +20,6 @@ public class DMInstance {
     }
 
     /**
-     *
      * @param att attribute of the instance.
      * @param value value of the instance.
      */
@@ -30,7 +28,6 @@ public class DMInstance {
     }
 
     /**
-     *
      * @param att attribute to get its value.
      * @return the value of the attribute.
      */
@@ -39,7 +36,6 @@ public class DMInstance {
     }
 
     /**
-     *
      * @return attributes within this instance.
      */
     public Set<DMAtt> getAtts() {
@@ -47,7 +43,6 @@ public class DMInstance {
     }
 
     /**
-     *
      * @return id of the instance.
      */
     public String getInstID() {

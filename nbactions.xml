@@ -12,9 +12,9 @@
             <properties>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
-                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\2DC</exec.workingdir>
+                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\correlation2d</exec.workingdir>
                 <exec.vmArgs></exec.vmArgs>
-                <exec.appArgs>-cfg 2DC.cfg</exec.appArgs>
+                <exec.appArgs>-cfg correlation2d.cfg</exec.appArgs>
                 <exec.mainClass>protmetrics.metrics.Correlation2D</exec.mainClass>
             </properties>
         </action>
@@ -31,9 +31,9 @@
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
-                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\2DC</exec.workingdir>
+                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\correlation2d</exec.workingdir>
                 <exec.vmArgs>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
-                <exec.appArgs>-cfg 2DC.cfg</exec.appArgs>
+                <exec.appArgs>-cfg correlation2d.cfg</exec.appArgs>
                 <exec.mainClass>protmetrics.metrics.Correlation2D</exec.mainClass>
             </properties>
         </action>
@@ -49,9 +49,9 @@
             <properties>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
-                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\2DC</exec.workingdir>
+                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\correlation2d</exec.workingdir>
                 <exec.vmArgs></exec.vmArgs>
-                <exec.appArgs>-cfg 2DC.cfg</exec.appArgs>
+                <exec.appArgs>-cfg correlation2d.cfg</exec.appArgs>
                 <exec.mainClass>protmetrics.metrics.Correlation2D</exec.mainClass>
             </properties>
         </action>

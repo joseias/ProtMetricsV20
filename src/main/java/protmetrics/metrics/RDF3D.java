@@ -25,13 +25,13 @@ import protmetrics.utils.Filter;
  * Implements the Protein Radial Distribution Function (PRDF) molecular
  * descriptor.
  *
- * [1] Fernández, M., Caballero, J., Fernández, L., Abreu, J. I., & Garriga, M.
+ * [1] Fernández, M., Caballero, J., Fernández, L., Abreu, J. I., Garriga, M.
  * (2007). Protein radial distribution function (P-RDF) and Bayesian-Regularized
  * Genetic Neural Networks for modeling protein conformational stability:
  * Chymotrypsin inhibitor 2 mutants. Journal of Molecular Graphics and
  * Modelling, 26(4), 748-759.
  *
- * [2] Schuur, J. H., Selzer, P., & Gasteiger, J. (1996). The coding of the
+ * [2] Schuur, J. H., Selzer, P., Gasteiger, J. (1996). The coding of the
  * three-dimensional structure of molecules by molecular transforms and its
  * application to structure-spectra correlations and studies of biological
  * activity. Journal of Chemical Information and Computer Sciences, 36(2),
@@ -40,34 +40,32 @@ import protmetrics.utils.Filter;
 public class RDF3D {
 
     /**
-     *
      */
     public static final String INDEX_ID = "RDF";
 
     /**
-     *
-     * @param p
-     * @return
-     * @throws Exception
+     * @param prop properties.
+     * @return dataset representing the descriptor for each of the input files.
+     * @throws Exception for problems while computing the descriptor.
      */
-    public DMDataSet calcRDFIndex(Properties p) throws Exception {
+    public DMDataSet calcRDFIndex(Properties prop) throws Exception {
 
         int attOrder = 0;
         DMDataSet ds = new DMDataSet(INDEX_ID);
         DMAtt attPN = new DMAtt(DMAtt.getSPECIAL_ATT_NAME(), String.class, attOrder++);
         ds.addAtt(attPN);
 
-        PropertyMatrix propMatrix = (PropertyMatrix) p.get(Constants.PROP_MATRIX);
+        PropertyMatrix propMatrix = (PropertyMatrix) prop.get(Constants.PROP_MATRIX);
 
-        double maxDist = Double.parseDouble(p.getProperty(Constants.MAX_DIST));
-        double minDist = Double.parseDouble(p.getProperty(Constants.MIN_DIST));
-        double step = Double.parseDouble(p.getProperty(Constants.STEP));
-        double rdfB = Double.parseDouble(p.getProperty(Constants.RDF_B));
-        double rdfF = Double.parseDouble(p.getProperty(Constants.RDF_F));
+        double maxDist = Double.parseDouble(prop.getProperty(Constants.MAX_DIST));
+        double minDist = Double.parseDouble(prop.getProperty(Constants.MIN_DIST));
+        double step = Double.parseDouble(prop.getProperty(Constants.STEP));
+        double rdfB = Double.parseDouble(prop.getProperty(Constants.RDF_B));
+        double rdfF = Double.parseDouble(prop.getProperty(Constants.RDF_F));
 
-        int stepDesp = (int) Math.round((maxDist - minDist) / step) + 1; //-> Para ver el rango de distancia.;
+        int stepDesp = (int) Math.round((maxDist - minDist) / step) + 1; /* if within the distance interval */
 
-        ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) p.get(Constants.PROTEIN_LIST);
+        ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) prop.get(Constants.PROTEIN_LIST);
 
         /* for each PDB, compute the index */
         for (ProtWrapper pw : protList) {
@@ -99,13 +97,12 @@ public class RDF3D {
     }
 
     /**
-     *
-     * @param pv
-     * @param interCAMatrix
-     * @param radius
-     * @param rdfF
-     * @param rdfB
-     * @return
+     * @param pv the property vector. 
+     * @param interCAMatrix inter CA matrix of the molecule.
+     * @param radius the R parameter.
+     * @param rdfF the F parameter.
+     * @param rdfB the B parameter.
+     * @return descriptor value for the given molecule.
      */
     public DMAttValue getRDF(PropertyVector pv, IEDMatrix interCAMatrix, double radius, double rdfF, double rdfB) {
 
@@ -128,21 +125,20 @@ public class RDF3D {
     }
 
     /**
-     *
-     * @param cfgPath
-     * @return
-     * @throws Exception
+     * @param path path to the configuration file.
+     * @return Properties object encoding configuration.
+     * @throws Exception for problems while loading the file.
      */
-    public Properties init(String cfgPath) throws Exception {
+    public Properties init(String path) throws Exception {
         /* properties file */
-        File cfgFile = new File(cfgPath);
+        File cfgFile = new File(path);
         if (cfgFile.exists() == false) {
-            throw new IOException(cfgPath + " does not exist...");
+            throw new IOException(path + " does not exist...");
         }
-        Properties p = BioUtils.loadProperties(cfgPath);
+        Properties prop = BioUtils.loadProperties(path);
 
         /* PDBs folder */
-        String pdbsPath = p.getProperty(Constants.PDBS_DIRECTORY_PATH);
+        String pdbsPath = prop.getProperty(Constants.PDBS_DIRECTORY_PATH);
         File pdbsFile = new File(pdbsPath);
         if (pdbsFile.exists() == false) {
             throw new IOException(pdbsPath + " does not exist...");
@@ -161,61 +157,60 @@ public class RDF3D {
             protList.add(new ProtWrapper(pdbC.getProteinName(), pdbInterDistMatrix));
         }
 
-        p.put(Constants.PROTEIN_LIST, protList);
+        prop.put(Constants.PROTEIN_LIST, protList);
 
         /* properties matrix path*/
-        String pmPath = p.getProperty(Constants.PROP_MATRIX_PATH);
+        String pmPath = prop.getProperty(Constants.PROP_MATRIX_PATH);
         File pmFile = new File(pmPath);
         if (pmFile.exists() == false) {
             throw new IOException(pmPath + " does not exist...");
         }
 
         /* min radius */
-        if (!p.containsKey(Constants.MIN_DIST)) {
+        if (!prop.containsKey(Constants.MIN_DIST)) {
             throw new IllegalArgumentException("Min Distance not specified for RDF...");
         }
 
         /* max radius */
-        if (!p.containsKey(Constants.MAX_DIST)) {
+        if (!prop.containsKey(Constants.MAX_DIST)) {
             throw new IllegalArgumentException("Max Distance not specified for RDF...");
         }
 
         /* step */
-        if (!p.containsKey(Constants.STEP)) {
+        if (!prop.containsKey(Constants.STEP)) {
             throw new IllegalArgumentException("Step not specified for RDF...");
         } else {
-            double step = Double.parseDouble(p.getProperty(Constants.STEP));
+            double step = Double.parseDouble(prop.getProperty(Constants.STEP));
             if (step <= 0) {
                 throw new IllegalArgumentException("Step mut be > 0 for RDF...");
             }
         }
 
         /* max rdfF */
-        if (!p.containsKey(Constants.RDF_F)) {
+        if (!prop.containsKey(Constants.RDF_F)) {
             throw new IllegalArgumentException("RDF F not specified for RDF...");
         }
 
         /* max rdfB */
-        if (!p.containsKey(Constants.RDF_B)) {
+        if (!prop.containsKey(Constants.RDF_B)) {
             throw new IllegalArgumentException("RDF B not specified for RDF...");
         }
 
         /* output format */
-        if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
+        if (!prop.containsKey(Constants.OUTPUT_FORMAT)) {
             throw new IllegalArgumentException("Output format not specified for RDF...");
         }
 
         PropertyMatrix pmAll = new PropertyMatrix(pmPath);
-        int[] indices = BioUtils.getSelectedIndices(p.getProperty(Constants.SELECTED_INDICES));
+        int[] indices = BioUtils.getSelectedIndices(prop.getProperty(Constants.SELECTED_INDICES));
         PropertyMatrix pm = pmAll.getSubPropertyMatrix(indices);
-        p.put(Constants.PROP_MATRIX, pm);
+        prop.put(Constants.PROP_MATRIX, pm);
 
-        return p;
+        return prop;
     }
 
     /**
-     *
-     * @param args
+     * @param args arguments for the call.
      */
     public static void main(String[] args) {
         Logger.getLogger(RDF3D.class.getName()).log(Level.INFO, "Computing 3D RDF Index...");
@@ -228,11 +223,11 @@ public class RDF3D {
 
             if (a.cfgPath != null) {
                 RDF3D rdf = new RDF3D();
-                Properties p = rdf.init(a.cfgPath);
+                Properties prop = rdf.init(a.cfgPath);
 
-                DMDataSet ds = rdf.calcRDFIndex(p);
-                String format = p.getProperty(Constants.OUTPUT_FORMAT);
-                String outFile = p.getProperty(Constants.OUTPUT_FILE_PATH);
+                DMDataSet ds = rdf.calcRDFIndex(prop);
+                String format = prop.getProperty(Constants.OUTPUT_FORMAT);
+                String outFile = prop.getProperty(Constants.OUTPUT_FILE_PATH);
                 switch (format) {
                     case Formats.ARFF:
                         ds.toARFF(outFile);
@@ -293,14 +288,14 @@ public class RDF3D {
         }
 
         /**
-         * @return the name
+         * @return the name.
          */
         public String getName() {
             return name;
         }
 
         /**
-         * @return the interCADistMatrix
+         * @return the interCADistMatrix.
          */
         public IEDMatrix getInterCADistMatrix() {
             return interCADistMatrix;

@@ -29,9 +29,9 @@ import protmetrics.utils.filters.ExtAtomsFilter;
 
 /**
  * Implements the Topological Autocorrelation Vectors molecular descriptor.
- * Paths goes through the interior of the molecule
+ * Paths goes through the interior of the molecule.
  *
- * [1]Fernandez, M., Abreu, J. I., Shi, H., & Barnard, A. S. (2016). Machine
+ * [1]Fernandez, M., Abreu, J. I., Shi, H., Barnard, A. S. (2016). Machine
  * learning prediction of the energy gap of graphene nanoflakes using
  * topological autocorrelation vectors. ACS combinatorial science, 18(11),
  * 661-664.
@@ -41,36 +41,34 @@ import protmetrics.utils.filters.ExtAtomsFilter;
 public class Wiener3D {
 
     /**
-     *
      */
     public static final String INDEX_ID = "Wiener3D";
 
     /**
-     *
-     * @param p
-     * @return
-     * @throws Exception
+     * @param prop properties.
+     * @return dataset representing the descriptor for each of the input files.
+     * @throws Exception for problems while computing the descriptor.
      */
-    public DMDataSet calcWiener3D(Properties p) throws Exception {
+    public DMDataSet calcWiener3D(Properties prop) throws Exception {
 
         int attOrder = 0;
         DMDataSet ds = new DMDataSet(Wiener3D.INDEX_ID);
         DMAtt attPN = new DMAtt(DMAtt.getSPECIAL_ATT_NAME(), String.class, attOrder++);
         ds.addAtt(attPN);
 
-        int maxPathL = (Integer) p.get(Constants.MAX_DIST);
-        int minPathL = (Integer) p.get(Constants.MIN_DIST);
+        int maxPathL = (Integer) prop.get(Constants.MAX_DIST);
+        int minPathL = (Integer) prop.get(Constants.MIN_DIST);
 
-        boolean normalized = (Boolean) p.get(Constants.GINDEX_NORMALIZED);
-        boolean onlyExt = (Boolean) p.get(Constants.GINDEX_ONLY_EXT);
-        int extNodeTagL = (Integer) p.get(Constants.GINDEX_EXT_ATOM_TAG);
-        int intNodeTagL = (Integer) p.get(Constants.GINDEX_INT_ATOM_TAG);
+        boolean normalized = (Boolean) prop.get(Constants.GINDEX_NORMALIZED);
+        boolean onlyExt = (Boolean) prop.get(Constants.GINDEX_ONLY_EXT);
+        int extNodeTagL = (Integer) prop.get(Constants.GINDEX_EXT_ATOM_TAG);
+        int intNodeTagL = (Integer) prop.get(Constants.GINDEX_INT_ATOM_TAG);
 
-        int precision = (Integer) p.get(Constants.PRECISION);
+        int precision = (Integer) prop.get(Constants.PRECISION);
 
-        ExtAtomsFilter extAtomFilter = (ExtAtomsFilter) p.get(Constants.EXTERNAL_ATOM_FILTER);
+        ExtAtomsFilter extAtomFilter = (ExtAtomsFilter) prop.get(Constants.EXTERIOR_ATOM_FILTER);
 
-        ArrayList<MolFile> protList = (ArrayList<MolFile>) p.get(Constants.INSTANCES);
+        ArrayList<MolFile> protList = (ArrayList<MolFile>) prop.get(Constants.INSTANCES);
 
         /* for each PDB, compute the index */
         for (MolFile mol : protList) {
@@ -104,17 +102,16 @@ public class Wiener3D {
     }
 
     /**
-     *
-     * @param wpsg
-     * @param fwsPath
-     * @param extAtomFilter
-     * @param pathL
-     * @param normalized
-     * @param onlyExt
-     * @param extNodeTagL
-     * @param intNodeTagL
-     * @param precision
-     * @return
+     * @param wpsg the WeightedPseudograph representing the molecule.
+     * @param fwsPath the algorithm to compute the path between atoms.
+     * @param extAtomFilter the atom filter to be used.
+     * @param pathL the max path lenght.
+     * @param normalized if descriptor must be normalized by molecule size.
+     * @param onlyExt if consider only exterior atoms.
+     * @param extNodeTagL weight of exterior atoms.
+     * @param intNodeTagL weight of internal atoms.
+     * @param precision the precision when round values.
+     * @return descriptor value for the given molecule.
      */
     public DMAttValue getWienerThrough(WeightedPseudograph<GAtom, DefaultWeightedEdge> wpsg,
             FloydWarshallShortestPaths<GAtom, DefaultWeightedEdge> fwsPath,
@@ -167,55 +164,54 @@ public class Wiener3D {
     }
 
     /**
-     *
-     * @param cfgPath
-     * @return
-     * @throws Exception
+     * @param path path to the configuration file.
+     * @return Properties object encoding configuration.
+     * @throws Exception for problems while loading the file.
      */
-    public Properties init(String cfgPath) throws Exception {
+    public Properties init(String path) throws Exception {
         /* properties file */
-        File cfgFile = new File(cfgPath);
+        File cfgFile = new File(path);
         if (cfgFile.exists() == false) {
-            throw new IOException(cfgPath + " does not exist...");
+            throw new IOException(path + " does not exist...");
         }
-        Properties p = BioUtils.loadProperties(cfgPath);
+        Properties prop = BioUtils.loadProperties(path);
 
         /* precision */
-        if (!p.containsKey(Constants.PRECISION)) {
+        if (!prop.containsKey(Constants.PRECISION)) {
             throw new IllegalArgumentException(Constants.PRECISION + " not specified for 3D Wiener...");
         } else {
-            p.put(Constants.PRECISION, Integer.parseInt(p.getProperty(Constants.PRECISION)));
+            prop.put(Constants.PRECISION, Integer.parseInt(prop.getProperty(Constants.PRECISION)));
         }
 
-        if (!p.containsKey(Constants.BOND_DESC_FILE)) {
+        if (!prop.containsKey(Constants.BOND_DESC_FILE)) {
             throw new IllegalArgumentException(Constants.BOND_DESC_FILE + " not specified for 3D Wiener...");
         } else {
-            String bdPath = p.getProperty(Constants.BOND_DESC_FILE);
+            String bdPath = prop.getProperty(Constants.BOND_DESC_FILE);
             File pmFile = new File(bdPath);
             if (!pmFile.exists()) {
                 throw new IOException(pmFile + " does not exist...");
             }
         }
 
-        if (!p.containsKey(Wiener3D.Constants.LOAD_BOND_TYPE)) {
+        if (!prop.containsKey(Wiener3D.Constants.LOAD_BOND_TYPE)) {
             throw new IllegalArgumentException(Wiener3D.Constants.LOAD_BOND_TYPE + "  not specified for 3D Wiener...");
         }
 
-        if (!p.containsKey(Constants.LOAD_XYZ_DEPLETED)) {
+        if (!prop.containsKey(Constants.LOAD_XYZ_DEPLETED)) {
             throw new IllegalArgumentException(Constants.LOAD_XYZ_DEPLETED + " not specified for 3D Wiener...");
         } else {
-            p.put(Constants.LOAD_XYZ_DEPLETED, Boolean.parseBoolean(p.getProperty(Constants.LOAD_XYZ_DEPLETED, "true")));
+            prop.put(Constants.LOAD_XYZ_DEPLETED, Boolean.parseBoolean(prop.getProperty(Constants.LOAD_XYZ_DEPLETED, "true")));
         }
 
-        if (!p.containsKey(Constants.BOND_DESC_FILE)) {
+        if (!prop.containsKey(Constants.BOND_DESC_FILE)) {
             throw new IllegalArgumentException(Constants.BOND_DESC_FILE + " not specified for 3D Wiener...");
         }
 
         /* XYZs folder */
-        if (!p.containsKey(Constants.XYZ_DIRECTORY_PATH)) {
+        if (!prop.containsKey(Constants.XYZ_DIRECTORY_PATH)) {
             throw new IllegalArgumentException(Constants.XYZ_DIRECTORY_PATH + " input folder not specified for 3D Wiener...");
         } else {
-            String xyzsPath = p.getProperty(Constants.XYZ_DIRECTORY_PATH);
+            String xyzsPath = prop.getProperty(Constants.XYZ_DIRECTORY_PATH);
             File xyzFilesDir = new File(xyzsPath);
             if (xyzFilesDir.exists() == false) {
                 throw new IOException(xyzsPath + " does not exist...");
@@ -226,85 +222,84 @@ public class Wiener3D {
                 ArrayList<MolFile> protList = new ArrayList<>(xyzFiles.length);
                 XYZMOLConverter conv = new XYZMOLConverter();
                 for (File xyzFile : xyzFiles) {
-                    boolean depleted = (Boolean) p.get(Constants.LOAD_XYZ_DEPLETED);
+                    boolean depleted = (Boolean) prop.get(Constants.LOAD_XYZ_DEPLETED);
                     XYZFile xyz = new XYZFile(xyzFile.getAbsolutePath(), depleted);
-                    MolFile molFile = conv.convert(xyz, p);
+                    MolFile molFile = conv.convert(xyz, prop);
                     protList.add(molFile);
                 }
 
-                p.put(Constants.INSTANCES, protList);
+                prop.put(Constants.INSTANCES, protList);
             }
 
         }
 
         /* output format */
-        if (!p.containsKey(Constants.OUTPUT_FORMAT)) {
+        if (!prop.containsKey(Constants.OUTPUT_FORMAT)) {
             throw new IllegalArgumentException(Constants.OUTPUT_FORMAT + "  format not specified for 3D Wiener...");
         }
 
         /* min radius */
-        if (!p.containsKey(Constants.MIN_DIST)) {
+        if (!prop.containsKey(Constants.MIN_DIST)) {
             throw new IllegalArgumentException(Constants.MIN_DIST + " not specified for 3D Wiener...");
         } else {
-            p.put(Constants.MIN_DIST, Integer.parseInt(p.getProperty(Constants.MIN_DIST)));
+            prop.put(Constants.MIN_DIST, Integer.parseInt(prop.getProperty(Constants.MIN_DIST)));
         }
 
         /* max radius */
-        if (!p.containsKey(Constants.MAX_DIST)) {
+        if (!prop.containsKey(Constants.MAX_DIST)) {
             throw new IllegalArgumentException(Constants.MAX_DIST + " not specified for 3D Wiener...");
         } else {
-            p.put(Constants.MAX_DIST, Integer.parseInt(p.getProperty(Constants.MAX_DIST)));
+            prop.put(Constants.MAX_DIST, Integer.parseInt(prop.getProperty(Constants.MAX_DIST)));
         }
 
-        if (!p.containsKey(Constants.GINDEX_NORMALIZED)) {
+        if (!prop.containsKey(Constants.GINDEX_NORMALIZED)) {
             throw new IllegalArgumentException(Constants.GINDEX_NORMALIZED + " not specified for 3D Wiener...");
         } else {
-            p.put(Constants.GINDEX_NORMALIZED, Boolean.parseBoolean(p.getProperty(Constants.GINDEX_NORMALIZED)));
+            prop.put(Constants.GINDEX_NORMALIZED, Boolean.parseBoolean(prop.getProperty(Constants.GINDEX_NORMALIZED)));
         }
 
-        if (!p.containsKey(Constants.GINDEX_ONLY_EXT)) {
+        if (!prop.containsKey(Constants.GINDEX_ONLY_EXT)) {
             throw new IllegalArgumentException(Constants.GINDEX_ONLY_EXT + " not specified for 3D Wiener...");
         } else {
-            p.put(Constants.GINDEX_ONLY_EXT, Boolean.parseBoolean(p.getProperty(Constants.GINDEX_ONLY_EXT)));
+            prop.put(Constants.GINDEX_ONLY_EXT, Boolean.parseBoolean(prop.getProperty(Constants.GINDEX_ONLY_EXT)));
         }
 
-        if (!p.containsKey(Constants.GINDEX_INT_ATOM_TAG)) {
+        if (!prop.containsKey(Constants.GINDEX_INT_ATOM_TAG)) {
             throw new IllegalArgumentException(Constants.GINDEX_INT_ATOM_TAG + " not specified for 3D Wiener...");
         } else {
-            p.put(Constants.GINDEX_INT_ATOM_TAG, Integer.parseInt(p.getProperty(Constants.GINDEX_INT_ATOM_TAG)));
+            prop.put(Constants.GINDEX_INT_ATOM_TAG, Integer.parseInt(prop.getProperty(Constants.GINDEX_INT_ATOM_TAG)));
         }
 
-        if (!p.containsKey(Constants.GINDEX_EXT_ATOM_TAG)) {
+        if (!prop.containsKey(Constants.GINDEX_EXT_ATOM_TAG)) {
             throw new IllegalArgumentException(Constants.GINDEX_EXT_ATOM_TAG + " not specified for 3D Wiener...");
         } else {
-            p.put(Constants.GINDEX_EXT_ATOM_TAG, Integer.parseInt(p.getProperty(Constants.GINDEX_EXT_ATOM_TAG)));
+            prop.put(Constants.GINDEX_EXT_ATOM_TAG, Integer.parseInt(prop.getProperty(Constants.GINDEX_EXT_ATOM_TAG)));
         }
 
-        if (!p.containsKey(Constants.EXTERNAL_ATOM_FILTER)) {
-            throw new IllegalArgumentException(Constants.EXTERNAL_ATOM_FILTER + " not specified for 3D Wiener...");
+        if (!prop.containsKey(Constants.EXTERIOR_ATOM_FILTER)) {
+            throw new IllegalArgumentException(Constants.EXTERIOR_ATOM_FILTER + " not specified for 3D Wiener...");
         } else {
-            String extAtomFilterCN = p.getProperty(Constants.EXTERNAL_ATOM_FILTER);
+            String extAtomFilterCN = prop.getProperty(Constants.EXTERIOR_ATOM_FILTER);
             Class<?> extAFC = Class.forName(extAtomFilterCN);
             ExtAtomsFilter extAtomFilter = (ExtAtomsFilter) extAFC.newInstance();
-            p.put(Constants.EXTERNAL_ATOM_FILTER, extAtomFilter);
+            prop.put(Constants.EXTERIOR_ATOM_FILTER, extAtomFilter);
         }
 
-        if (!p.containsKey(Constants.MAX_EDGES_BY_ATOM)) {
+        if (!prop.containsKey(Constants.MAX_EDGES_BY_ATOM)) {
             throw new IllegalArgumentException(Constants.MAX_EDGES_BY_ATOM + " not specified for 3D Wiener...");
         } else {
-            p.put(Constants.MAX_EDGES_BY_ATOM, Double.parseDouble(p.getProperty(Constants.MAX_EDGES_BY_ATOM)));
+            prop.put(Constants.MAX_EDGES_BY_ATOM, Double.parseDouble(prop.getProperty(Constants.MAX_EDGES_BY_ATOM)));
         }
 
-        if (!p.containsKey(Constants.MOL_TYPE)) {
+        if (!prop.containsKey(Constants.MOL_TYPE)) {
             throw new IllegalArgumentException(Constants.MOL_TYPE + " not specified for 3D Wiener...");
         }
 
-        return p;
+        return prop;
     }
 
     /**
-     *
-     * @param args
+     * @param args arguments for the call.
      */
     public static void main(String[] args) {
         Logger.getLogger(Wiener3D.class.getName()).log(Level.INFO, "Computing 3D Wiener Index...");
@@ -317,11 +312,11 @@ public class Wiener3D {
 
             if (a.cfgPath != null) {
                 Wiener3D wtd = new Wiener3D();
-                Properties p = wtd.init(a.cfgPath);
+                Properties prop = wtd.init(a.cfgPath);
 
-                DMDataSet ds = wtd.calcWiener3D(p);
-                String format = p.getProperty(Constants.OUTPUT_FORMAT);
-                String outFile = p.getProperty(Constants.OUTPUT_FILE_PATH);
+                DMDataSet ds = wtd.calcWiener3D(prop);
+                String format = prop.getProperty(Constants.OUTPUT_FORMAT);
+                String outFile = prop.getProperty(Constants.OUTPUT_FILE_PATH);
                 switch (format) {
                     case Formats.ARFF:
                         ds.toARFF(outFile);
@@ -372,7 +367,7 @@ public class Wiener3D {
         /**
          *
          */
-        public static final String EXTERNAL_ATOM_FILTER = "EXTERNAL_ATOM_FILTER";
+        public static final String EXTERIOR_ATOM_FILTER = "EXTERIOR_ATOM_FILTER";
 
         /**
          *

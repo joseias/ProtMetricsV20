@@ -14,15 +14,14 @@ import protmetrics.dao.files.xyz.GAtom;
 public class ExtAtomFilterGraphene extends ExtAtomsFilter {
 
     /**
-     *
-     * @param graph
-     * @return
+     * @param graph the molecule graph.
+     * @return set of exterior atoms.
      */
     @Override
     public Set<GAtom> getExteriorVertices(WeightedPseudograph<GAtom, DefaultWeightedEdge> graph) {
         Set<GAtom> result = new HashSet<>(graph.vertexSet().size());
         for (GAtom vertex : graph.vertexSet()) {
-            if (isExternal(graph, vertex)) {
+            if (isExterior(graph, vertex)) {
                 result.add(vertex);
             }
         }
@@ -30,7 +29,15 @@ public class ExtAtomFilterGraphene extends ExtAtomsFilter {
         return result;
     }
 
-    private boolean isExternal(WeightedPseudograph<GAtom, DefaultWeightedEdge> graph, GAtom vertex) {
+    /**
+     * Determines if carbon is exterior, i.e. have degree 3, or have degree 4
+     * but don�t have 4 neighbors of degree 4.
+     *
+     * @param graph the molecule graph.
+     * @param vertex the vertex to check if it is exterior.
+     * @return if the vertex is exterior.
+     */
+    private boolean isExterior(WeightedPseudograph<GAtom, DefaultWeightedEdge> graph, GAtom vertex) {
         GAtom targetAtom;
         int extCount = 0;
         if (graph.degreeOf(vertex) == 2) {

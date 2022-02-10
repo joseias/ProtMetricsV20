@@ -7,26 +7,22 @@ package protmetrics.dao.intervals;
 public class Interval implements Comparable<Interval> {
 
     /**
-     *
      */
     protected double start;
 
     /**
-     *
      */
     protected double end;
 
     /**
-     *
      */
     protected IntervalType itype;
     private boolean lopen;
     private boolean ropen;
 
     /**
-     *
-     * @param start
-     * @param end
+     * @param start interval start.
+     * @param end interval end.
      */
     public Interval(double start, double end) {
         this.start = start;
@@ -35,10 +31,9 @@ public class Interval implements Comparable<Interval> {
     }
 
     /**
-     *
-     * @param start
-     * @param end
-     * @param itype
+     * @param start interval start.
+     * @param end interval end.
+     * @param itype interval type.
      */
     public Interval(double start, double end, IntervalType itype) {
         this.start = start;
@@ -47,48 +42,42 @@ public class Interval implements Comparable<Interval> {
     }
 
     /**
-     *
-     * @return
+     * @return if the interval is L open.
      */
     public boolean isLopen() {
         return lopen;
     }
 
     /**
-     *
-     * @return
+     * @return if the interval is R open.
      */
     public boolean isRopen() {
         return ropen;
     }
 
     /**
-     *
-     * @return
+     * @return the interval start.
      */
     public double getStart() {
         return start;
     }
 
     /**
-     *
-     * @return
+     * @return the interval end.
      */
     public double getEnd() {
         return end;
     }
 
     /**
-     *
-     * @return
+     * @return the interval type.
      */
     public IntervalType getItype() {
         return itype;
     }
 
     /**
-     *
-     * @param itype
+     * @param itype the interval type to set.
      */
     public void setItype(IntervalType itype) {
         this.itype = itype;
@@ -116,11 +105,11 @@ public class Interval implements Comparable<Interval> {
     }
 
     /**
-     * @param value
+     * @param value the value to search for within the interval.
      * @return	true if this interval contains time (inclusive)
      */
     public boolean contains(double value) {
-        /*JComment: Add the = */
+        /* add the = */
         if (lopen == true && ropen == true) {
             return value > start && value < end;
         }
@@ -137,7 +126,7 @@ public class Interval implements Comparable<Interval> {
     }
 
     /**
-     * @param other
+     * @param other interval to check intersects.
      * @return	return true if this interval intersects other
      */
     public boolean intersects(Interval other) {
@@ -160,7 +149,7 @@ public class Interval implements Comparable<Interval> {
      * greater In the event of a tie, -1 if this interval's end time is less
      * than the other, 1 if greater, 0 if same
      *
-     * @param other
+     * @param other other interval.
      * @return 1 or -1
      */
     @Override
@@ -179,7 +168,7 @@ public class Interval implements Comparable<Interval> {
     }
 
     /**
-     *
+     * Enum of interval types.
      */
     public enum IntervalType {
 

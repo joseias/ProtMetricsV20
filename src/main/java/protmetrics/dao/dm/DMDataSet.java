@@ -21,7 +21,6 @@ public class DMDataSet {
     private Set<DMAtt> atts;
 
     /**
-     *
      * @param dsID id of the dataset.
      */
     public DMDataSet(String dsID) {
@@ -31,7 +30,6 @@ public class DMDataSet {
     }
 
     /**
-     *
      * @param att attribute.
      */
     public void addAtt(DMAtt att) {
@@ -39,7 +37,6 @@ public class DMDataSet {
     }
 
     /**
-     *
      * @param inst dataset instance.
      */
     public void addInstance(DMInstance inst) {
@@ -47,14 +44,14 @@ public class DMDataSet {
     }
 
     /**
-     * @return the instances
+     * @return the instances.
      */
     public Set<DMInstance> getInstances() {
         return instances;
     }
 
     /**
-     * @param instances the instances to set
+     * @param instances the instances to set.
      */
     public void setInstances(Set<DMInstance> instances) {
         this.instances = instances;
@@ -68,7 +65,7 @@ public class DMDataSet {
     }
 
     /**
-     * @param atts the attributes to set
+     * @param atts the attributes to set.
      */
     public void setAtts(Set<DMAtt> atts) {
         this.atts = atts;
@@ -76,7 +73,7 @@ public class DMDataSet {
 
     /**
      * *
-     * Prints de data set to arff file...
+     * Prints de data set to arff file.
      *
      * @param path path to file to write .arff file.
      */
@@ -131,7 +128,7 @@ public class DMDataSet {
 
     /**
      * *
-     * Prints de data set to csv file...
+     * Prints de data set to csv file.
      *
      * @param path path to file to write .csv file.
      */

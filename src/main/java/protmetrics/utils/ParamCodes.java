@@ -40,14 +40,14 @@ public class ParamCodes {
 
     /**
      * -Mx: max Ratio for RDF and 3DMorse Indices. RDF 10 by default 3DMorse and
-     * 3DCorrelation 31 by default
+     * 3DCorrelation 31 by default.
      *
      */
     public static String rMx = "-rMx";
 
     /**
      * -Mn: min ratio for RDF and 3DMorse Indices. RDF 2 by default 3DMorse 1 by
-     * default
+     * default.
      */
     public static String rMn = "-rMn";
 
@@ -58,7 +58,7 @@ public class ParamCodes {
 
     /**
      * -fmt: output file format: 0 for arff, 1 for csv and 2 for bif, 2 by
-     * default
+     * default.
      */
     public static String fmt = "-fmt";
 

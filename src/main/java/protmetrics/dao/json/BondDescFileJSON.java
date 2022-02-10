@@ -19,31 +19,28 @@ public class BondDescFileJSON {
     private List<BondAtomDescJSON> bondAtomDes = new ArrayList<BondAtomDescJSON>();
 
     /**
-     *
-     * @return The bondAtomDes
+     * @return the bondAtomDesc.
      */
     public List<BondAtomDescJSON> getBondAtomDesc() {
         return bondAtomDes;
     }
 
     /**
-     *
-     * @param bondAtomDes The bondAtomDes
+     * @param bondAtomDes the bond description.
      */
     public void setBondAtomDes(List<BondAtomDescJSON> bondAtomDes) {
         this.bondAtomDes = bondAtomDes;
     }
 
     /**
-     *
-     * @param jsonFilePath
-     * @return
-     * @throws FileNotFoundException
+     * @param path path to .json file with bond descriptions.
+     * @return bond description wrapper.
+     * @throws FileNotFoundException for problems while loading the file.
      */
-    public static BondDescFileJSON buildFromFile(String jsonFilePath) throws FileNotFoundException {
+    public static BondDescFileJSON buildFromFile(String path) throws FileNotFoundException {
 
         Gson gson = new Gson();
-        FileReader fr = new FileReader(jsonFilePath);
+        FileReader fr = new FileReader(path);
         return gson.fromJson(fr, BondDescFileJSON.class);
     }
 }

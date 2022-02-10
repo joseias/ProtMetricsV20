@@ -15,7 +15,6 @@ public class MolFile {
     private WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds;
 
     /**
-     *
      * @param id id of the .mol
      * @param header header object.
      * @param bonds object representing the graph.
@@ -27,44 +26,42 @@ public class MolFile {
     }
 
     /**
-     * @return the header
+     * @return the header.
      */
     public GHeader getHeader() {
         return header;
     }
 
     /**
-     * @param header the header to set
+     * @param header the header to set.
      */
     public void setHeader(GHeader header) {
         this.header = header;
     }
 
     /**
-     *
-     * @return
+     * @return bonds within the .mol file.
      */
     public WeightedPseudograph<GAtom, DefaultWeightedEdge> getBonds() {
         return bonds;
     }
 
     /**
-     *
-     * @param bonds
+     * @param bonds bonds to set.
      */
     public void setBonds(WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds) {
         this.bonds = bonds;
     }
 
     /**
-     * @return the ID
+     * @return the ID.
      */
     public String getID() {
         return ID;
     }
 
     /**
-     * @param id the id to set
+     * @param id the id to set.
      */
     public void setID(String id) {
         this.ID = id;

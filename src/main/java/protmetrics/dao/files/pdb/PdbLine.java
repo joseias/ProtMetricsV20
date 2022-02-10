@@ -2,33 +2,29 @@ package protmetrics.dao.files.pdb;
 
 /**
  * Represent a line within a .pdb file.
- * 
  */
 public class PdbLine {
 
-    String[] LineTokens;
+    String[] lineTokens;
 
     /**
-     *
      */
-    public String Line;
+    public String line;
 
     /**
-     *
-     * @param string
+     * @param line string representing a line within a .pdb file.
      */
-    public PdbLine(String a_line) {
-        Line = a_line;
-        LineTokens = null;
+    public PdbLine(String line) {
+        this.line = line;
+        this.lineTokens = null;
     }
 
     /**
-     *
-     * @param string
-     * @param strings
+     * @param line string representing a line within a .pdb file.
+     * @param lineTokens tokens of the line.
      */
-    public PdbLine(String a_line, String[] a_lineTokens) {
-        Line = a_line;
-        LineTokens = a_lineTokens;
+    public PdbLine(String line, String[] lineTokens) {
+        this.line = line;
+        this.lineTokens = lineTokens;
     }
 }

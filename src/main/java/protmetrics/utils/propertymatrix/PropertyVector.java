@@ -8,54 +8,49 @@ import java.util.*;
 public class PropertyVector {
 
     /**
-     *
      */
     public String PropertyName;
 
     /**
-     *
      */
     public ArrayList VectorElements;
 
     /**
-     *
-     * @param string
+     * @param propertyName name of the property.
      */
-    public PropertyVector(String a_propertyName) {
-        this.PropertyName = a_propertyName;
+    public PropertyVector(String propertyName) {
+        this.PropertyName = propertyName;
         VectorElements = new ArrayList();
     }
 
     /**
-     *
-     * @param a_name
-     * @param o_found
-     * @return
+     * @param name name of the property to get its value.
+     * @param found used as output value to check if was found.
+     * @return the value of the given name.
      */
-    public double getValueFromName(String a_name, boolean[] o_found) {
+    public double getValueFromName(String name, boolean[] found) {
         double m_result = 0;
         boolean[] m_ofound = {false};
 
         PropertyVectorElement m_pve;
         for (int m = 0; m < this.VectorElements.size(); m++) {
             m_pve = (PropertyVectorElement) this.VectorElements.get(m);
-            m_result = m_pve.getValueFromName(a_name, m_ofound);
+            m_result = m_pve.getValueFromName(name, m_ofound);
             if (m_ofound[0] == true) {
-                o_found[0] = true;
+                found[0] = true;
                 return m_result;
             } else {
 
             }
         }
-        o_found[0] = false;
+        found[0] = false;
         return m_result;
     }
 
     /**
-     *
-     * @param a_vectorElement
+     * @param element vector element to be added.
      */
-    public void addVectorElement(PropertyVectorElement a_vectorElement) {
-        this.VectorElements.add(a_vectorElement);
+    public void addVectorElement(PropertyVectorElement element) {
+        this.VectorElements.add(element);
     }
 }

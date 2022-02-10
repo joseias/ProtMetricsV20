@@ -10,41 +10,30 @@ import protmetrics.utils.BioUtils;
 
 /**
  * Wrapper to represent a .pdb file.
- * 
+ *
  */
 public final class PdbFile {
 
-    private int[] caLinesIndex; // indices of the lines with CA 
-    private int[] atomLinesIndex; //indices of the lines of type ATOM 
+    private int[] caLinesIndex; /* indices of the lines with CA */
     private PdbLine[] lines;
     private String proteinName;
-    private String pdbPath = "";
+    private String path = "";
 
     /**
-     *
+     * @param path Path to the .pdb file.
+     * @throws Exception for problems while loading the file.
      */
-    public PdbFile() {
-
-    }
-
-    /**
-     *
-     * @param string
-     * @throws Exception
-     */
-    public PdbFile(String a_pdbFilePath) throws Exception {
-        pdbPath = a_pdbFilePath;
+    public PdbFile(String path) throws Exception {
+        this.path = path;
         try {
-            this.intPDB(a_pdbFilePath, "~");
+            this.intPDB(path, "~");
         } catch (Exception m_see) {
             throw m_see;
         }
-
     }
 
     /**
-     *
-     * @return
+     * @return the CA lines within the .pdb file.
      */
     public PdbAtomLine[] getCALines() {
 
@@ -52,23 +41,22 @@ public final class PdbFile {
         int m_resultlength = m_result.length;
 
         for (int index = 0; index < m_resultlength; index++) {
-            m_result[index] = new PdbAtomLine(this.lines[this.caLinesIndex[index]].Line, this.lines[this.caLinesIndex[index]].LineTokens);
+            m_result[index] = new PdbAtomLine(this.lines[this.caLinesIndex[index]].line, this.lines[this.caLinesIndex[index]].lineTokens);
         }
         return m_result;
 
     }
 
     /**
-     *
-     * @param a_pdbFilePath
-     * @param a_seq
-     * @throws Exception
+     * @param path path to the .pdb file.
+     * @param seq sequence to be searched.
+     * @throws Exception for problems while loading the file.
      */
-    public void intPDB(String a_pdbFilePath, String a_seq) throws Exception {
+    public void intPDB(String path, String seq) throws Exception {
 
         try {
 
-            java.io.LineNumberReader m_sr = new LineNumberReader(new FileReader(a_pdbFilePath));
+            java.io.LineNumberReader m_sr = new LineNumberReader(new FileReader(path));
 
             String m_actualLine = m_sr.readLine();
 
@@ -79,8 +67,7 @@ public final class PdbFile {
             PdbAtomLine m_alaux;
 
             ArrayList m_lines = new ArrayList();
-            ArrayList m_CALinesIndex = new ArrayList();
-            ArrayList m_ATOMLinesIndex = new ArrayList();
+            ArrayList<Integer> m_CALinesIndex = new ArrayList();
 
             int m_totalPdbLines = 0;
 
@@ -95,11 +82,9 @@ public final class PdbFile {
 
                     /* if it is from the selected sequence*/
                     m_alaux = new PdbAtomLine(m_actualLine, m_tokens);
-                    if (m_alaux.getSequence().equals(a_seq)) {
-                        /* is an ATOM line, add it to m_ATOMLinesIndex*/
-                        m_ATOMLinesIndex.add(m_totalPdbLines);
+                    if (m_alaux.getSequence().equals(seq)) {
 
-                        /*if it is CA line, add it to m_CALinesIndex*/
+                        /* if it is CA line, add it to m_CALinesIndex */
                         if (m_alaux.getAtomType().equals("CA")) {
                             m_CALinesIndex.add(m_totalPdbLines);
                         }
@@ -116,36 +101,34 @@ public final class PdbFile {
 
             this.lines = this.toPDBLine(m_lines);
             this.caLinesIndex = this.toInt(m_CALinesIndex);
-            this.atomLinesIndex = this.toInt(m_ATOMLinesIndex);
             m_sr.close();
         } catch (IOException m_ioe) {
             throw m_ioe;
         } catch (Exception m_e) {
-            throw new SomeErrorException("ERROR AT->" + pdbPath);
+            throw new SomeErrorException("ERROR AT->" + path);
         }
     }
 
-    private int[] toInt(ArrayList a_AL) {
-        int[] m_result = new int[a_AL.size()];
+    private int[] toInt(ArrayList AL) {
+        int[] m_result = new int[AL.size()];
         Integer m_aux;
         for (int i = 0; i < m_result.length; ++i) {
-            m_aux = (Integer) a_AL.get(i);
+            m_aux = (Integer) AL.get(i);
             m_result[i] = m_aux;
         }
         return m_result;
     }
 
-    private PdbLine[] toPDBLine(ArrayList a_AL) {
-        PdbLine[] m_result = new PdbLine[a_AL.size()];
+    private PdbLine[] toPDBLine(ArrayList AL) {
+        PdbLine[] m_result = new PdbLine[AL.size()];
         for (int i = 0; i < m_result.length; ++i) {
-            m_result[i] = (PdbLine) a_AL.get(i);
+            m_result[i] = (PdbLine) AL.get(i);
         }
         return m_result;
     }
 
     /**
-     *
-     * @return
+     * @return the sequence within the .pdb file.
      */
     public String getSequence() {
         PdbAtomLine[] m_CALines = this.getCALines();
@@ -157,8 +140,7 @@ public final class PdbFile {
     }
 
     /**
-     *
-     * @return
+     * @return the name of the protein in .pdb file.
      */
     public String getProteinName() {
         return proteinName;

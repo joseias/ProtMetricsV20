@@ -10,16 +10,15 @@ public class Filter implements FileFilter {
     private final String c_pattern;
 
     /**
-     *
-     * @param a_pattern
+     * @param pattern search pattern.
      */
-    public Filter(String a_pattern) {
-        c_pattern = a_pattern;
+    public Filter(String pattern) {
+        c_pattern = pattern;
     }
 
     @Override
-    public boolean accept(File a_file) {
+    public boolean accept(File file) {
 
-        return a_file.getName().endsWith(c_pattern);
+        return file.getName().endsWith(c_pattern);
     }
 }

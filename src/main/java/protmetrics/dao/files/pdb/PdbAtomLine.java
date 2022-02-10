@@ -17,15 +17,14 @@ public final class PdbAtomLine extends PdbLine {
     private final String atomType;
 
     /**
-     *
-     * @param line line of the pdb file
-     * @param lineTokens elements within the line
+     * @param line string representing a line within a .pdb file.
+     * @param lineTokens tokens of the line.
      */
     public PdbAtomLine(String line, String[] lineTokens) {
         super(line, lineTokens);
 
         /* the amino acid number must be the 2nd number in lineTokens */
-        this.LineTokens = lineTokens;
+        this.lineTokens = lineTokens;
 
         aminoNumberPos = this.getAminoNumberLocation(lineTokens);
         if (aminoNumberPos != -1) {
@@ -56,8 +55,7 @@ public final class PdbAtomLine extends PdbLine {
     }
 
     /**
-     *
-     * @param lineTokens tokens within the line
+     * @param lineTokens tokens within the line.
      * @return the location of the amino acid number within the line.
      */
     public int getAminoNumberLocation(String[] lineTokens) {
@@ -82,57 +80,55 @@ public final class PdbAtomLine extends PdbLine {
     }
 
     /**
-     *
      */
     public void upDatePdbLine() {
-        String m_result = this.LineTokens[0];
+        String m_result = this.lineTokens[0];
         boolean m_changed = false;
-        int m_tlength = LineTokens.length;
+        int m_tlength = lineTokens.length;
         for (int i = 1; i < m_tlength; ++i) {
             m_changed = false;
             if (i == 2) {
                 m_result = m_result + "	 " + this.atomType;
-                this.LineTokens[2] = this.atomType;
+                this.lineTokens[2] = this.atomType;
                 m_changed = true;
             }
             if (i == 3) {
                 m_result = m_result + "	 " + this.aminoType;
-                this.LineTokens[3] = this.aminoType;
+                this.lineTokens[3] = this.aminoType;
                 m_changed = true;
             }
             if (i == aminoNumberPos - 1) {
-                if (BioUtils.isAminoSequence(this.LineTokens[aminoNumberPos - 1]) == false) {
+                if (BioUtils.isAminoSequence(this.lineTokens[aminoNumberPos - 1]) == false) {
                     m_result = m_result + "	 " + this.sequence;
-                    this.LineTokens[aminoNumberPos - 1] = this.sequence;
+                    this.lineTokens[aminoNumberPos - 1] = this.sequence;
                     m_changed = true;
                 }
                 /* note that if no sequence, no changes can be done */
             }
             if (i == aminoNumberPos + 1) {
                 m_result = m_result + "	 " + this.location.x;
-                this.LineTokens[aminoNumberPos + 1] = Double.toString(this.location.x);
+                this.lineTokens[aminoNumberPos + 1] = Double.toString(this.location.x);
                 m_changed = true;
             }
             if (i == aminoNumberPos + 2) {
                 m_result = m_result + "	 " + this.location.y;
-                this.LineTokens[aminoNumberPos + 2] = Double.toString(this.location.y);
+                this.lineTokens[aminoNumberPos + 2] = Double.toString(this.location.y);
                 m_changed = true;
             }
             if (i == aminoNumberPos + 3) {
                 m_result = m_result + "	 " + this.location.z;
-                this.LineTokens[aminoNumberPos + 3] = Double.toString(this.location.z);
+                this.lineTokens[aminoNumberPos + 3] = Double.toString(this.location.z);
                 m_changed = true;
             }
             if (m_changed == false) {
-                m_result = m_result + "	 " + this.LineTokens[i];
+                m_result = m_result + "	 " + this.lineTokens[i];
             }
 
         }
-        this.Line = m_result;
+        this.line = m_result;
     }
 
     /**
-     *
      * @return the 3d coordinates of the atom.
      */
     public Point3d getLocation() {
@@ -140,7 +136,6 @@ public final class PdbAtomLine extends PdbLine {
     }
 
     /**
-     *
      * @param newAT new amino acid type.
      */
     public void setAminoType(String newAT) {
@@ -149,7 +144,6 @@ public final class PdbAtomLine extends PdbLine {
     }
 
     /**
-     *
      * @return the amino acid type of this atom line.
      */
     public String getAminoType() {
@@ -157,7 +151,6 @@ public final class PdbAtomLine extends PdbLine {
     }
 
     /**
-     *
      * @return the atom type of type.
      */
     public String getAtomType() {
@@ -165,7 +158,6 @@ public final class PdbAtomLine extends PdbLine {
     }
 
     /**
-     *
      * @return the sequence within the atom line.
      */
     public String getSequence() {

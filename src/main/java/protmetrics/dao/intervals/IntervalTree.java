@@ -5,9 +5,9 @@ import java.util.List;
 
 /**
  * An Interval Tree is essentially a map from intervals to objects, which can be
- * queried for all data associated with a particular interval of time
+ * queried for all data associated with a particular interval of time.
  * based in https://github.com/kevinjdolan/intervaltree (WTFPL)
- * @param <Type>
+ * @param <Type> type of the data within the tree.
  */
 public class IntervalTree<Type> {
 
@@ -17,7 +17,7 @@ public class IntervalTree<Type> {
     private int size;
 
     /**
-     * Instantiate a new interval tree with no intervals
+     * Instantiate a new interval tree with no intervals.
      */
     public IntervalTree() {
         this.head = new IntervalNode<>();
@@ -27,9 +27,9 @@ public class IntervalTree<Type> {
     }
 
     /**
-     * Instantiate and build an interval tree with a preset list of intervals
+     * Instantiate and build an interval tree with a preset list of intervals.
      *
-     * @param intervalList the list of intervals to use
+     * @param intervalList the list of intervals to use.
      */
     public IntervalTree(List<IntervalData<Type>> intervalList) {
         this.head = new IntervalNode<>(intervalList);
@@ -41,10 +41,10 @@ public class IntervalTree<Type> {
 
     /**
      * Perform a stabbing query, returning the interval objects Will rebuild the
-     * tree if out of sync
+     * tree if out of sync.
      *
-     * @param time the time to stab
-     * @return	all intervals that contain time
+     * @param time the time to stab.
+     * @return	all intervals that contain time.
      */
     public List<IntervalData<Type>> getIntervals(double time) {
         build();
@@ -53,9 +53,9 @@ public class IntervalTree<Type> {
 
     /**
      * Add an interval object to the interval tree's list Will not rebuild the
-     * tree until the next query or call to build
+     * tree until the next query or call to build.
      *
-     * @param interval the interval object to add
+     * @param interval the interval object to add.
      */
     public void addInterval(IntervalData<Type> interval) {
         intervalList.add(interval);
@@ -64,7 +64,7 @@ public class IntervalTree<Type> {
 
     /**
      * Build the interval tree to reflect the list of intervals, Will not run if
-     * this is currently in sync
+     * this is currently in sync.
      */
     public void build() {
         if (!inSync) {
