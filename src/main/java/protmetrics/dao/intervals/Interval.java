@@ -126,7 +126,7 @@ public class Interval implements Comparable<Interval> {
     }
 
     /**
-     * @param another interval to check intersects.
+     * @param other interval to check intersects.
      * @return returns true if this interval intersects other
      */
     public boolean intersects(Interval other) {
