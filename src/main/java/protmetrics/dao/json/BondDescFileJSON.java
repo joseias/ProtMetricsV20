@@ -16,7 +16,7 @@ public class BondDescFileJSON {
 
     @SerializedName("bondAtomDesc")
     @Expose
-    private List<BondAtomDescJSON> bondAtomDes = new ArrayList<BondAtomDescJSON>();
+    private List<BondAtomDescJSON> bondAtomDes = new ArrayList<>();
 
     /**
      * @return the bondAtomDesc.

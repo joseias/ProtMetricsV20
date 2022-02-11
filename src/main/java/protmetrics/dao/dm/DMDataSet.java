@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 import protmetrics.metrics.Correlation2D;
 
 /**
- * Represents the result matrix (DataSet) when computing an index for several molecules.
+ * Represents the result matrix (DataSet) when computing an index for several
+ * molecules.
  */
 public class DMDataSet {
 
@@ -87,35 +88,30 @@ public class DMDataSet {
 
             List<DMAtt> attList = this.atts.stream().collect(Collectors.toList());
             Collections.sort(attList, (o1, o2) -> {
-                int order = Integer.compare(o1.getAttOrder(), o2.getAttOrder());
+                int order = Integer.compare(o1.getOrder(), o2.getOrder());
 
                 if (order == 0) {
-                    if (o1.getAttName().equals(DMAtt.getSPECIAL_ATT_NAME())) {
+                    if (o1.getName().equals(DMAtt.getSName())) {
                         return -1;
                     }
 
-                    if (o2.getAttName().equals(DMAtt.getSPECIAL_ATT_NAME())) {
+                    if (o2.getName().equals(DMAtt.getSName())) {
                         return 1;
                     }
 
-                    return o1.getAttName().compareTo(o2.getAttName());
+                    return o1.getName().compareTo(o2.getName());
                 } else {
                     return order;
                 }
             });
 
-            attList.stream().forEach(at -> {
-                ps.println("@attribute " + at.getAttName() + " " + at.getAttType().getSimpleName());
-            });
+            attList.stream().forEach(at -> ps.println("@attribute " + at.getName() + " " + at.getType()));
 
             ps.println(" ");
             ps.println("@data");
 
             instances.stream().forEach(i -> {
-                List<String> attAsStr = attList.stream().map(at -> {
-                    return i.getAttValue(at).getValue();
-                }).collect(Collectors.toList());
-
+                List<String> attAsStr = attList.stream().map(at -> i.getAttValue(at).getValue()).collect(Collectors.toList());
                 String attAsCSV = String.join(",", attAsStr);
                 ps.println(attAsCSV);
             });
@@ -133,46 +129,38 @@ public class DMDataSet {
      * @param path path to file to write .csv file.
      */
     public void toCSV(String path) {
-        try {
-            PrintStream ps = new PrintStream(path);
+        try (PrintStream ps = new PrintStream(path);) {
 
             /* print the header */
             List<DMAtt> attList = this.atts.stream().collect(Collectors.toList());
             Collections.sort(attList, (o1, o2) -> {
-                int order = Integer.compare(o1.getAttOrder(), o2.getAttOrder());
+                int order = Integer.compare(o1.getOrder(), o2.getOrder());
 
                 if (order == 0) {
-                    if (o1.getAttName().equals(DMAtt.getSPECIAL_ATT_NAME())) {
+                    if (o1.getName().equals(DMAtt.getSName())) {
                         return -1;
                     }
 
-                    if (o2.getAttName().equals(DMAtt.getSPECIAL_ATT_NAME())) {
+                    if (o2.getName().equals(DMAtt.getSName())) {
                         return 1;
                     }
 
-                    return o1.getAttName().compareTo(o2.getAttName());
+                    return o1.getName().compareTo(o2.getName());
                 } else {
                     return order;
                 }
             });
 
-            List<String> headerAsStr = attList.stream().map(at -> {
-                return at.getAttName();
-            }).collect(Collectors.toList());
+            List<String> headerAsStr = attList.stream().map(at -> at.getName()).collect(Collectors.toList());
 
             String headerCSV = String.join(",", headerAsStr);
             ps.println(headerCSV);
 
             instances.stream().forEach(i -> {
-                List<String> attAsStr = attList.stream().map(at -> {
-                    return i.getAttValue(at).getValue();
-                }).collect(Collectors.toList());
-
+                List<String> attAsStr = attList.stream().map(at -> i.getAttValue(at).getValue()).collect(Collectors.toList());
                 String attAsCSV = String.join(",", attAsStr);
                 ps.println(attAsCSV);
             });
-
-            ps.close();
         } catch (IOException ioe) {
             Logger.getLogger(Correlation2D.class.getName()).log(Level.SEVERE, null, ioe);
         }

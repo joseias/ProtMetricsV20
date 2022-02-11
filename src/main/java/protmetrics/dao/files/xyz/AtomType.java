@@ -10,51 +10,51 @@ public enum AtomType {
     /**
      * Actinium
      */
-    Ac("Ac", 1),
+    AC("Ac", 1),
     /**
      * Aluminum
      */
-    Al("Al", 2),
+    AL("Al", 2),
     /**
      * Americium
      */
-    Am("Am", 3),
+    AM("Am", 3),
     /**
      * Antimony
      */
-    Sb("Sb", 4),
+    SB("Sb", 4),
     /**
      * Argon
      */
-    Ar("Ar", 5),
+    AR("Ar", 5),
     /**
      * Arsenic
      */
-    As("As", 6),
+    AS("As", 6),
     /**
      * Astatine
      */
-    At("At", 7),
+    AT("At", 7),
     /**
      * Barium
      */
-    Ba("Ba", 8),
+    BA("Ba", 8),
     /**
      * Berkelium
      */
-    Bk("Bk", 9),
+    BK("Bk", 9),
     /**
      * Beryllium
      */
-    Be("Be", 10),
+    BE("Be", 10),
     /**
      * Bismuth
      */
-    Bi("Bi", 11),
+    BI("Bi", 11),
     /**
      * Bohrium
      */
-    Bh("Bh", 12),
+    BH("Bh", 12),
     /**
      * Boron
      */
@@ -62,19 +62,19 @@ public enum AtomType {
     /**
      * Bromine
      */
-    Br("Br", 14),
+    BR("Br", 14),
     /**
      * Cadmium
      */
-    Cd("Cd", 15),
+    CD("Cd", 15),
     /**
      * Calcium
      */
-    Ca("Ca", 16),
+    CA("Ca", 16),
     /**
      * Californium
      */
-    Cf("Cf", 17),
+    CF("Cf", 17),
     /**
      * Carbon
      */
@@ -82,59 +82,59 @@ public enum AtomType {
     /**
      * Cerium
      */
-    Ce("Ce", 19),
+    CE("Ce", 19),
     /**
      * Cesium
      */
-    Cs("Cs", 20),
+    CS("Cs", 20),
     /**
      * Chlorine
      */
-    Cl("Cl", 21),
+    CL("Cl", 21),
     /**
      * Chromium
      */
-    Cr("Cr", 22),
+    CR("Cr", 22),
     /**
      * Cobalt
      */
-    Co("Co", 23),
+    CO("Co", 23),
     /**
      * Copper
      */
-    Cu("Cu", 24),
+    CU("Cu", 24),
     /**
      * Curium
      */
-    Cm("Cm", 25),
+    CM("Cm", 25),
     /**
      * Darmstadtium
      */
-    Ds("Ds", 26),
+    DS("Ds", 26),
     /**
      * Dubnium
      */
-    Db("Db", 27),
+    DB("Db", 27),
     /**
      * Dysprosium
      */
-    Dy("Dy", 28),
+    DY("Dy", 28),
     /**
      * Einsteinium
      */
-    Es("Es", 29),
+    ES("Es", 29),
     /**
      * Erbium
      */
-    Er("Er", 30),
+    ER("Er", 30),
     /**
      * Europium
      */
-    Eu("Eu", 31),
+    EU("Eu", 31),
     /**
      * Fermium
      */
-    Fm("Fm", 32),
+    FM("Fm", 32),
     /**
      * Fluorine
      */
@@ -142,39 +142,39 @@ public enum AtomType {
     /**
      * Francium
      */
-    Fr("Fr", 34),
+    FR("Fr", 34),
     /**
      * Gadolinium
      */
-    Gd("Gd", 35),
+    GD("Gd", 35),
     /**
      * Gallium
      */
-    Ga("Ga", 36),
+    GA("Ga", 36),
     /**
      * Germanium
      */
-    Ge("Ge", 37),
+    GE("Ge", 37),
     /**
      * Gold
      */
-    Au("Au", 38),
+    AU("Au", 38),
     /**
      * Hafnium
      */
-    Hf("Hf", 39),
+    HF("Hf", 39),
     /**
      * Hassium
      */
-    Hs("Hs", 40),
+    HS("Hs", 40),
     /**
      * Helium
      */
-    He("He", 41),
+    HE("He", 41),
     /**
      * Holmium
      */
-    Ho("Ho", 42),
+    HO("Ho", 42),
     /**
      * Hydrogen
      */
@@ -182,7 +182,7 @@ public enum AtomType {
     /**
      * Indium
      */
-    In("In", 44),
+    IN("In", 44),
     /**
      * Iodine
      */
@@ -190,79 +190,79 @@ public enum AtomType {
     /**
      * Iridium
      */
-    Ir("Ir", 46),
+    IR("Ir", 46),
     /**
      * Iron
      */
-    Fe("Fe", 47),
+    FE("Fe", 47),
     /**
      * Krypton
      */
-    Kr("Kr", 48),
+    KR("Kr", 48),
     /**
      * Lanthanum
      */
-    La("La", 49),
+    LA("La", 49),
     /**
      * Lawrencium
      */
-    Lr("Lr", 50),
+    LR("Lr", 50),
     /**
      * Lead
      */
-    Pb("Pb", 51),
+    PB("Pb", 51),
     /**
      * Lithium
      */
-    Li("Li", 52),
+    LI("Li", 52),
     /**
      * Lutetium
      */
-    Lu("Lu", 53),
+    LU("Lu", 53),
     /**
      * Magnesium
      */
-    Mg("Mg", 54),
+    MG("Mg", 54),
     /**
      * Manganese
      */
-    Mn("Mn", 55),
+    MN("Mn", 55),
     /**
      * Meitnerium
      */
-    Mt("Mt", 56),
+    MT("Mt", 56),
     /**
      * Mendelevium
      */
-    Md("Md", 57),
+    MD("Md", 57),
     /**
      * Mercury
      */
-    Hg("Hg", 58),
+    HG("Hg", 58),
     /**
      * Molybdenum
      */
-    Mo("Mo", 59),
+    MO("Mo", 59),
     /**
      * Neodymium
      */
-    Nd("Nd", 60),
+    ND("Nd", 60),
     /**
      * Neon
      */
-    Ne("Ne", 61),
+    NE("Ne", 61),
     /**
      * Neptunium
      */
-    Np("Np", 62),
+    NP("Np", 62),
     /**
      * Nickel
      */
-    Ni("Ni", 63),
+    NI("Ni", 63),
     /**
      * Niobium
      */
-    Nb("Nb", 64),
+    NB("Nb", 64),
     /**
      * Nitrogen
      */
@@ -270,15 +270,15 @@ public enum AtomType {
     /**
      * Nobelium
      */
-    No("No", 66),
+    NO("No", 66),
     /**
      * Oganesson
      */
-    Uuo("Uuo", 67),
+    UUO("Uuo", 67),
     /**
      * Osmium
      */
-    Os("Os", 68),
+    OS("Os", 68),
     /**
      * Oxygen
      */
@@ -286,7 +286,7 @@ public enum AtomType {
     /**
      * Palladium
      */
-    Pd("Pd", 70),
+    PD("Pd", 70),
     /**
      * Phosphorus
      */
@@ -294,15 +294,15 @@ public enum AtomType {
     /**
      * Platinum
      */
-    Pt("Pt", 72),
+    PT("Pt", 72),
     /**
      * Plutonium
      */
-    Pu("Pu", 73),
+    PU("Pu", 73),
     /**
      * Polonium
      */
-    Po("Po", 74),
+    PO("Po", 74),
     /**
      * Potassium
      */
@@ -310,79 +310,79 @@ public enum AtomType {
     /**
      * Praseodymium
      */
-    Pr("Pr", 76),
+    PR("Pr", 76),
     /**
      * Promethium
      */
-    Pm("Pm", 77),
+    PM("Pm", 77),
     /**
      * Protactinium
      */
-    Pa("Pa", 78),
+    PA("Pa", 78),
     /**
      * Radium
      */
-    Ra("Ra", 79),
+    RA("Ra", 79),
     /**
      * Radon
      */
-    Rn("Rn", 80),
+    RN("Rn", 80),
     /**
      * Rhenium
      */
-    Re("Re", 81),
+    RE("Re", 81),
     /**
      * Rhodium
      */
-    Rh("Rh", 82),
+    RH("Rh", 82),
     /**
      * Roentgenium
      */
-    Rg("Rg", 83),
+    RG("Rg", 83),
     /**
      * Rubidium
      */
-    Rb("Rb", 84),
+    RB("Rb", 84),
     /**
      * Ruthenium
      */
-    Ru("Ru", 85),
+    RU("Ru", 85),
     /**
      * Rutherfordium
      */
-    Rf("Rf", 86),
+    RF("Rf", 86),
     /**
      * Samarium
      */
-    Sm("Sm", 87),
+    SM("Sm", 87),
     /**
      * Scandium
      */
-    Sc("Sc", 88),
+    SC("Sc", 88),
     /**
      * Seaborgium
      */
-    Sg("Sg", 89),
+    SG("Sg", 89),
     /**
      * Selenium
      */
-    Se("Se", 90),
+    SE("Se", 90),
     /**
      * Silicon
      */
-    Si("Si", 91),
+    SI("Si", 91),
     /**
      * Silver
      */
-    Ag("Ag", 92),
+    AG("Ag", 92),
     /**
      * Sodium
      */
-    Na("Na", 93),
+    NA("Na", 93),
     /**
      * Strontium
      */
-    Sr("Sr", 94),
+    SR("Sr", 94),
     /**
      * Sulfur
      */
@@ -390,39 +390,39 @@ public enum AtomType {
     /**
      * Tantalum
      */
-    Ta("Ta", 96),
+    TA("Ta", 96),
     /**
      * Technetium
      */
-    Tc("Tc", 97),
+    TC("Tc", 97),
     /**
      * Tellurium
      */
-    Te("Te", 98),
+    TE("Te", 98),
     /**
      * Terbium
      */
-    Tb("Tb", 99),
+    TB("Tb", 99),
     /**
      * Thallium
      */
-    Tl("Tl", 100),
+    TL("Tl", 100),
     /**
      * Thorium
      */
-    Th("Th", 101),
+    TH("Th", 101),
     /**
      * Thulium
      */
-    Tm("Tm", 102),
+    TM("Tm", 102),
     /**
      * Tin
      */
-    Sn("Sn", 103),
+    SN("Sn", 103),
     /**
      * Titanium
      */
-    Ti("Ti", 104),
+    TI("Ti", 104),
     /**
      * Tungsten
      */
@@ -430,27 +430,27 @@ public enum AtomType {
     /**
      * Ununbium
      */
-    Uub("Uub", 106),
+    UUB("Uub", 106),
     /**
      * Ununhexium
      */
-    Uuh("Uuh", 107),
+    UUH("Uuh", 107),
     /**
      * Ununpentium
      */
-    Uup("Uup", 108),
+    UUP("Uup", 108),
     /**
      * Ununquadium
      */
-    Uuq("Uuq", 109),
+    UUQ("Uuq", 109),
     /**
      * Ununseptium
      */
-    Uus("Uus", 110),
+    UUS("Uus", 110),
     /**
      * Ununtrium
      */
-    Uut("Uut", 111),
+    UUT("Uut", 111),
     /**
      * Uranium
      */
@@ -462,11 +462,11 @@ public enum AtomType {
     /**
      * Xenon
      */
-    Xe("Xe", 114),
+    XE("Xe", 114),
     /**
      * Ytterbium
      */
-    Yb("Yb", 115),
+    YB("Yb", 115),
     /**
      * Yttrium
      */
@@ -474,15 +474,15 @@ public enum AtomType {
     /**
      * Zinc
      */
-    Zn("Zn", 117),
+    ZN("Zn", 117),
     /**
      * Zirconium
      */
-    Zr("Zr", 118),
+    ZR("Zr", 118),
     /**
      * Unknown
      */
-    Unknown("?", 0);
+    UNKWNOWN("?", 0);
 
     private final String code;
     private final int index;
@@ -498,7 +498,6 @@ public enum AtomType {
     private AtomType(String code, int index) {
         this.code = code;
         this.index = index;
-
     }
 
     @Override
@@ -522,7 +521,8 @@ public enum AtomType {
 
     /**
      * @param code the code of the AtomType.
-     * @return AtomType of the code or null if no AtomType is associated with code.
+     * @return AtomType of the code or null if no AtomType is associated with
+     * code.
      */
     public static AtomType getTypeFromCode(String code) {
         return map.containsKey(code) ? map.get(code) : null;

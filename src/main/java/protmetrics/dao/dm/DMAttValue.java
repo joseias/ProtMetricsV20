@@ -1,7 +1,8 @@
 package protmetrics.dao.dm;
 
 /**
- * Represents an attribute value within the result matrix (DataSet) when computing an index.
+ * Represents an attribute value within the result matrix (DataSet) when
+ * computing an index.
  */
 public class DMAttValue {
 

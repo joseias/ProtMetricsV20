@@ -1,6 +1,5 @@
 package protmetrics.dao.files.xyz;
 
-
 /**
  * Represents an edge within a molecule in .xyz files.
  */

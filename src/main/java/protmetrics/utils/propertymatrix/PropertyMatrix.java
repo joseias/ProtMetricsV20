@@ -1,7 +1,10 @@
 package protmetrics.utils.propertymatrix;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.LineNumberReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import protmetrics.utils.BioUtils;
 
 /**
@@ -13,48 +16,51 @@ public class PropertyMatrix {
 
     /**
      * @param path the path to the configuration file.
-     * @throws Exception for problems while loading the file.
+     * @throws IOException for problems while loading the file.
      */
-    public PropertyMatrix(String path) throws Exception {
+    public PropertyMatrix(String path) throws IOException {
 
-        LineNumberReader m_sr = new LineNumberReader(new FileReader(path));
+        try (LineNumberReader sr = new LineNumberReader(new FileReader(path))) {
+            String actualLine;
+            String[] actualLineElements;
+            String sep = "[\\s]+";
 
-        String m_actualLine;
-        String[] m_actualLineElements;
-        char[] m_sep = {' '};
+            actualLine = sr.readLine();
+            if (actualLine != null) {
+                /* get property indices */
+                actualLineElements = actualLine.trim().split(sep, 0);
+                actualLineElements = BioUtils.procSplitString(actualLineElements);
+                propertyVectorsColumns = new PropertyVector[actualLineElements.length];
 
-        m_actualLine = m_sr.readLine();
-        if (m_actualLine != null) {
-            /* get property indices */
-            m_actualLineElements = m_actualLine.trim().split("[\\s]+", 0);
-            m_actualLineElements = BioUtils.procSplitString(m_actualLineElements);
-            propertyVectorsColumns = new PropertyVector[m_actualLineElements.length];
+                actualLine = sr.readLine();
 
-            m_actualLine = m_sr.readLine();
+                /* get property indices */
+                if (actualLine != null) /* 2 */ {
+                    actualLineElements = actualLine.trim().split(sep, 0);
+                    actualLineElements = BioUtils.procSplitString(actualLineElements);
 
-            /* get property indices */
-            if (m_actualLine != null) /* 2 */
-            {
-                m_actualLineElements = m_actualLine.trim().split("[\\s]+", 0);
-                m_actualLineElements = BioUtils.procSplitString(m_actualLineElements);
-
-                /* create property vectors*/
-                for (int i = 0; i < m_actualLineElements.length; ++i) {
-                    propertyVectorsColumns[i] = new PropertyVector(m_actualLineElements[i]);
-                }
-
-                m_actualLine = m_sr.readLine();
-                while (m_actualLine != null) {
-                    m_actualLineElements = m_actualLine.trim().split("[\\s]+", 0);
-                    m_actualLineElements = BioUtils.procSplitString(m_actualLineElements);
-
-                    for (int e = 3; e < m_actualLineElements.length; e++) {
-
-                        propertyVectorsColumns[e - 3].addVectorElement(new PropertyVectorElement(Integer.parseInt(m_actualLineElements[0]), m_actualLineElements[1], m_actualLineElements[2], Double.parseDouble(m_actualLineElements[e])));
+                    /* create property vectors*/
+                    for (int i = 0; i < actualLineElements.length; ++i) {
+                        propertyVectorsColumns[i] = new PropertyVector(actualLineElements[i]);
                     }
-                    m_actualLine = m_sr.readLine();
+
+                    actualLine = sr.readLine();
+                    while (actualLine != null) {
+                        actualLineElements = actualLine.trim().split(sep, 0);
+                        actualLineElements = BioUtils.procSplitString(actualLineElements);
+
+                        for (int e = 3; e < actualLineElements.length; e++) {
+
+                            propertyVectorsColumns[e - 3].addVectorElement(new PropertyVectorElement(Integer.parseInt(actualLineElements[0]), actualLineElements[1], actualLineElements[2], Double.parseDouble(actualLineElements[e])));
+                        }
+                        actualLine = sr.readLine();
+                    }
                 }
             }
+
+        } catch (IOException ioe) {
+            Logger.getLogger(PropertyMatrix.class.getName()).log(Level.INFO, "Error while building PropertyMatrix...");
+            throw ioe;
         }
     }
 
@@ -74,14 +80,14 @@ public class PropertyMatrix {
      * @return the sub-property matrix from selected property vector columns.
      */
     public PropertyMatrix getSubPropertyMatrix(int[] selectedPVC) {
-        int m_length = selectedPVC.length;
-        PropertyVector[] m_PVC = new PropertyVector[m_length];
+        int length = selectedPVC.length;
+        PropertyVector[] pvc = new PropertyVector[length];
 
-        for (int i = 0; i < m_length; ++i) {
+        for (int i = 0; i < length; ++i) {
             /* not checking if value is < PropertyVectorColumns length */
-            m_PVC[i] = this.getPropertyVectorsColumns()[selectedPVC[i]];
+            pvc[i] = this.getPropertyVectorsColumns()[selectedPVC[i]];
         }
-        return new PropertyMatrix(m_PVC);
+        return new PropertyMatrix(pvc);
     }
 
     /**

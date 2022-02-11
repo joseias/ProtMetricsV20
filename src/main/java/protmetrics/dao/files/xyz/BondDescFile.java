@@ -1,5 +1,6 @@
 package protmetrics.dao.files.xyz;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.jgrapht.graph.Pseudograph;
@@ -8,7 +9,8 @@ import protmetrics.dao.json.BondAtomDescJSON;
 import protmetrics.dao.json.BondDescFileJSON;
 
 /**
- * Wrapper for a bond description file. It specifies the ranges of each bond type.
+ * Wrapper for a bond description file. It specifies the ranges of each bond
+ * type.
  */
 public class BondDescFile {
 
@@ -16,9 +18,9 @@ public class BondDescFile {
 
     /**
      * @param path the path to the bond description file.
-     * @throws Exception for problems while loading the file.
+     * @throws FileNotFoundException for problems while loading the file.
      */
-    public BondDescFile(String path) throws Exception {
+    public BondDescFile(String path) throws FileNotFoundException {
 
         this.desc = new Pseudograph<>(DefaultEdgeJ.class);
         BondDescFileJSON bdfj = BondDescFileJSON.buildFromFile(path);

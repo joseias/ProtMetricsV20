@@ -3,7 +3,7 @@ package protmetrics.dao.files.xyz;
 import protmetrics.dao.json.BondAtomDescJSON;
 import protmetrics.dao.json.BondDescJSON;
 import protmetrics.dao.intervals.IntervalData;
-import protmetrics.dao.intervals.IntervalTree;
+import protmetrics.dao.intervals.Type;
 
 /**
  * Represents the description of the bond between two atoms A and B (encoded as
@@ -13,7 +13,7 @@ public class BondAtomDesc {
 
     AtomType atomA;
     AtomType atomB;
-    IntervalTree<Double> bondInfo;
+    Type<Double> bondInfo;
 
     /**
      * @return the atom A of the bound.
@@ -46,14 +46,14 @@ public class BondAtomDesc {
     /**
      * @return bond description.
      */
-    public IntervalTree<Double> getDescriptions() {
+    public Type<Double> getDescriptions() {
         return bondInfo;
     }
 
     /**
      * @param descriptions bond description to set.
      */
-    public void setDescriptions(IntervalTree<Double> descriptions) {
+    public void setDescriptions(Type<Double> descriptions) {
         this.bondInfo = descriptions;
     }
 
@@ -65,7 +65,7 @@ public class BondAtomDesc {
         AtomType atomA = AtomType.getTypeFromCode(badj.getAtomA());
         AtomType atomB = AtomType.getTypeFromCode(badj.getAtomB());
 
-        IntervalTree<Double> bondInfo = new IntervalTree<>();
+        Type<Double> bondInfo = new Type<>();
 
         for (BondDescJSON bdj : badj.getBondDesc()) {
             IntervalData<Double> idd = IntervalData.fromBondDescJSON(bdj);

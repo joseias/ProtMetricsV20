@@ -15,7 +15,7 @@ Currently it supports the following descriptors:
 - Topological Autocorrelation Vectors  as in  [5].
 
 #### Recomended Setup:
-- [JDK 8](https://www.oracle.com/es/java/technologies/javase/javase8-archive-downloads.html)  or compatible.
+- [JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)  or compatible.
 - [Apache NetBeans 12.6.](https://netbeans.apache.org/download/nb126/nb126.html)
 
 #### Basic usage:
@@ -24,7 +24,7 @@ java -cp [jar file with dependencies] protmetrics.metrics.[Descriptor]  -cfg [pa
 
 Example, to compute the AASA 2D run:
 
-java -cp ProtMetricsV20-1.0-SNAPSHOT-jar-with-dependencies.jar  protmetrics.metrics.Correlation2D -cfg correlation2D.cfg
+java -cp ProtMetricsV20-2.0-SNAPSHOT-jar-with-dependencies.jar  protmetrics.metrics.Correlation2D -cfg correlation2D.cfg
 
 The .cfg file is specific for each descriptor. See files within the "examples" folder for details.
 

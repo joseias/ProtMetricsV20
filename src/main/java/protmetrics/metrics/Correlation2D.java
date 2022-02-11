@@ -14,6 +14,7 @@ import protmetrics.dao.dm.DMDataSet;
 import protmetrics.dao.dm.DMInstance;
 import protmetrics.dao.files.fasta.FastaFile;
 import protmetrics.dao.files.pdb.PdbFile;
+import protmetrics.errors.SomeErrorException;
 import protmetrics.utils.BioUtils;
 import protmetrics.utils.Filter;
 import protmetrics.utils.Formats;
@@ -25,7 +26,7 @@ import protmetrics.utils.propertymatrix.PropertyVector;
  * Implements the 2D Amino Acid Sequence Autocorrelation Vectors molecular
  * descriptor.
  *
- * [1] Caballero, J., Fernandez, L., Abreu, J. I.,  Fernández, M. (2006). Amino
+ * [1] Caballero, J., Fernandez, L., Abreu, J. I., Fernández, M. (2006). Amino
  * Acid Sequence Autocorrelation vectors and ensembles of Bayesian-Regularized
  * Genetic Neural Networks for prediction of conformational stability of human
  * lysozyme mutants. Journal of Chemical Information and Modeling, 46(3),
@@ -43,19 +44,18 @@ public class Correlation2D {
     /**
      * @param prop properties.
      * @return dataset representing the descriptor for each of the input files.
-     * @throws Exception for problems while computing the descriptor.
      */
-    public DMDataSet calc2DCorrelationIndex(Properties prop) throws Exception {
-
+    public DMDataSet calc2DCorrelationIndex(Properties prop) {
+        String msg;
         int attOrder = 0;
         DMDataSet ds = new DMDataSet(Correlation2D.INDEX_ID);
-        DMAtt attPN = new DMAtt(DMAtt.getSPECIAL_ATT_NAME(), String.class, attOrder++);
+        DMAtt attPN = new DMAtt(DMAtt.getSName(), String.class.getSimpleName(), attOrder++);
         ds.addAtt(attPN);
 
         PropertyMatrix propMatrix = (PropertyMatrix) prop.get(Constants.PROP_MATRIX);
-        boolean doProduct = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_PRODUCT));
-        boolean doMax = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_MAX));
-        boolean doMin = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_MIN));
+        boolean doProduct = Boolean.parseBoolean(prop.getProperty(Constants.DO_PRODUCT));
+        boolean doMax = Boolean.parseBoolean(prop.getProperty(Constants.DO_MAX));
+        boolean doMin = Boolean.parseBoolean(prop.getProperty(Constants.DO_MIN));
 
         int maxDist = Integer.parseInt(prop.getProperty(Constants.MAX_DIST));
         int minDist = Integer.parseInt(prop.getProperty(Constants.MIN_DIST));
@@ -64,7 +64,8 @@ public class Correlation2D {
         ArrayList<ProtWrapper> protList = (ArrayList<ProtWrapper>) prop.get(Constants.PROTEIN_LIST);
 
         for (ProtWrapper pw : protList) {
-            Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, String.format("Computing 2D Correlation Index for %s", pw.name));
+            msg = String.format("Computing 2D Correlation Index for %s", pw.name);
+            Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, msg);
             DMInstance inst = new DMInstance(pw.getName());
             inst.setAttValue(attPN, new DMAttValue(inst.getInstID()));
 
@@ -77,8 +78,8 @@ public class Correlation2D {
                         /* compute the index*/
                         DMAttValue r = this.get2DProd(pv, seq, currentDist);
 
-                        String attName = pv.PropertyName + "_" + (double) currentDist;
-                        DMAtt att = new DMAtt(attName, Double.class, attOrder++);
+                        String attName = pv.getPropertyName() + "_" + (double) currentDist;
+                        DMAtt att = new DMAtt(attName, Double.class.getSimpleName(), attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
                     }
@@ -87,8 +88,8 @@ public class Correlation2D {
                         /* compute the index*/
                         DMAttValue r = this.get2DMax(pv, seq, currentDist);
 
-                        String attName = pv.PropertyName + "_Max_" + (double) currentDist;
-                        DMAtt att = new DMAtt(attName, Double.class, attOrder++);
+                        String attName = pv.getPropertyName() + "_Max_" + (double) currentDist;
+                        DMAtt att = new DMAtt(attName, Double.class.getSimpleName(), attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
                     }
@@ -97,8 +98,8 @@ public class Correlation2D {
                         /* compute the index*/
                         DMAttValue r = this.get2DMin(pv, seq, currentDist);
 
-                        String attName = pv.PropertyName + "_Min_" + (double) currentDist;
-                        DMAtt att = new DMAtt(attName, Double.class, attOrder++);
+                        String attName = pv.getPropertyName() + "_Min_" + (double) currentDist;
+                        DMAtt att = new DMAtt(attName, Double.class.getSimpleName(), attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
                     }
@@ -107,7 +108,8 @@ public class Correlation2D {
                 }
             }
             ds.addInstance(inst);
-            Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, String.format("Computing 2D Correlation Index for %s. Done", pw.name));
+            msg = String.format("Computing 2D Correlation Index for %s. Done", pw.name);
+            Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, msg);
         }
         return ds;
     }
@@ -127,18 +129,18 @@ public class Correlation2D {
         double pi;
         double pj;
         double sum = 0;
-        int L = 0;
+        int eL = 0;
 
         for (int i = 0; i < seq.length(); ++i) {
             pi = pv.getValueFromName(seq.substring(i, i + 1), found);
             if (i + lag < seq.length()) {
                 pj = pv.getValueFromName(seq.substring(i + lag, i + lag + 1), found);
                 sum = sum + pi * pj;
-                L++;
+                eL++;
             }
         }
 
-        double result = L > 0 ? sum / L : 0;
+        double result = eL > 0 ? sum / eL : 0;
         return new DMAttValue(Double.toString(MyMath.round(result, 2)));
     }
 
@@ -157,17 +159,17 @@ public class Correlation2D {
         double pi;
         double pj;
         double max = Double.MIN_VALUE;
-        int L = 0;
+        int eL = 0;
 
         for (int i = 0; i < seq.length(); ++i) {
             pi = pv.getValueFromName(seq.substring(i, i + 1), found);
             if (i + lag < seq.length()) {
                 pj = pv.getValueFromName(seq.substring(i + lag, i + lag + 1), found);
                 max = Math.max(max, pi * pj);
-                L++;
+                eL++;
             }
         }
-        double result = L != 0 ? MyMath.round(max, 2) : 0;
+        double result = eL != 0 ? MyMath.round(max, 2) : 0;
         return new DMAttValue(Double.toString(result));
     }
 
@@ -186,39 +188,38 @@ public class Correlation2D {
         double pi;
         double pj;
         double min = Double.MAX_VALUE;
-        int L = 0;
+        int eL = 0;
 
         for (int i = 0; i < seq.length(); ++i) {
             pi = pv.getValueFromName(seq.substring(i, i + 1), found);
             if (i + lag < seq.length()) {
                 pj = pv.getValueFromName(seq.substring(i + lag, i + lag + 1), found);
                 min = Math.min(min, pi * pj);
-                L++;
+                eL++;
             }
         }
-        double result = L != 0 ? MyMath.round(min, 2) : 0;
+        double result = eL != 0 ? MyMath.round(min, 2) : 0;
         return new DMAttValue(Double.toString(result));
     }
 
     /**
      * @param path the path to the configuration file.
      * @return Properties object encoding configuration.
-     * @throws Exception for problems while loading the file.
+     * @throws IOException for problems while loading the file.
+     * @throws IllegalArgumentException for missing configuration options.
+     * @throws SomeErrorException for other errors.
      */
-    public Properties init(String path) throws Exception {
+    public Properties init(String path) throws IOException, IllegalArgumentException, SomeErrorException {
+        String msgioe = "%s does not exist...";
+        String msgcfg = "%s not specified for 3D Wiener...";
 
-        /* properties file */
-        File cfgFile = new File(path);
-        if (cfgFile.exists() == false) {
-            throw new IOException(path + " does not exist...");
-        }
         Properties prop = BioUtils.loadProperties(path);
 
         /* PDBs folder */
         String pdbsPath = prop.getProperty(Constants.PDBS_DIRECTORY_PATH);
         File pdbsFile = new File(pdbsPath);
-        if (pdbsFile.exists() == false) {
-            throw new IOException(pdbsPath + " does not exist...");
+        if (!pdbsFile.exists()) {
+            throw new IOException(String.format(msgioe, pdbsPath));
         }
 
         File pdbFilesDir = new File(pdbsPath);
@@ -245,24 +246,23 @@ public class Correlation2D {
 
         /* properties matrix path */
         String pmPath = prop.getProperty(Constants.PROP_MATRIX_PATH);
-        File pmFile = new File(pmPath);
-        if (pmFile.exists() == false) {
-            throw new IOException(pmPath + " does not exist...");
+        if (!BioUtils.checkFileExist(pmPath)) {
+            throw new IOException(String.format(msgioe, pmPath));
         }
 
         /* min radius */
         if (!prop.containsKey(Constants.MIN_DIST)) {
-            throw new IllegalArgumentException("Min Distance not specified for 2D Correlation...");
+            throw new IllegalArgumentException(String.format(msgcfg, Constants.MIN_DIST));
         }
 
         /* max radius */
         if (!prop.containsKey(Constants.MAX_DIST)) {
-            throw new IllegalArgumentException("Max Distance not specified for 2D Correlation...");
+            throw new IllegalArgumentException(String.format(msgcfg, Constants.MAX_DIST));
         }
 
         /* step */
         if (!prop.containsKey(Constants.STEP)) {
-            throw new IllegalArgumentException("Step not specified for 2D Correlation...");
+            throw new IllegalArgumentException(String.format(msgcfg, Constants.STEP));
         } else {
             double step = Double.parseDouble(prop.getProperty(Constants.STEP));
             if (step <= 0) {
@@ -272,7 +272,7 @@ public class Correlation2D {
 
         /* output format */
         if (!prop.containsKey(Constants.OUTPUT_FORMAT)) {
-            throw new IllegalArgumentException("Output format not specified for 2D Correlation...");
+            throw new IllegalArgumentException(String.format(msgcfg, Constants.OUTPUT_FORMAT));
         }
 
         PropertyMatrix pmAll = new PropertyMatrix(pmPath);
@@ -309,12 +309,14 @@ public class Correlation2D {
                     case Formats.CSV:
                         ds.toCSV(outFile);
                         break;
+                    default:
+                        break;
                 }
 
             } else {
                 throw new IllegalArgumentException("Configuration file not specified... must supply -cfg option...");
             }
-        } catch (Exception ex) {
+        } catch (IOException | IllegalArgumentException | SomeErrorException ex) {
             Logger.getLogger(Correlation2D.class.getName()).log(Level.SEVERE, null, ex);
         }
         Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, "Computing 2D Correlation Index. Done!");

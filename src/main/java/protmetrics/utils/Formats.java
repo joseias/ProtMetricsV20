@@ -5,6 +5,8 @@ package protmetrics.utils;
  */
 public class Formats {
 
+    private Formats() {
+    }
     /**
      */
     public static final String ARFF = "arff";

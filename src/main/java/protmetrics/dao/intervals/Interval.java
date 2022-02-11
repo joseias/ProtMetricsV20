@@ -1,8 +1,8 @@
 package protmetrics.dao.intervals;
 
 /**
- * Represents an interval.
- * based in https://github.com/kevinjdolan/intervaltree (WTFPL)
+ * Represents an interval. based in https://github.com/kevinjdolan/intervaltree
+ * (WTFPL)
  */
 public class Interval implements Comparable<Interval> {
 
@@ -110,19 +110,19 @@ public class Interval implements Comparable<Interval> {
      */
     public boolean contains(double value) {
         /* add the = */
-        if (lopen == true && ropen == true) {
-            return value > start && value < end;
+        if (lopen) {
+            if (ropen) {
+                return value > start && value < end;
+            } else {
+                return value > start && value <= end;
+            }
+        } else {
+            if (ropen) {
+                return value >= start && value < end;
+            } else {
+                return value >= start && value <= end;
+            }
         }
-
-        if (lopen == true && ropen == false) {
-            return value > start && value <= end;
-        }
-
-        if (lopen == false && ropen == true) {
-            return value >= start && value < end;
-        }
-
-        return value >= start && value <= end;
     }
 
     /**
@@ -176,17 +176,14 @@ public class Interval implements Comparable<Interval> {
          *
          */
         LOPEN_ROPEN,
-
         /**
          *
          */
         LOPEN_RCLOSED,
-
         /**
          *
          */
         LCLOSED_ROPEN,
-
         /**
          *
          */

@@ -1,24 +1,27 @@
 package protmetrics.dao.intervals;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import protmetrics.dao.json.BondDescJSON;
 import protmetrics.utils.BioUtils;
 
 /**
- * Represents the data associated with an interval.
- * based in https://github.com/kevinjdolan/intervaltree (WTFPL)
- * @param <Type> the type of the data that the interval holds.
+ * Represents the data associated with an interval. based in
+ * https://github.com/kevinjdolan/intervaltree (WTFPL)
+ *
+ * @param <T> the type of the data that the interval holds.
  */
-public class IntervalData<Type> extends Interval {
+public class IntervalData<T> extends Interval {
 
     /**
      */
-    protected Type data;
+    protected T data;
 
     /**
      * @param inter the interval.
      * @param data the type.
      */
-    public IntervalData(Interval inter, Type data) {
+    public IntervalData(Interval inter, T data) {
         super(inter.start, inter.end, inter.getItype());
         this.data = data;
     }
@@ -28,7 +31,7 @@ public class IntervalData<Type> extends Interval {
      * @param end interval end.
      * @param data interval data type.
      */
-    public IntervalData(double start, double end, Type data) {
+    public IntervalData(double start, double end, T data) {
         super(start, end);
         this.data = data;
     }
@@ -36,14 +39,14 @@ public class IntervalData<Type> extends Interval {
     /**
      * @return interval data.
      */
-    public Type getData() {
+    public T getData() {
         return data;
     }
 
     /**
      * @param data interval data to set.
      */
-    public void setData(Type data) {
+    public void setData(T data) {
         this.data = data;
     }
 
@@ -59,7 +62,8 @@ public class IntervalData<Type> extends Interval {
             result = new IntervalData<>(tmp, bd.getW());
             return result;
         } else {
-            System.err.println("Interval " + bd.getSpec() + " specification is wrong, check it...");
+            String msg = String.format("Interval specification is wrong, check it...", bd.getSpec());
+            Logger.getLogger(Interval.class.getName()).log(Level.SEVERE, msg);
             return null;
         }
     }

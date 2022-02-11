@@ -8,19 +8,33 @@ import java.util.*;
 public class PropertyVector {
 
     /**
+     * @return the propertyName
      */
-    public String PropertyName;
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    /**
+     * @return the vectorElements
+     */
+    public List<PropertyVectorElement> getVectorElements() {
+        return vectorElements;
+    }
 
     /**
      */
-    public ArrayList VectorElements;
+    private final String propertyName;
+
+    /**
+     */
+    private final ArrayList<PropertyVectorElement> vectorElements;
 
     /**
      * @param propertyName name of the property.
      */
     public PropertyVector(String propertyName) {
-        this.PropertyName = propertyName;
-        VectorElements = new ArrayList();
+        this.propertyName = propertyName;
+        this.vectorElements = new ArrayList<>();
     }
 
     /**
@@ -29,28 +43,26 @@ public class PropertyVector {
      * @return the value of the given name.
      */
     public double getValueFromName(String name, boolean[] found) {
-        double m_result = 0;
-        boolean[] m_ofound = {false};
+        double result = 0;
+        boolean[] ofound = {false};
 
-        PropertyVectorElement m_pve;
-        for (int m = 0; m < this.VectorElements.size(); m++) {
-            m_pve = (PropertyVectorElement) this.VectorElements.get(m);
-            m_result = m_pve.getValueFromName(name, m_ofound);
-            if (m_ofound[0] == true) {
+        PropertyVectorElement pve;
+        for (int m = 0; m < this.getVectorElements().size(); m++) {
+            pve = (PropertyVectorElement) this.getVectorElements().get(m);
+            result = pve.getValueFromName(name, ofound);
+            if (ofound[0]) {
                 found[0] = true;
-                return m_result;
-            } else {
-
+                return result;
             }
         }
         found[0] = false;
-        return m_result;
+        return result;
     }
 
     /**
      * @param element vector element to be added.
      */
     public void addVectorElement(PropertyVectorElement element) {
-        this.VectorElements.add(element);
+        this.getVectorElements().add(element);
     }
 }

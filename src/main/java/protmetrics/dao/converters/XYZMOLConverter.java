@@ -1,5 +1,6 @@
 package protmetrics.dao.converters;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Properties;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -10,6 +11,7 @@ import protmetrics.dao.files.xyz.GAtom;
 import protmetrics.dao.files.xyz.GHeader;
 import protmetrics.dao.files.xyz.XYZFile;
 import protmetrics.dao.intervals.IntervalData;
+import protmetrics.errors.SomeErrorException;
 import protmetrics.metrics.Wiener3D;
 import protmetrics.metrics.Wiener3D.MolType;
 import protmetrics.utils.BioUtils;
@@ -24,9 +26,10 @@ public class XYZMOLConverter {
      * @param input .xyz file wrapper.
      * @param prop properties object.
      * @return a .mol file object from a .xyz file object.
-     * @throws Exception for problems while loading the file.
+     * @throws SomeErrorException for problems while processing the file.
+     * @throws FileNotFoundException for problems while processing the file.
      */
-    public MolFile convert(XYZFile input, Properties prop) throws Exception {
+    public MolFile convert(XYZFile input, Properties prop) throws SomeErrorException, FileNotFoundException {
 
         boolean loadBondType = Boolean.parseBoolean(prop.getProperty(Wiener3D.Constants.LOAD_BOND_TYPE));
 
@@ -37,7 +40,8 @@ public class XYZMOLConverter {
 
         List<IntervalData<Double>> items;
         DefaultWeightedEdge wedgeTmp;
-        GAtom atomi, atomj;
+        GAtom atomi;
+        GAtom atomj;
 
         int precision = (Integer) prop.get(Wiener3D.Constants.PRECISION);
 
@@ -54,15 +58,14 @@ public class XYZMOLConverter {
                 if (items != null) {
                     if (items.size() > 1) {
                         String error = "Some of the intervals specified for " + atomi.getType() + "-" + atomi.getType() + " overlaps...";
-                        Exception e = new Exception(error);
-                        throw e;
+                        throw new SomeErrorException(error);
                     } else {
                         if (items.size() == 1) {
                             bonds.addVertex(atomi);
                             bonds.addVertex(atomj);
                             wedgeTmp = new DefaultWeightedEdge();
 
-                            if (loadBondType == true) {
+                            if (loadBondType) {
                                 bonds.setEdgeWeight(wedgeTmp, items.get(0).getData());
                             } else {
                                 bonds.setEdgeWeight(wedgeTmp, Wiener3D.Constants.DEFAULT_EDGE_WEIGHT);
@@ -73,8 +76,7 @@ public class XYZMOLConverter {
                     }
                 } else {
                     String error = "Intervals for atoms of type " + atomi.getType() + "-" + atomi.getType() + " seems to be not specified...";
-                    Exception e = new Exception(error);
-                    throw e;
+                    throw new SomeErrorException(error);
                 }
             }
         }

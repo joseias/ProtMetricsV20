@@ -1,1 +1,1 @@
-java -cp ProtMetricsV20-1.0-SNAPSHOT-jar-with-dependencies.jar protmetrics.metrics.Morse3D -cfg morse3d.cfg
+java -cp ProtMetricsV20-2.0-SNAPSHOT-jar-with-dependencies.jar protmetrics.metrics.Morse3D -cfg morse3d.cfg

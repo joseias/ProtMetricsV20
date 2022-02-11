@@ -7,13 +7,13 @@ public class IEDMatrix {
 
     /**
      */
-    public String[][] InterCAMatrix;
- 
+    private final String[][] interCAMatrix;
+
     /**
      * @param interCAMatrix Inter alpha carbon matrix.
      */
     public IEDMatrix(String[][] interCAMatrix) {
-        this.InterCAMatrix = interCAMatrix;
+        this.interCAMatrix = interCAMatrix;
     }
 
     /**
@@ -22,36 +22,36 @@ public class IEDMatrix {
      * @return the value of the inter alpha carbon matrix.
      */
     public double getValueAt(int row, int column) {
-        return Double.parseDouble(this.InterCAMatrix[row][column]);
+        return Double.parseDouble(this.interCAMatrix[row][column]);
     }
 
     /**
-     * @param elementCode code representing an element.
+     * @param ecode code representing an element.
      * @return the element from its code.
      */
-    public String getElementAt(int elementCode) {
+    public String getElementAt(int ecode) {
 
-        String m_sep = "_";
-        String[] m_elementCode;
-        String m_elementName;
+        String sep = "_";
+        String[] code;
+        String name;
 
-        m_elementCode = this.InterCAMatrix[0][elementCode].trim().split(m_sep, 0);
-        m_elementName = m_elementCode[m_elementCode.length - 1];
+        code = this.interCAMatrix[0][ecode].trim().split(sep, 0);
+        name = code[code.length - 1];
 
-        return m_elementName;
+        return name;
     }
 
     /**
      * @return the number of rows.
      */
     public int getRows() {
-        return this.InterCAMatrix[0].length;
+        return this.interCAMatrix[0].length;
     }
 
     /**
      * @return the number of columns.
      */
     public int getColumns() {
-        return this.InterCAMatrix.length;
+        return this.interCAMatrix.length;
     }
 }

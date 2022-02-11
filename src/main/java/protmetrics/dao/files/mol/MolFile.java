@@ -10,7 +10,7 @@ import protmetrics.dao.files.xyz.GHeader;
  */
 public class MolFile {
 
-    private String ID;
+    private String id;
     private GHeader header;
     private WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds;
 
@@ -22,7 +22,7 @@ public class MolFile {
     public MolFile(String id, GHeader header, WeightedPseudograph<GAtom, DefaultWeightedEdge> bonds) {
         this.header = header;
         this.bonds = bonds;
-        this.ID = id;
+        this.id = id;
     }
 
     /**
@@ -54,16 +54,16 @@ public class MolFile {
     }
 
     /**
-     * @return the ID.
+     * @return the id.
      */
     public String getID() {
-        return ID;
+        return id;
     }
 
     /**
      * @param id the id to set.
      */
     public void setID(String id) {
-        this.ID = id;
+        this.id = id;
     }
 }

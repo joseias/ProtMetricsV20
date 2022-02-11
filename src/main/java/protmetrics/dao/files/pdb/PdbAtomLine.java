@@ -12,7 +12,6 @@ public final class PdbAtomLine extends PdbLine {
     private final int aminoNumberPos;
     private String sequence;
     private final Point3d location;
-    private final String aminoNumber;
     private String aminoType;
     private final String atomType;
 
@@ -27,17 +26,12 @@ public final class PdbAtomLine extends PdbLine {
         this.lineTokens = lineTokens;
 
         aminoNumberPos = this.getAminoNumberLocation(lineTokens);
-        if (aminoNumberPos != -1) {
-            aminoNumber = lineTokens[aminoNumberPos];
-        } else {
-            aminoNumber = "~";
-        }
 
         /* they seem to be the 3 numbers after the amino acid number  */
-        double m_X = Double.parseDouble(lineTokens[aminoNumberPos + 1]);
-        double m_Y = Double.parseDouble(lineTokens[aminoNumberPos + 2]);
-        double m_Z = Double.parseDouble(lineTokens[aminoNumberPos + 3]);
-        location = new Point3d(m_X, m_Y, m_Z);
+        double x = Double.parseDouble(lineTokens[aminoNumberPos + 1]);
+        double y = Double.parseDouble(lineTokens[aminoNumberPos + 2]);
+        double z = Double.parseDouble(lineTokens[aminoNumberPos + 3]);
+        location = new Point3d(x, y, z);
 
         aminoType = lineTokens[3];
 
@@ -45,7 +39,7 @@ public final class PdbAtomLine extends PdbLine {
 
         /* before the amino acid number we found the sequence or the type */
         if (aminoNumberPos != -1) {
-            if (BioUtils.isAminoSequence(lineTokens[aminoNumberPos - 1]) == false) {
+            if (!BioUtils.isAminoSequence(lineTokens[aminoNumberPos - 1])) {
                 sequence = lineTokens[aminoNumberPos - 1];
             } else {
                 /* only one sequence */
@@ -60,71 +54,70 @@ public final class PdbAtomLine extends PdbLine {
      */
     public int getAminoNumberLocation(String[] lineTokens) {
 
-        int m_result = -1;
-        int m_numbersFind = 0;
-        int m_pos = 0;
+        int result = -1;
+        int numbersFind = 0;
+        int pos = 0;
 
-        int m_length = lineTokens.length;
+        int length = lineTokens.length;
 
-        while (m_pos < m_length && m_numbersFind < 2) {
-            if (BioUtils.isInteger(lineTokens[m_pos])) {
-                m_numbersFind++;
+        while (pos < length && numbersFind < 2) {
+            if (BioUtils.isInteger(lineTokens[pos])) {
+                numbersFind++;
             }
-            if (m_numbersFind == 2) {
-                m_result = m_pos;
+            if (numbersFind == 2) {
+                result = pos;
             }
-            m_pos++;
+            pos++;
         }
-        return m_result;
+        return result;
 
     }
 
     /**
      */
     public void upDatePdbLine() {
-        String m_result = this.lineTokens[0];
-        boolean m_changed = false;
-        int m_tlength = lineTokens.length;
-        for (int i = 1; i < m_tlength; ++i) {
-            m_changed = false;
+        StringBuilder result = new StringBuilder(this.lineTokens[0]);
+
+        boolean changed;
+        int tlength = lineTokens.length;
+        for (int i = 1; i < tlength; ++i) {
+            changed = false;
             if (i == 2) {
-                m_result = m_result + " " + this.atomType;
+                result.append(" ").append(this.atomType);
                 this.lineTokens[2] = this.atomType;
-                m_changed = true;
+                changed = true;
             }
             if (i == 3) {
-                m_result = m_result + " " + this.aminoType;
+                result.append(" ").append(this.aminoType);
                 this.lineTokens[3] = this.aminoType;
-                m_changed = true;
+                changed = true;
             }
-            if (i == aminoNumberPos - 1) {
-                if (BioUtils.isAminoSequence(this.lineTokens[aminoNumberPos - 1]) == false) {
-                    m_result = m_result + " " + this.sequence;
-                    this.lineTokens[aminoNumberPos - 1] = this.sequence;
-                    m_changed = true;
-                }
+            if ((i == aminoNumberPos - 1) && (!BioUtils.isAminoSequence(this.lineTokens[aminoNumberPos - 1]))) {
+                result.append(" ").append(this.sequence);
+                this.lineTokens[aminoNumberPos - 1] = this.sequence;
+                changed = true;
                 /* note that if no sequence, no changes can be done */
             }
             if (i == aminoNumberPos + 1) {
-                m_result = m_result + "	 " + this.location.x;
+                result.append("\\t").append(this.location.x);
                 this.lineTokens[aminoNumberPos + 1] = Double.toString(this.location.x);
-                m_changed = true;
+                changed = true;
             }
             if (i == aminoNumberPos + 2) {
-                m_result = m_result + "	 " + this.location.y;
+                result.append("\\t").append(this.location.x);
                 this.lineTokens[aminoNumberPos + 2] = Double.toString(this.location.y);
-                m_changed = true;
+                changed = true;
             }
             if (i == aminoNumberPos + 3) {
-                m_result = m_result + " " + this.location.z;
+                result.append("\\t").append(this.location.z);
                 this.lineTokens[aminoNumberPos + 3] = Double.toString(this.location.z);
-                m_changed = true;
+                changed = true;
             }
-            if (m_changed == false) {
-                m_result = m_result + " " + this.lineTokens[i];
+            if (!changed) {
+                result.append("\\t").append(this.lineTokens[i]);
             }
         }
-        this.line = m_result;
+        this.line = result.toString();
     }
 
     /**

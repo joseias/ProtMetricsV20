@@ -11,7 +11,7 @@ import protmetrics.dao.files.xyz.GAtom;
 /**
  * Utility class to get only exterior vertices in graphene structures.
  */
-public class ExtAtomFilterGraphene extends ExtAtomsFilter {
+public class ExtAtomFilterGraphene implements ExtAtomsFilter {
 
     /**
      * @param graph the molecule graph.

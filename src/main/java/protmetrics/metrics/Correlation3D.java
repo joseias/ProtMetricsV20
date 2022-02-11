@@ -14,6 +14,7 @@ import protmetrics.dao.dm.DMAttValue;
 import protmetrics.dao.dm.DMDataSet;
 import protmetrics.dao.dm.DMInstance;
 import protmetrics.dao.files.pdb.PdbFile;
+import protmetrics.errors.SomeErrorException;
 import protmetrics.utils.BioUtils;
 import protmetrics.utils.Filter;
 import protmetrics.utils.Formats;
@@ -25,12 +26,12 @@ import protmetrics.utils.propertymatrix.PropertyVector;
  * Implements the 2D Amino Acid Sequence Autocorrelation Vectors molecular
  * descriptor.
  *
- * [1] Fernandez, M., Abreu, J. I., Caballero, J., Garriga, M., Fernandez,
- * len. (2007). Comparative modeling of the conformational stability of
- * chymotrypsin inhibitor 2 protein mutants using amino acid sequence
- * autocorrelation (AASA) and amino acid 3D autocorrelation (AA3DA) vectors and
- * ensembles of Bayesian-regularized genetic neural networks. Molecular
- * Simulation, 33(13), 1045-1056.
+ * [1] Fernandez, M., Abreu, J. I., Caballero, J., Garriga, M., Fernandez, len.
+ * (2007). Comparative modeling of the conformational stability of chymotrypsin
+ * inhibitor 2 protein mutants using amino acid sequence autocorrelation (AASA)
+ * and amino acid 3D autocorrelation (AA3DA) vectors and ensembles of
+ * Bayesian-regularized genetic neural networks. Molecular Simulation, 33(13),
+ * 1045-1056.
  *
  * [2] Wagener, M., Sadowski, J., Gasteiger, J. (1995). Autocorrelation of
  * molecular surface properties for modeling corticosteroid binding globulin and
@@ -46,19 +47,19 @@ public class Correlation3D {
     /**
      * @param prop properties.
      * @return dataset representing the descriptor for each of the input files.
-     * @throws Exception for problems while computing the descriptor.
      */
-    public DMDataSet calc3DCorrelationIndex(Properties prop) throws Exception {
+    public DMDataSet calc3DCorrelationIndex(Properties prop) {
+        String msg;
 
         int attOrder = 0;
         DMDataSet ds = new DMDataSet(Correlation3D.INDEX_ID);
-        DMAtt attPN = new DMAtt(DMAtt.getSPECIAL_ATT_NAME(), String.class, attOrder++);
+        DMAtt attPN = new DMAtt(DMAtt.getSName(), String.class.getSimpleName(), attOrder++);
         ds.addAtt(attPN);
 
         PropertyMatrix propMatrix = (PropertyMatrix) prop.get(Constants.PROP_MATRIX);
-        boolean doProduct = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_PRODUCT));
-        boolean doMax = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_MAX));
-        boolean doMin = (Boolean) Boolean.parseBoolean(prop.getProperty(Constants.DO_MIN));
+        boolean doProduct = Boolean.parseBoolean(prop.getProperty(Constants.DO_PRODUCT));
+        boolean doMax = Boolean.parseBoolean(prop.getProperty(Constants.DO_MAX));
+        boolean doMin = Boolean.parseBoolean(prop.getProperty(Constants.DO_MIN));
 
         double maxDist = Double.parseDouble(prop.getProperty(Constants.MAX_DIST));
         double minDist = Double.parseDouble(prop.getProperty(Constants.MIN_DIST));
@@ -70,7 +71,8 @@ public class Correlation3D {
 
         /* for each PDB, compute the index */
         for (ProtWrapper pw : protList) {
-            Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, String.format("Computing 3D Correlation Index for %s", pw.name));
+            msg = String.format("Computing 3D Correlation Index for %s", pw.name);
+            Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, msg);
             DMInstance inst = new DMInstance(pw.getName());
             inst.setAttValue(attPN, new DMAttValue(inst.getInstID()));
 
@@ -86,8 +88,8 @@ public class Correlation3D {
                         /* compute the indice */
                         DMAttValue r = this.get3DProd(pv, pw.getInterCADistMatrix(), dLower, dUpper);
 
-                        String attName = pv.PropertyName + "_[" + MyMath.round(dLower, 2) + " - " + MyMath.round(dUpper, 2) + "]";
-                        DMAtt att = new DMAtt(attName, Double.class, attOrder++);
+                        String attName = pv.getPropertyName() + "_[" + MyMath.round(dLower, 2) + " - " + MyMath.round(dUpper, 2) + "]";
+                        DMAtt att = new DMAtt(attName, Double.class.getSimpleName(), attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
                     }
@@ -96,8 +98,8 @@ public class Correlation3D {
                         /* compute the indice */
                         DMAttValue r = this.get3DMax(pv, pw.getInterCADistMatrix(), dLower, dUpper);
 
-                        String attName = pv.PropertyName + "_Max_[" + MyMath.round(dLower, 2) + " - " + MyMath.round(dUpper, 2) + "]";
-                        DMAtt att = new DMAtt(attName, Double.class, attOrder++);
+                        String attName = pv.getPropertyName() + "_Max_[" + MyMath.round(dLower, 2) + " - " + MyMath.round(dUpper, 2) + "]";
+                        DMAtt att = new DMAtt(attName, Double.class.getSimpleName(), attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
                     }
@@ -106,8 +108,8 @@ public class Correlation3D {
                         /* compute the indice */
                         DMAttValue r = this.get3DMin(pv, pw.getInterCADistMatrix(), dLower, dUpper);
 
-                        String attName = pv.PropertyName + "_Min_[" + MyMath.round(dLower, 2) + " - " + MyMath.round(dUpper, 2) + "]";
-                        DMAtt att = new DMAtt(attName, Double.class, attOrder++);
+                        String attName = pv.getPropertyName() + "_Min_[" + MyMath.round(dLower, 2) + " - " + MyMath.round(dUpper, 2) + "]";
+                        DMAtt att = new DMAtt(attName, Double.class.getSimpleName(), attOrder++);
                         ds.addAtt(att);
                         inst.setAttValue(att, r);
                     }
@@ -116,7 +118,8 @@ public class Correlation3D {
                 }
             }
             ds.addInstance(inst);
-            Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, String.format("Computing 3D Correlation Index for %s. Done!", pw.name));
+            msg = String.format("Computing 3D Correlation Index for %s. Done!", pw.name);
+            Logger.getLogger(Correlation2D.class.getName()).log(Level.INFO, msg);
         }
         return ds;
     }
@@ -137,7 +140,7 @@ public class Correlation3D {
         double pj;
         double dij;
         double sum = 0;
-        int L = 0;
+        int eL = 0;
 
         for (int i = 1; i < interCAMatrix.getRows() - 1; ++i) {
             pi = pv.getValueFromName(interCAMatrix.getElementAt(i), found);
@@ -147,11 +150,11 @@ public class Correlation3D {
 
                 if ((dij > dLower) && (dij <= dUpper)) {
                     sum = sum + pi * pj;
-                    L++;
+                    eL++;
                 }
             }
         }
-        double result = L > 0 ? sum / L : 0;
+        double result = eL > 0 ? sum / eL : 0;
         return new DMAttValue(Double.toString(MyMath.round(result, 2)));
     }
 
@@ -169,7 +172,7 @@ public class Correlation3D {
         double pj;
         double dij;
         double max = Double.MIN_VALUE;
-        int L = 0;
+        int eL = 0;
 
         for (int i = 1; i < interCAMatrix.getRows() - 1; ++i) {
             pi = pv.getValueFromName(interCAMatrix.getElementAt(i), found);
@@ -179,12 +182,12 @@ public class Correlation3D {
 
                 if ((dij > dLower) && (dij <= dUpper)) {
                     max = Math.max(max, pi * pj);
-                    L++;
+                    eL++;
                 }
             }
         }
 
-        double result = L != 0 ? MyMath.round(max, 2) : 0;
+        double result = eL != 0 ? MyMath.round(max, 2) : 0;
         return new DMAttValue(Double.toString(result));
     }
 
@@ -202,7 +205,7 @@ public class Correlation3D {
         double pj;
         double dij;
         double min = Double.MAX_VALUE;
-        int L = 0;
+        int eL = 0;
 
         for (int i = 1; i < interCAMatrix.getRows() - 1; ++i) {
             pi = pv.getValueFromName(interCAMatrix.getElementAt(i), found);
@@ -212,33 +215,33 @@ public class Correlation3D {
 
                 if ((dij > dLower) && (dij <= dUpper)) {
                     min = Math.min(min, pi * pj);
-                    L++;
+                    eL++;
                 }
             }
         }
 
-        double result = L != 0 ? MyMath.round(min, 2) : 0;
+        double result = eL != 0 ? MyMath.round(min, 2) : 0;
         return new DMAttValue(Double.toString(result));
     }
 
     /**
      * @param path the path to the configuration file.
      * @return Properties object encoding configuration.
-     * @throws Exception for problems while loading the file.
+     * @throws IOException for problems while loading the file.
+     * @throws IllegalArgumentException for missing configuration options.
+     * @throws SomeErrorException for other errors.
      */
-    public Properties init(String path) throws Exception {
-        /* properties file*/
-        File cfgFile = new File(path);
-        if (cfgFile.exists() == false) {
-            throw new IOException(path + " does not exist...");
-        }
+    public Properties init(String path) throws IOException, IllegalArgumentException, SomeErrorException {
+        String msgioe = "%s does not exist...";
+        String msgcfg = "%s not specified for 3D Wiener...";
+
         Properties prop = BioUtils.loadProperties(path);
 
         /* PDBs folder*/
         String pdbsPath = prop.getProperty(Constants.PDBS_DIRECTORY_PATH);
         File pdbsFile = new File(pdbsPath);
-        if (pdbsFile.exists() == false) {
-            throw new IOException(pdbsPath + " does not exist...");
+        if (!pdbsFile.exists()) {
+            throw new IOException(String.format(msgioe, pdbsPath));
         }
 
         File pdbFilesDir = new File(pdbsPath);
@@ -258,24 +261,23 @@ public class Correlation3D {
 
         /* properties matrix path*/
         String pmPath = prop.getProperty(Constants.PROP_MATRIX_PATH);
-        File pmFile = new File(pmPath);
-        if (pmFile.exists() == false) {
-            throw new IOException(pmPath + " does not exist...");
+        if (!BioUtils.checkFileExist(pmPath)) {
+            throw new IOException(String.format(msgioe, pmPath));
         }
 
         /* min radius*/
         if (!prop.containsKey(Constants.MIN_DIST)) {
-            throw new IllegalArgumentException("Min Distance not specified for 3D Correlation...");
+            throw new IllegalArgumentException(String.format(msgcfg, Constants.MIN_DIST));
         }
 
         /* max radius*/
         if (!prop.containsKey(Constants.MAX_DIST)) {
-            throw new IllegalArgumentException("Max Distance not specified for 3D Correlation...");
+            throw new IllegalArgumentException(String.format(msgcfg, Constants.MAX_DIST));
         }
 
         /* step*/
         if (!prop.containsKey(Constants.STEP)) {
-            throw new IllegalArgumentException("Step not specified for 3D Correlation...");
+            throw new IllegalArgumentException(String.format(msgcfg, Constants.STEP));
         } else {
             double step = Double.parseDouble(prop.getProperty(Constants.STEP));
             if (step <= 0) {
@@ -285,7 +287,7 @@ public class Correlation3D {
 
         /* output format*/
         if (!prop.containsKey(Constants.OUTPUT_FORMAT)) {
-            throw new IllegalArgumentException("Output format not specified for 3D Correlation...");
+            throw new IllegalArgumentException(String.format(msgcfg, Constants.OUTPUT_FORMAT));
         }
 
         PropertyMatrix pmAll = new PropertyMatrix(pmPath);
@@ -322,11 +324,13 @@ public class Correlation3D {
                     case Formats.CSV:
                         ds.toCSV(outFile);
                         break;
+                    default:
+                        break;
                 }
             } else {
                 throw new IllegalArgumentException("Configuration file not specified... must supply -cfg option...");
             }
-        } catch (Exception ex) {
+        } catch (IOException | IllegalArgumentException | SomeErrorException ex) {
             Logger.getLogger(Correlation3D.class.getName()).log(Level.SEVERE, null, ex);
         }
         Logger.getLogger(Correlation3D.class.getName()).log(Level.INFO, "Computing 3D Correlation Index. Done!");
@@ -354,6 +358,8 @@ public class Correlation3D {
         public static final String DO_MAX = "DO_MAX";
         public static final String DO_MIN = "DO_MIN";
 
+        private Constants() {
+        }
     }
 
     private static class Args {

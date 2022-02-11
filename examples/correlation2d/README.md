@@ -1,1 +1,1 @@
-java -cp ProtMetricsV20-1.0-SNAPSHOT-jar-with-dependencies.jar protmetrics.metrics.Correlation2D -cfg correlation2d.cfg
+java -cp ProtMetricsV20-2.0-SNAPSHOT-jar-with-dependencies.jar protmetrics.metrics.Correlation2D -cfg correlation2d.cfg

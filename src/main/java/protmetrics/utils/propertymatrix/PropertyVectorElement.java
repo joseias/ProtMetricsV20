@@ -7,19 +7,19 @@ public class PropertyVectorElement {
 
     /**
      */
-    public int ElementNumber;
+    private final int number;
 
     /**
      */
-    public String ElementSimpleName;
+    private final String simpleName;
 
     /**
      */
-    public String ElementFullName;
+    private final String fullName;
 
     /**
      */
-    public double ElementValue;
+    private final double value;
 
     /**
      * @param number number within the vector.
@@ -28,10 +28,10 @@ public class PropertyVectorElement {
      * @param value property value.
      */
     public PropertyVectorElement(int number, String simpleName, String fullName, double value) {
-        this.ElementNumber = number;
-        this.ElementSimpleName = simpleName;
-        this.ElementFullName = fullName;
-        this.ElementValue = value;
+        this.number = number;
+        this.simpleName = simpleName;
+        this.fullName = fullName;
+        this.value = value;
     }
 
     /**
@@ -40,11 +40,39 @@ public class PropertyVectorElement {
      * @return the value of the property.
      */
     public double getValueFromName(String name, boolean[] found) {
-        if ((this.ElementSimpleName.equals(name)) || (this.ElementFullName.equals(name))) {
+        if ((this.getElementSimpleName().equals(name)) || (this.getElementFullName().equals(name))) {
             found[0] = true;
-            return this.ElementValue;
+            return this.getElementValue();
         }
         found[0] = false;
         return 0;
+    }
+
+    /**
+     * @return the number
+     */
+    public int getElementNumber() {
+        return number;
+    }
+
+    /**
+     * @return the simpleName
+     */
+    public String getElementSimpleName() {
+        return simpleName;
+    }
+
+    /**
+     * @return the fullName
+     */
+    public String getElementFullName() {
+        return fullName;
+    }
+
+    /**
+     * @return the value
+     */
+    public double getElementValue() {
+        return value;
     }
 }

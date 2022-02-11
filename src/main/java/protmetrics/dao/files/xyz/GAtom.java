@@ -8,7 +8,7 @@ import javax.vecmath.Point3d;
 public class GAtom {
 
     private Point3d location;
-    private int ID;
+    private int id;
     private AtomType type;
 
     /**
@@ -19,7 +19,7 @@ public class GAtom {
     public GAtom(Point3d location, AtomType type, int id) {
         this.location = location;
         this.type = type;
-        this.ID = id;
+        this.id = id;
     }
 
     /**
@@ -37,17 +37,17 @@ public class GAtom {
     }
 
     /**
-     * @return the ID.
+     * @return the id.
      */
     public int getID() {
-        return ID;
+        return id;
     }
 
     /**
-     * @param ID the ID to set.
+     * @param id the id to set.
      */
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setID(int id) {
+        this.id = id;
     }
 
     @Override

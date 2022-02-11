@@ -12,10 +12,10 @@
             <properties>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
-                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\correlation2d</exec.workingdir>
+                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\wiener3d</exec.workingdir>
                 <exec.vmArgs></exec.vmArgs>
-                <exec.appArgs>-cfg correlation2d.cfg</exec.appArgs>
-                <exec.mainClass>protmetrics.metrics.Correlation2D</exec.mainClass>
+                <exec.appArgs>-cfg wiener3d.cfg</exec.appArgs>
+                <exec.mainClass>protmetrics.metrics.Wiener3D</exec.mainClass>
             </properties>
         </action>
         <action>
@@ -31,10 +31,10 @@
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
-                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\correlation2d</exec.workingdir>
+                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\wiener3d</exec.workingdir>
                 <exec.vmArgs>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
-                <exec.appArgs>-cfg correlation2d.cfg</exec.appArgs>
-                <exec.mainClass>protmetrics.metrics.Correlation2D</exec.mainClass>
+                <exec.appArgs>-cfg wiener3d.cfg</exec.appArgs>
+                <exec.mainClass>protmetrics.metrics.Wiener3D</exec.mainClass>
             </properties>
         </action>
         <action>
@@ -49,10 +49,10 @@
             <properties>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
-                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\correlation2d</exec.workingdir>
+                <exec.workingdir>D:\Cloud\GDriveUA\Work\02_Research\Colaborations\NanoInformatics\Software\ProtMetricsV20\examples\wiener3d</exec.workingdir>
                 <exec.vmArgs></exec.vmArgs>
-                <exec.appArgs>-cfg correlation2d.cfg</exec.appArgs>
-                <exec.mainClass>protmetrics.metrics.Correlation2D</exec.mainClass>
+                <exec.appArgs>-cfg wiener3d.cfg</exec.appArgs>
+                <exec.mainClass>protmetrics.metrics.Wiener3D</exec.mainClass>
             </properties>
         </action>
     </actions>

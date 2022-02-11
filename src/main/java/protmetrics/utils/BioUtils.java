@@ -1,10 +1,13 @@
 package protmetrics.utils;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,94 +27,101 @@ public class BioUtils {
      */
     public static final String SEPARATOR = ",";
 
+    private BioUtils() {
+    }
+
     /**
      * Removes "" from an array of string tokens.
+     *
      * @param input the input string array.
      * @return the tokens filtered.
      */
     public static String[] procSplitString(String[] input) {
-        ArrayList<String> m_aux = new ArrayList();
+        ArrayList<String> aux = new ArrayList<>();
 
         for (int i = 0; i < input.length; ++i) {
             if (!"".equals(input[i])) {
-                m_aux.add(input[i]);
+                aux.add(input[i]);
             }
         }
-        String[] m_result = new String[m_aux.size()];
-        for (int j = 0; j < m_result.length; ++j) {
-            m_result[j] = (String) m_aux.get(j);
+        String[] result = new String[aux.size()];
+        for (int j = 0; j < result.length; ++j) {
+            result[j] = aux.get(j);
         }
-        return m_result;
+        return result;
     }
 
     /**
      * @param aminoTLCode amino acid code in three letters format.
      * @return amino acid code in one letter format.
      */
-    public static String aminoThreetoOne(String aminoTLCode) {
+    public static String aminoThree2One(String aminoTLCode) {
 
-        if ((aminoTLCode.toUpperCase()).equals("ALA")) {
-            return "A";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("ARG")) {
-            return "R";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("ASP")) {
-            return "D";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("ASN")) {
-            return "N";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("CYS")) {
-            return "C";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("GLU")) {
-            return "E";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("GLN")) {
-            return "Q";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("GLY")) {
-            return "G";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("HIS")) {
-            return "H";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("ILE")) {
-            return "I";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("LEU")) {
-            return "L";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("LYS")) {
-            return "K";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("MET")) {
-            return "M";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("PHE")) {
-            return "F";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("PRO")) {
-            return "P";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("SER")) {
-            return "S";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("THR")) {
-            return "T";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("TRP")) {
-            return "W";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("TYR")) {
-            return "Y";
-        }
-        if ((aminoTLCode.toUpperCase()).equals("VAL")) {
-            return "V";
-        }
+        String code = aminoTLCode.toUpperCase();
+        switch (code) {
+            case "ALA":
+                return "A";
 
-        return "";
+            case "ARG":
+                return "R";
+
+            case "ASP":
+                return "D";
+
+            case "ASN":
+                return "N";
+
+            case "CYS":
+                return "C";
+
+            case "GLU":
+                return "E";
+
+            case "GLN":
+                return "Q";
+
+            case "GLY":
+                return "G";
+
+            case "HIS":
+                return "H";
+
+            case "ILE":
+                return "I";
+
+            case "LEU":
+                return "L";
+
+            case "LYS":
+                return "K";
+
+            case "MET":
+                return "M";
+
+            case "PHE":
+                return "F";
+
+            case "PRO":
+                return "P";
+
+            case "SER":
+                return "S";
+
+            case "THR":
+                return "T";
+
+            case "TRP":
+                return "W";
+
+            case "TYR":
+                return "Y";
+
+            case "VAL":
+                return "V";
+
+            default:
+                return "";
+        }
     }
 
     /**
@@ -119,70 +129,71 @@ public class BioUtils {
      * @return amino acid code in three letters format.
      */
     public static String aminoOnetoThree(String aminoOLCode) {
+        String code = aminoOLCode.toUpperCase();
 
-        if ((aminoOLCode.toUpperCase()).equals("A")) {
-            return "ALA";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("R")) {
-            return "ARG";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("D")) {
-            return "ASP";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("N")) {
-            return "ASN";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("C")) {
-            return "CYS";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("E")) {
-            return "GLU";
-        }
+        switch (code) {
+            case "A":
+                return "ALA";
 
-        if ((aminoOLCode.toUpperCase()).equals("Q")) {
-            return "GLN";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("G")) {
-            return "GLY";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("H")) {
-            return "HIS";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("I")) {
-            return "ILE";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("L")) {
-            return "LEU";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("K")) {
-            return "LYS";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("M")) {
-            return "MET";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("F")) {
-            return "PHE";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("P")) {
-            return "PRO";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("S")) {
-            return "SER";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("T")) {
-            return "THR";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("W")) {
-            return "TRP";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("Y")) {
-            return "TYR";
-        }
-        if ((aminoOLCode.toUpperCase()).equals("V")) {
-            return "VAL";
-        }
+            case "R":
+                return "ARG";
 
-        return "";
+            case "D":
+                return "ASP";
+
+            case "N":
+                return "ASN";
+
+            case "C":
+                return "CYS";
+
+            case "E":
+                return "GLU";
+
+            case "Q":
+                return "GLN";
+
+            case "G":
+                return "GLY";
+
+            case "H":
+                return "HIS";
+
+            case "I":
+                return "ILE";
+
+            case "L":
+                return "LEU";
+
+            case "K":
+                return "LYS";
+
+            case "M":
+                return "MET";
+
+            case "F":
+                return "PHE";
+
+            case "P":
+                return "PRO";
+
+            case "S":
+                return "SER";
+
+            case "T":
+                return "THR";
+
+            case "W":
+                return "TRP";
+
+            case "Y":
+                return "TYR";
+
+            case "V":
+                return "VAL";
+            default:
+                return "";
+        }
 
     }
 
@@ -192,15 +203,15 @@ public class BioUtils {
      */
     public static boolean isInteger(String chars) {
 
-        boolean m_result = true;
-        int m_length = chars.length();
-        int m_pos = 0;
+        boolean result = true;
+        int length = chars.length();
+        int pos = 0;
 
-        while (m_pos < m_length && m_result == true) {
-            m_result = Character.isDigit(chars.charAt(m_pos));
-            m_pos++;
+        while (pos < length && result) {
+            result = Character.isDigit(chars.charAt(pos));
+            pos++;
         }
-        return m_result;
+        return result;
 
     }
 
@@ -210,82 +221,53 @@ public class BioUtils {
      */
     public static boolean isAminoSequence(String aminoTLCode) {
 
-        if ((aminoTLCode.toUpperCase()).equals("ALA")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("ARG")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("ASP")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("ASN")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("CYS")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("GLU")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("GLN")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("GLY")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("HIS")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("ILE")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("LEU")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("LYS")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("MET")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("PHE")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("PRO")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("SER")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("THR")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("TRP")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("TYR")) {
-            return true;
-        }
-        if ((aminoTLCode.toUpperCase()).equals("VAL")) {
-            return true;
-        }
+        String code = aminoTLCode.toUpperCase();
 
-        return false;
+        switch (code) {
+            case "ALA":
+            case "ARG":
+            case "ASP":
+            case "ASN":
+            case "CYS":
+            case "GLU":
+            case "GLN":
+            case "GLY":
+            case "HIS":
+            case "ILE":
+            case "LEU":
+            case "LYS":
+            case "MET":
+            case "PHE":
+            case "PRO":
+            case "SER":
+            case "THR":
+            case "TRP":
+            case "TYR":
+            case "VAL":
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
      * @param path path to the configuration file.
      * @return properties object.
+     * @throws IOException for problems while loading the file.
      */
-    public static Properties loadProperties(String path) {
-        try {
+    public static Properties loadProperties(String path) throws IOException {
+        String msgioe = "%s does not exist...";
+
+        /* properties file*/
+        if (!BioUtils.checkFileExist(path)) {
+            throw new IOException(String.format(msgioe, path));
+        } else {
             Properties prop = new Properties();
-            prop.load(new FileReader(path));
-            return prop;
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            return null;
+
+            try (FileReader fr = new FileReader(path)) {
+                prop.load(fr);
+                return prop;
+            }
         }
     }
 
@@ -296,9 +278,7 @@ public class BioUtils {
     public static int[] getSelectedIndices(String indices) {
 
         String[] tokens = indices.split(SEPARATOR);
-        return Arrays.stream(tokens).mapToInt(e -> {
-            return Integer.parseInt(e);
-        }).toArray();
+        return Arrays.stream(tokens).mapToInt(Integer::parseInt).toArray();
     }
 
     /**
@@ -307,9 +287,8 @@ public class BioUtils {
      *
      * @param pdb the pdb file wrapper.
      * @return inter CA distance matrix with values as string.
-     * @throws Exception for problems computing inter CA distance matrix.
      */
-    public static String[][] getInterCADistMatrixN(PdbFile pdb) throws Exception {
+    public static String[][] getInterCADistMatrixN(PdbFile pdb) {
 
         PdbAtomLine[] caData = pdb.getCALines();
         String[][] result = new String[caData.length + 1][caData.length + 1];
@@ -343,7 +322,9 @@ public class BioUtils {
      * @return interval from its description.
      */
     public static Interval getIntervalFromDesc(String desc) {
-        String regex = "([\\[]|[\\(])(([0-9]+.[0-9]+),([0-9]+.[0-9]+))([\\]]|[\\)])";
+        String msge = "Interval %s specification is wrong, check it...";
+
+        String regex = "([\\[\\(])(([0-9]+.[0-9]+),([0-9]+.[0-9]+))([\\]\\)])";
 
         Pattern r = Pattern.compile(regex);
         Matcher m = r.matcher(desc);
@@ -357,36 +338,48 @@ public class BioUtils {
             double lld = Double.parseDouble(ll);
             double uld = Double.parseDouble(ul);
 
-            boolean lclosed_rclosed = lo.equals(IntervalTypeCodes.LCLOSED) && ro.equals(IntervalTypeCodes.RCLOSED);
-            boolean lclosed_ropen = lo.equals(IntervalTypeCodes.LCLOSED) && ro.equals(IntervalTypeCodes.ROPEN);
-            boolean lopen_ropen = lo.equals(IntervalTypeCodes.LOPEN) && ro.equals(IntervalTypeCodes.ROPEN);
-            boolean lopen_rclosed = lo.equals(IntervalTypeCodes.LOPEN) && ro.equals(IntervalTypeCodes.RCLOSED);
+            boolean lcrc = lo.equals(IntervalTypeCodes.LCLOSED) && ro.equals(IntervalTypeCodes.RCLOSED);
+            boolean lcro = lo.equals(IntervalTypeCodes.LCLOSED) && ro.equals(IntervalTypeCodes.ROPEN);
+            boolean loro = lo.equals(IntervalTypeCodes.LOPEN) && ro.equals(IntervalTypeCodes.ROPEN);
+            boolean lorc = lo.equals(IntervalTypeCodes.LOPEN) && ro.equals(IntervalTypeCodes.RCLOSED);
 
             IntervalType itype = IntervalType.LCLOSED_ROPEN;
 
             /* better implementation with nested if, but for readability and because if are exclusive */
-            if (lclosed_rclosed) {
+            if (lcrc) {
                 itype = IntervalType.LCLOSED_RCLOSED;
             }
-            if (lclosed_ropen) {
+            if (lcro) {
                 itype = IntervalType.LCLOSED_ROPEN;
             }
-            if (lopen_ropen) {
+            if (loro) {
                 itype = IntervalType.LOPEN_ROPEN;
             }
-            if (lopen_rclosed) {
+            if (lorc) {
                 itype = IntervalType.LOPEN_RCLOSED;
             }
-            if (!(lclosed_rclosed || lclosed_ropen || lopen_rclosed || lopen_ropen)) {
-                System.err.println("Interval " + desc + " specification is wrong, check it...");
+            if (!(lcrc || lcro || lorc || loro)) {
+                String msg = String.format(msge, desc);
+                Logger.getLogger(BioUtils.class.getName()).log(Level.SEVERE, msg);
                 return null;
             }
 
             return new Interval(lld, uld, itype);
 
         } else {
-            System.err.println("Interval " + desc + " specification is wrong, check it...");
+            String msg = String.format(msge, desc);
+            Logger.getLogger(BioUtils.class.getName()).log(Level.SEVERE, msg);
             return null;
         }
+    }
+
+    /**
+     * 
+     * @param path the path to the file.
+     * @return if the file exists.
+     */
+    public static boolean checkFileExist(String path) {
+        File file = new File(path);
+        return file.exists();
     }
 }

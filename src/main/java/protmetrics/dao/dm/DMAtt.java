@@ -3,22 +3,23 @@ package protmetrics.dao.dm;
 import java.util.Objects;
 
 /**
- * Represents an attribute within the result matrix (DataSet) when computing an index.
+ * Represents an attribute within the result matrix (DataSet) when computing an
+ * index.
  */
 public class DMAtt {
 
     private final String name;
-    private final Class type;
+    private final String type;
     private final int order;
 
-    private static String SPECIAL_ATT_NAME = "StructID";
+    private static final String SPECIAL_ATT_NAME = "StructID";
 
     /**
      * @param name attribute name.
      * @param type class of the attribute.
      * @param order the order of the attribute.
      */
-    public DMAtt(String name, Class type, int order) {
+    public DMAtt(String name, String type, int order) {
         this.name = name;
         this.type = type;
         this.order = order;
@@ -27,20 +28,20 @@ public class DMAtt {
     /**
      * @return the name of the attribute.
      */
-    public String getAttName() {
+    public String getName() {
         return name;
     }
 
     /**
      * @return the type of the attribute.
      */
-    public Class getAttType() {
+    public String getType() {
         return type;
     }
 
     @Override
     public int hashCode() {
-        return this.getAttName().hashCode();
+        return this.getName().hashCode();
     }
 
     @Override
@@ -55,27 +56,20 @@ public class DMAtt {
             return false;
         }
         final DMAtt other = (DMAtt) obj;
-        return Objects.equals(this.getAttName(), other.getAttName());
+        return Objects.equals(this.getName(), other.getName());
     }
 
     /**
      * @return the order of the attribute.
      */
-    public int getAttOrder() {
+    public int getOrder() {
         return order;
     }
 
     /**
      * @return the SPECIAL_ATT_NAME.
      */
-    public static String getSPECIAL_ATT_NAME() {
+    public static String getSName() {
         return SPECIAL_ATT_NAME;
-    }
-
-    /**
-     * @param specialAttName the SPECIAL_ATT_NAME to set
-     */
-    public static void setSPECIAL_ATT_NAME(String specialAttName) {
-        SPECIAL_ATT_NAME = specialAttName;
     }
 }

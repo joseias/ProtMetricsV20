@@ -5,6 +5,8 @@ package protmetrics.utils;
  */
 public class GlobalConstants {
 
+    private GlobalConstants() {
+    }
     /**
      */
     public static final String SPACE_PATTERN = "[\\s]+";

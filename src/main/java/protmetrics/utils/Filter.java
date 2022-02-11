@@ -7,18 +7,18 @@ import java.io.*;
  */
 public class Filter implements FileFilter {
 
-    private final String c_pattern;
+    private final String pattern;
 
     /**
      * @param pattern search pattern.
      */
     public Filter(String pattern) {
-        c_pattern = pattern;
+        this.pattern = pattern;
     }
 
     @Override
     public boolean accept(File file) {
 
-        return file.getName().endsWith(c_pattern);
+        return file.getName().endsWith(pattern);
     }
 }

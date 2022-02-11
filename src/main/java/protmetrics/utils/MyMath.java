@@ -8,6 +8,9 @@ import java.math.RoundingMode;
  */
 public class MyMath {
 
+    private MyMath() {
+    }
+
     /**
      * @param value the value to round.
      * @param precision required precision.
@@ -19,7 +22,7 @@ public class MyMath {
             throw new IllegalArgumentException();
         }
 
-        BigDecimal bd = new BigDecimal(value);
+        BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(precision, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }

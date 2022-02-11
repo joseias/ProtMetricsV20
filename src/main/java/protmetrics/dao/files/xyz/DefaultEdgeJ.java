@@ -1,7 +1,7 @@
 package protmetrics.dao.files.xyz;
 
 import org.jgrapht.graph.DefaultEdge;
-import protmetrics.dao.intervals.IntervalTree;
+import protmetrics.dao.intervals.Type;
 
 /**
  * An edge within the bond description graph.
@@ -10,19 +10,22 @@ public class DefaultEdgeJ extends DefaultEdge {
 
     private static final long serialVersionUID = 1L;
 
-    IntervalTree<Double> value;
+    /**
+     *
+     */
+    Type<Double> value;
 
     /**
-     * @return IntervalTree representing the range of the bond type values.
+     * @return Type representing the range of the bond type values.
      */
-    public IntervalTree<Double> getValue() {
+    public Type<Double> getValue() {
         return value;
     }
 
     /**
-     * @param value IntervalTree representing the range of the bond type values.
+     * @param value Type representing the range of the bond type values.
      */
-    public void setValue(IntervalTree<Double> value) {
+    public void setValue(Type<Double> value) {
         this.value = value;
     }
 }

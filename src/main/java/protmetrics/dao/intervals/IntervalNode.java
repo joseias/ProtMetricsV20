@@ -11,18 +11,19 @@ import java.util.Map.Entry;
 /**
  * The Node class contains the interval tree information for one single node.
  * based in https://github.com/kevinjdolan/intervaltree (WTFPL)
- * @param <Type> type of the data within the node.
+ *
+ * @param <T> type of the data within the node.
  */
-public class IntervalNode<Type> {
+public class IntervalNode<T> {
 
-    private SortedMap<IntervalData<Type>, List<IntervalData<Type>>> intervals;
+    private SortedMap<IntervalData<T>, List<IntervalData<T>>> intervals;
     private double center;
-    private IntervalNode<Type> leftNode;
-    private IntervalNode<Type> rightNode;
+    private IntervalNode<T> leftNode;
+    private IntervalNode<T> rightNode;
 
     /**
-    *    
-    */
+     *
+     */
     public IntervalNode() {
         intervals = new TreeMap<>();
         center = 0;
@@ -33,13 +34,13 @@ public class IntervalNode<Type> {
     /**
      * @param intervalList list of interval data.
      */
-    public IntervalNode(List<IntervalData<Type>> intervalList) {
+    public IntervalNode(List<IntervalData<T>> intervalList) {
 
         intervals = new TreeMap<>();
 
         SortedSet<Double> endpoints = new TreeSet<>();
 
-        for (IntervalData<Type> interval : intervalList) {
+        for (IntervalData<T> interval : intervalList) {
             endpoints.add(interval.getStart());
             endpoints.add(interval.getEnd());
         }
@@ -47,16 +48,16 @@ public class IntervalNode<Type> {
         double median = getMedian(endpoints);
         center = median;
 
-        List<IntervalData<Type>> left = new ArrayList<>();
-        List<IntervalData<Type>> right = new ArrayList<>();
+        List<IntervalData<T>> left = new ArrayList<>();
+        List<IntervalData<T>> right = new ArrayList<>();
 
-        for (IntervalData<Type> interval : intervalList) {
+        for (IntervalData<T> interval : intervalList) {
             if (interval.getEnd() < median) {
                 left.add(interval);
             } else if (interval.getStart() > median) {
                 right.add(interval);
             } else {
-                List<IntervalData<Type>> posting = intervals.get(interval);
+                List<IntervalData<T>> posting = intervals.get(interval);
                 if (posting == null) {
                     posting = new ArrayList<>();
                     intervals.put(interval, posting);
@@ -79,12 +80,12 @@ public class IntervalNode<Type> {
      * @param time the time to query at.
      * @return	all intervals containing time.
      */
-    public List<IntervalData<Type>> stab(double time) {
-        List<IntervalData<Type>> result = new ArrayList<>();
+    public List<IntervalData<T>> stab(double time) {
+        List<IntervalData<T>> result = new ArrayList<>();
 
-        for (Entry<IntervalData<Type>, List<IntervalData<Type>>> entry : intervals.entrySet()) {
+        for (Entry<IntervalData<T>, List<IntervalData<T>>> entry : intervals.entrySet()) {
             if (entry.getKey().contains(time)) {
-                for (IntervalData<Type> interval : entry.getValue()) {
+                for (IntervalData<T> interval : entry.getValue()) {
                     result.add(interval);
                 }
             } else if (entry.getKey().getStart() > time) {
@@ -106,12 +107,12 @@ public class IntervalNode<Type> {
      * @param target the interval to intersect.
      * @return all intervals containing time.
      */
-    public List<IntervalData<Type>> query(IntervalData<?> target) {
-        List<IntervalData<Type>> result = new ArrayList<>();
+    public List<IntervalData<T>> query(IntervalData<?> target) {
+        List<IntervalData<T>> result = new ArrayList<>();
 
-        for (Entry<IntervalData<Type>, List<IntervalData<Type>>> entry : intervals.entrySet()) {
+        for (Entry<IntervalData<T>, List<IntervalData<T>>> entry : intervals.entrySet()) {
             if (entry.getKey().intersects(target)) {
-                for (IntervalData<Type> interval : entry.getValue()) {
+                for (IntervalData<T> interval : entry.getValue()) {
                     result.add(interval);
                 }
             } else if (entry.getKey().getStart() > target.getEnd()) {
@@ -145,28 +146,28 @@ public class IntervalNode<Type> {
     /**
      * @return left node.
      */
-    public IntervalNode<Type> getLeft() {
+    public IntervalNode<T> getLeft() {
         return leftNode;
     }
 
     /**
      * @param left the left node to set.
      */
-    public void setLeft(IntervalNode<Type> left) {
+    public void setLeft(IntervalNode<T> left) {
         this.leftNode = left;
     }
 
     /**
      * @return right node.
      */
-    public IntervalNode<Type> getRight() {
+    public IntervalNode<T> getRight() {
         return rightNode;
     }
 
     /**
      * @param right the right node to set.
      */
-    public void setRight(IntervalNode<Type> right) {
+    public void setRight(IntervalNode<T> right) {
         this.rightNode = right;
     }
 
@@ -190,9 +191,9 @@ public class IntervalNode<Type> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(center + ": ");
-        for (Entry<IntervalData<Type>, List<IntervalData<Type>>> entry : intervals.entrySet()) {
+        for (Entry<IntervalData<T>, List<IntervalData<T>>> entry : intervals.entrySet()) {
             sb.append("[" + entry.getKey().getStart() + "," + entry.getKey().getEnd() + "]:{");
-            for (IntervalData<Type> interval : entry.getValue()) {
+            for (IntervalData<T> interval : entry.getValue()) {
                 sb.append("(" + interval.getStart() + "," + interval.getEnd() + "," + interval.getData() + ")");
             }
             sb.append("} ");

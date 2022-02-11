@@ -5,60 +5,62 @@ package protmetrics.utils;
  */
 public class ParamCodes {
 
+    private ParamCodes() {
+    }
     /**
-     * -Mt: methods any of {RDF, 3DM, 3DC}
+     * -MT: methods any of {RDF, 3DM, 3DC}
      */
-    public static String Mt = "-Mt";
+    public static final String MT = "-Mt";
     /**
      * -O: full name of output file, with no extension.
      */
-    public static String outFile = "-O";
+    public static final String OUTFILE = "-O";
 
     /**
      * -P: path to the directory containing PDBs
      */
-    public static String pdbFile = "-P";
+    public static final String PDBFILE = "-P";
 
     /**
      * -M: path to property matrix file
      */
-    public static String propertyMatrixDir = "-M";
+    public static final String PROPERTY_MATRIX_DIR = "-M";
     /**
      * -I: properties Indices
      */
-    public static String propertyIndices = "-I";
+    public static final String PROPERTY_INDICES = "-I";
 
     /**
-     * -rdfB: B for RDF Index, 150 by default
+     * -RDF_B: B for RDF Index, 150 by default
      */
-    public static String rdfB = "-rdfB";
+    public static final String RDF_B = "-rdfB";
 
     /**
-     * -rdfF: F for RDF Index, 0.1 by default
+     * -RDF_F: F for RDF Index, 0.1 by default
      */
-    public static String rdfF = "-rdfF";
+    public static final String RDF_F = "-rdfF";
 
     /**
      * -Mx: max Ratio for RDF and 3DMorse Indices. RDF 10 by default 3DMorse and
      * 3DCorrelation 31 by default.
      *
      */
-    public static String rMx = "-rMx";
+    public static final String RMX = "-rMx";
 
     /**
      * -Mn: min ratio for RDF and 3DMorse Indices. RDF 2 by default 3DMorse 1 by
      * default.
      */
-    public static String rMn = "-rMn";
+    public static final String RMN = "-rMn";
 
     /**
      * -S: a step for RDF,3DMorse, and 3DCorrelation Indices, 1 by default
      */
-    public static String S = "-S";
+    public static final String S = "-S";
 
     /**
-     * -fmt: output file format: 0 for arff, 1 for csv and 2 for bif, 2 by
+     * -FMT: output file format: 0 for arff, 1 for csv and 2 for bif, 2 by
      * default.
      */
-    public static String fmt = "-fmt";
+    public static final String FMT = "-fmt";
 }

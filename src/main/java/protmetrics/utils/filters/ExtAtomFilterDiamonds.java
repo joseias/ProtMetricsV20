@@ -10,7 +10,7 @@ import protmetrics.dao.files.xyz.GAtom;
 /**
  * Utility class to get only exterior vertices diamond structures.
  */
-public class ExtAtomFilterDiamonds extends ExtAtomsFilter {
+public class ExtAtomFilterDiamonds implements ExtAtomsFilter {
 
     /**
      * @param graph the molecule graph.
@@ -21,7 +21,7 @@ public class ExtAtomFilterDiamonds extends ExtAtomsFilter {
         Set<GAtom> result = new HashSet<>(graph.vertexSet().size());
         for (GAtom vertex : graph.vertexSet()) {
             if (isExterior(graph, vertex)) {
-                boolean add = result.add(vertex);
+                result.add(vertex);
             }
         }
 
